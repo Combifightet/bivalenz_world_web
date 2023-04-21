@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'theme.dart';
 import 'dart:math' as math;
 
 
@@ -10,30 +11,31 @@ class DraggableObjekt extends StatefulWidget {
     required this.gridSize,   // in px
     this.size = 1,            //  small / medium / big / ...             (0/1/2)
     this.type = 1,            //  Triangle / Square / Pentagon / ...     (0/1/2)
-    this.color = Colors.blue,
   });
 
   final int id;
   final Offset position;
-  final int gridSize;
+  final double gridSize;
   final int size;
   final int type;
-  final Color color;
 
   @override
   DraggableObjektState createState() => DraggableObjektState();
 }
 
 class DraggableObjektState extends State<DraggableObjekt> {
-  double _left = -1000;
-  double _top =-1000;
+  late double _left;
+  late double _top;
+  late double _scale;
+  
 
   @override
   void initState() {
     super.initState();
     setState(() {
     _left =  (widget.position.dx*(widget.gridSize/8));
-    _top =  widget.position.dy*(widget.gridSize/8);
+    _top =  widget.position.dy*(widget.gridSize/8) + (widget.type==0?7:widget.type==2?3:0);
+    _scale = widget.gridSize/800;
     });
   }
 
@@ -46,13 +48,18 @@ class DraggableObjektState extends State<DraggableObjekt> {
 
   void _onDragEnd(DragEndDetails details) {
     setState(() {
-      _left = (_left / 100.0).round().clamp(0, 7) * 100.0;
-      _top = (_top / 100.0).round().clamp(0, 7) * 100.0;
+      _left = (_left / (100*_scale)).round().clamp(0, 7) * 100*_scale;
+      _top = (_top / (100*_scale)).round().clamp(0, 7) * 100*_scale + (widget.type==0?7:widget.type==2?3:0);
     });
   }
 
   @override
   Widget build(BuildContext context) {
+
+    double width = MediaQuery.of(context).size.width;
+    double height = MediaQuery.of(context).size.height;
+    _scale = (width-200<height-150?width-200:height-150).clamp(80, 80000)/800;
+
     return Positioned(
       left: _left,
       top: _top,
@@ -60,16 +67,15 @@ class DraggableObjektState extends State<DraggableObjekt> {
         onPanUpdate: _onDrag,
         onPanEnd: _onDragEnd,
         child: SizedBox(
-          width: 100,
-          height: 100,
+          width: 100*_scale,
+          height: 100*_scale,
           child: Center(
             child: CustomPaint(
               painter: PolygonPainter(
                 sides: widget.type+3,
-                radius: widget.size*10+20,
+                radius: (widget.size+1)*15*_scale,
                 polygonPaint: Paint()
-                  ..color = widget.color
-                  ..strokeWidth = 2.0
+                  ..color = widget.type==0?redAccentColor:widget.type==1?blueAccentColor:widget.type==2?yellowAccentColor:Colors.blueGrey
                   ..style = PaintingStyle.fill,
               ),
               child: Container(),
@@ -82,36 +88,35 @@ class DraggableObjektState extends State<DraggableObjekt> {
 }
 
 class DraggableObjektDemo extends StatelessWidget {
-  const DraggableObjektDemo(
-    {super.key}
-    
-  );
+  const DraggableObjektDemo({
+    super.key, 
+    required this.scale,
+  });
+  final double scale;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Center(
-        child: Container(
-          width: 800.0,
-          height: 800.0,
+        child: SizedBox(
+          width: scale,
+          height: scale,
           child: Stack(
-            children: const [
-              Image(
+            children: [
+              const Image(
                 image: AssetImage('8x8_grid.png'),
                 height: 800,
                 width: 800,
                 fit: BoxFit.cover,
                 filterQuality: FilterQuality.none,
               ),
-              DraggableObjekt(id: 1, position: Offset(1, 1), gridSize: 800, size:1, type: 0, color: Colors.red),
-              DraggableObjekt(id: 1, position: Offset(2, 1), gridSize: 800, size:2, type: 0, color: Colors.red),
-              DraggableObjekt(id: 1, position: Offset(3, 1), gridSize: 800, size:3, type: 0, color: Colors.red),
-              DraggableObjekt(id: 1, position: Offset(1, 2), gridSize: 800, size:1, type: 1, color: Colors.green),
-              DraggableObjekt(id: 1, position: Offset(2, 2), gridSize: 800, size:2, type: 1, color: Colors.green),
-              DraggableObjekt(id: 1, position: Offset(3, 2), gridSize: 800, size:3, type: 1, color: Colors.green),
-              DraggableObjekt(id: 1, position: Offset(1, 3), gridSize: 800, size:1, type: 2, color: Colors.blue),
-              DraggableObjekt(id: 1, position: Offset(2, 3), gridSize: 800, size:2, type: 2, color: Colors.blue),
-              DraggableObjekt(id: 1, position: Offset(3, 3), gridSize: 800, size:3, type: 2, color: Colors.blue),
+              DraggableObjekt(id: 1, position: const Offset(-1, -1), gridSize: scale, size:1, type: 1),
+              DraggableObjekt(id: 1, position: const Offset(-1, -1), gridSize: scale, size:1, type: 1),
+              DraggableObjekt(id: 1, position: const Offset(-1, -1), gridSize: scale, size:1, type: 1),
+              DraggableObjekt(id: 1, position: const Offset(-1, -1), gridSize: scale, size:1, type: 1),
+              DraggableObjekt(id: 1, position: const Offset(-1, -1), gridSize: scale, size:1, type: 1),
+              DraggableObjekt(id: 1, position: const Offset(-0, -0), gridSize: scale, size:1, type: 1),
+
             ],
           ),
         ),
@@ -138,8 +143,8 @@ class PolygonPainter extends CustomPainter {
     final Path polygonPath = Path();
 
     for (int i = 0; i < sides; i++) {
-      final double x = centerX + radius * math.cos(angle * i - (sides%2==0?math.pi/4:math.pi/2));
-      final double y = centerY + radius * math.sin(angle * i - (sides%2==0?math.pi/4:math.pi/2));
+      final double x = centerX + radius * math.cos(angle * i - (sides%2==0?math.pi/sides:math.pi/2));
+      final double y = centerY + radius * math.sin(angle * i - (sides%2==0?math.pi/sides:math.pi/2));
 
       if (i == 0) {
         polygonPath.moveTo(x, y);

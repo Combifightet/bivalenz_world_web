@@ -11,10 +11,10 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
+    return MaterialApp(
       home: Scaffold(
-        // body: TwoRowsWidget(),
-        body: DraggableObjektDemo(),
+        body: TwoRowsWidget(),
+        // body: DraggableObjektDemo(scale: 400),
       ),
     );
   }
@@ -60,11 +60,7 @@ class TwoRowsWidget extends StatelessWidget {
             children: [
               Container(
                 padding: EdgeInsets.only(right: (width-200-squareSize)/2),
-                child: Container(
-                  width: squareSize,
-                  height: squareSize,
-                  color: Colors.orange,
-                ),
+                child: SizedBox(width: squareSize, height: squareSize, child: DraggableObjektDemo(scale: squareSize),)
               ),
               Container(
                   width: 200,
