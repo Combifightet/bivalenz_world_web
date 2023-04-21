@@ -5,7 +5,7 @@ import 'dart:math' as math;
 class DraggableObjekt extends StatefulWidget {
   const DraggableObjekt({
     super.key,
-    required this.id,         //  a / b / c / d / e / f
+    required this.id,         //  a / b / c / d / e
     required this.position,   //  1-8 / 1-8
     required this.gridSize,   // in px
     this.size = 1,            //  small / medium / big / ...             (0/1/2)
