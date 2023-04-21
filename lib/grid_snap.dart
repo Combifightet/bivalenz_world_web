@@ -105,9 +105,9 @@ class DraggableObjektDemo extends StatelessWidget {
             children: [
               const Image(
                 image: AssetImage('8x8_grid.png'),
-                height: 800,
-                width: 800,
-                fit: BoxFit.cover,
+                height: 80000,
+                width: 80000,
+                fit: BoxFit.fill,
                 filterQuality: FilterQuality.none,
               ),
               DraggableObjekt(id: 1, position: const Offset(-1, -1), gridSize: scale, size:1, type: 1),

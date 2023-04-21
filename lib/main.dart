@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
+import 'object_handeling.dart';
 
-import 'grid_snap.dart';
+// import 'grid_snap.dart';
 
 void main() {
-  runApp(MyApp());
+  runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
@@ -11,7 +12,7 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return const MaterialApp(
       home: Scaffold(
         body: TwoRowsWidget(),
         // body: DraggableObjektDemo(scale: 400),
@@ -60,7 +61,8 @@ class TwoRowsWidget extends StatelessWidget {
             children: [
               Container(
                 padding: EdgeInsets.only(right: (width-200-squareSize)/2),
-                child: SizedBox(width: squareSize, height: squareSize, child: DraggableObjektDemo(scale: squareSize),)
+                // child: SizedBox(width: squareSize, height: squareSize, child: DraggableObjektDemo(scale: squareSize),)
+                child:SizedBox(width: squareSize, height: squareSize, child: const BoardRenderer()),
               ),
               Container(
                   width: 200,
