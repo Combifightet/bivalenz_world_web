@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'object_handeling.dart';
 
-// import 'grid_snap.dart';
-
 void main() {
   runApp(const MyApp());
 }

@@ -5,7 +5,8 @@
 - [X] Create base application Layout class
 - [X] Create object classes
 - [X] Create shape renderer
-- [ ] Create bord renderer
+- [X] Create board renderer
+- [ ] Create board manager
 - [ ] Evalueate logic statements
 - [ ] Export and import "BivalenzWorld" data
 - [ ] Create ui
