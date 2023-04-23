@@ -5,11 +5,11 @@ import 'dart:math' as math;
 
 // import 'grid_snap.dart';
 
+LogicBoard mainBoard = LogicBoard();
 
 
 class LogicObj {
   List<String> id;
-  // Offset pos;
   int size;
   int sides;    // shape
 
@@ -32,36 +32,67 @@ class LogicBoard {
   [[], [], [], [], [], [], [], []],
   [[], [], [], [], [], [], [], []]];
 
-  void addObj(LogicObj logicObj, Offset pos) {
-    if (board[pos.dy.floor()][pos.dx.floor()].isEmpty) {
-      board[pos.dy.floor()][pos.dx.floor()].add(logicObj);
+  Offset? selected;
+
+  void selectTile(Offset pos) {
+    if (selected != Offset(pos.dx.floorToDouble(),pos.dy.floorToDouble())) {
+      selected = Offset(pos.dx.floorToDouble(),pos.dy.floorToDouble());
+    } else {
+      selected = null;
     }
   }
 
-  void addId(Offset pos, String id) {
-    if(board[pos.dy.floor()][pos.dx.floor()].isNotEmpty && !board[pos.dx.floor()][pos.dy.floor()][0].id.contains(id)) {
-      board[pos.dy.floor()][pos.dx.floor()][0].id.add(id);
+  void deselectTile() {
+    selected = null;
+  }
+
+  void addObj(LogicObj logicObj, [Offset? pos]) {
+    pos = pos ?? selected;
+    if (pos != null) {
+      if (board[pos.dy.floor()][pos.dx.floor()].isEmpty) {
+        board[pos.dy.floor()][pos.dx.floor()].add(logicObj);
+      }
     }
   }
 
-  void removeId(Offset pos, String id) {
-    if (board[pos.dy.floor()][pos.dx.floor()].isNotEmpty) {
-      board[pos.dy.floor()][pos.dx.floor()][0].id.remove(id);
-      // if(board[pos.dx.floor()][pos.dy.floor()][0].id.isEmpty) {
-      //   board[pos.dx.floor()][pos.dy.floor()].removeAt(0);
-      // }
+  void addId(String id, [Offset? pos]) {
+    pos = pos ?? selected;
+    if (pos != null) {
+      if(board[pos.dy.floor()][pos.dx.floor()].isNotEmpty) {
+        board[pos.dy.floor()][pos.dx.floor()][0].id.add(id);
+        if (!board[pos.dx.floor()][pos.dy.floor()][0].id.contains(id)) {
+          board[pos.dy.floor()][pos.dx.floor()][0].id.add(id);
+        } else {
+          board[pos.dy.floor()][pos.dx.floor()][0].id.remove(id);
+        }
+      }
     }
   }
 
-  void setSize(Offset pos, int size) {
-    if(board[pos.dy.floor()][pos.dx.floor()].isNotEmpty) {
-      board[pos.dy.floor()][pos.dx.floor()][0].size = size;
+  void removeId(String id, [Offset? pos]) {
+    pos = pos ?? selected;
+    if (pos != null) {
+      if (board[pos.dy.floor()][pos.dx.floor()].isNotEmpty) {
+        board[pos.dy.floor()][pos.dx.floor()][0].id.remove(id);
+      }
     }
   }
 
-  void setSides(Offset pos, int sides) {
-    if (board[pos.dy.floor()][pos.dx.floor()].isNotEmpty) {
-      board[pos.dy.floor()][pos.dx.floor()][0].sides = sides;
+  void setSize(int size, [Offset? pos]) {
+    pos = pos ?? selected;
+    if (pos != null) {
+      if(board[pos.dy.floor()][pos.dx.floor()].isNotEmpty) {
+        board[pos.dy.floor()][pos.dx.floor()][0].size = size;
+      }
+    }
+  }
+
+  void setSides(int sides, [Offset? pos]) {
+    pos = pos ?? selected;
+    if (pos != null) {
+      if (board[pos.dy.floor()][pos.dx.floor()].isNotEmpty) {
+        board[pos.dy.floor()][pos.dx.floor()][0].sides = sides;
+      }
     }
   }
 
@@ -83,6 +114,9 @@ class LogicBoard {
       }
     }
     board = rotArr;
+    if (selected != null) {
+    selected = Offset(selected!.dy, board[0].length-1-selected!.dx);
+    }
   }
   void rotateRight() {
     List<List<List<LogicObj>>> rotArr = [];
@@ -93,6 +127,9 @@ class LogicBoard {
       }
     }
     board = rotArr;
+    if (selected != null) {
+    selected = Offset(board.length-1-selected!.dy, selected!.dx);
+    }
   }
 }
 
@@ -107,18 +144,20 @@ class BoardRenderer extends StatefulWidget{
 class BorderRendererState extends State<BoardRenderer> {
   final _boardKey = GlobalKey();
 
-  LogicBoard mainBoard = LogicBoard();
-
   late Offset dragStartPos;
   late Offset dragEndPos;
 
   void _onTapDown(TapDownDetails details) {
     setState(() {
-      mainBoard.addObj(LogicObj(id: [''], sides: 3+math.Random().nextInt(3), size: math.Random().nextInt(3)), Offset((details.localPosition.dx/(_boardKey.currentContext!.size!.width/8)).floorToDouble(), (details.localPosition.dy/(_boardKey.currentContext!.size!.width/8)).floorToDouble()));
+      mainBoard.selectTile(Offset((details.localPosition.dx/(_boardKey.currentContext!.size!.width/8)).floorToDouble(), (details.localPosition.dy/(_boardKey.currentContext!.size!.width/8)).floorToDouble()));
+      // mainBoard.addObj(LogicObj(id: [''], sides: 3+math.Random().nextInt(3), size: math.Random().nextInt(3)), Offset((details.localPosition.dx/(_boardKey.currentContext!.size!.width/8)).floorToDouble(), (details.localPosition.dy/(_boardKey.currentContext!.size!.width/8)).floorToDouble()));
     });
   }
 
   void _onPanStart(DragStartDetails details) {
+    setState(() {
+      mainBoard.selectTile(Offset((details.localPosition.dx/(_boardKey.currentContext!.size!.width/8)).floorToDouble(), (details.localPosition.dy/(_boardKey.currentContext!.size!.width/8)).floorToDouble()));
+    });
     dragStartPos = details.localPosition;
   }
 
@@ -129,6 +168,7 @@ class BorderRendererState extends State<BoardRenderer> {
   void _onPanEnd(DragEndDetails details) {
     setState(() {
       mainBoard.moveObj(Offset((dragStartPos.dx/(_boardKey.currentContext!.size!.width/8)).floorToDouble(), (dragStartPos.dy/(_boardKey.currentContext!.size!.width/8)).floorToDouble()), Offset((dragEndPos.dx/(_boardKey.currentContext!.size!.width/8)).floorToDouble(), (dragEndPos.dy/(_boardKey.currentContext!.size!.width/8)).floorToDouble()));
+      mainBoard.selectTile(Offset((dragEndPos.dx/(_boardKey.currentContext!.size!.width/8)).floorToDouble(), (dragEndPos.dy/(_boardKey.currentContext!.size!.width/8)).floorToDouble()));
     });
   }
 
@@ -199,9 +239,19 @@ class BoardPainter extends CustomPainter {
   }
 
 
-
   @override
   void paint(Canvas canvas, Size size) {
+    if (board.selected != null) {
+      canvas.drawRect(
+        Rect.fromCircle(
+          center: Offset((width/8*board.selected!.dx) + (width/8)/2, (width/8*board.selected!.dy) + (width/8)/2),
+          radius: width/8/2,
+        ),
+        Paint()
+          ..color = greenAccentColor.withOpacity(0.5)
+          ..style = PaintingStyle.fill,
+      );
+    }
     for (int i=0; i<board.board.length; i++) {
       for (int j=0; j<board.board[i].length; j++) {
         if (board.board[i][j].isNotEmpty){
@@ -218,6 +268,6 @@ class BoardPainter extends CustomPainter {
 
   @override
   bool shouldRepaint(covariant CustomPainter oldDelegate) {
-    return false;
+    return true;
   }
 }

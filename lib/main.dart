@@ -1,5 +1,9 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'object_handeling.dart';
+import 'option_buttons.dart';
+import 'theme.dart';
 
 void main() {
   runApp(const MyApp());
@@ -11,6 +15,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return const MaterialApp(
+      color: backgroundColor,
       home: Scaffold(
         body: TwoRowsWidget(),
         // body: DraggableObjektDemo(scale: 400),
@@ -27,49 +32,66 @@ class TwoRowsWidget extends StatelessWidget {
 
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
-    double squareSize = (width-200<height-150?width-200:height-150).clamp(80, 80000);
+    double logicTextSize = width*0.4;
+    double topBarSize = (2*60)+(2*10)-25;
+    double squareSize = (width-logicTextSize<height-topBarSize?width-logicTextSize:height-topBarSize).clamp(80, 80000);
 
-    return Column(
-      children: [
-        // First row
-        Container(
-          height: 150,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              Container(
-                width: MediaQuery.of(context).size.width / 3,
-                color: Colors.red,
-              ),
-              Container(
-                width: MediaQuery.of(context).size.width / 3,
-                color: Colors.green,
-              ),
-              Container(
-                width: MediaQuery.of(context).size.width / 3,
-                color: Colors.blue,
-              ),
-            ],
-          ),
-        ),
-        // Second row
-        Expanded(
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: [
-              Container(
-                padding: EdgeInsets.only(right: (width-200-squareSize)/2),
-                // child: SizedBox(width: squareSize, height: squareSize, child: DraggableObjektDemo(scale: squareSize),)
-                child:SizedBox(width: squareSize, height: squareSize, child: const BoardRenderer()),
-              ),
-              Container(
-                  width: 200,
-                  color: Colors.yellow,
+    return Container(
+      color: backgroundColor,
+      child: Column(
+        children: [
+          // First row
+          SizedBox(
+            height: topBarSize,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                Container(
+                  width: 40,
+                  color: Colors.red,
                 ),
-            ],
+                SizedBox(
+                  width: width - logicTextSize - 40,
+                  // color: Colors.green,
+                  child: Center(
+                    child: Container(
+                      width: min(width - logicTextSize - 40, topBarSize*3),
+                      height: topBarSize,
+                      color: cyanAccentColor,
+                      child: const OptionButtons(),
+                    ),
+                  ),
+                ),
+                Container(
+                  width: logicTextSize,
+                  color: Colors.blue,
+                ),
+              ],
+            ),
           ),
-        ),
-      ],
+          // Second row
+          Expanded(
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                Expanded(
+                  child: Container(
+                      padding: const EdgeInsets.all(10),
+                    color: backgroundAccentColor,
+                    child: Center(
+                      child: SizedBox(width: squareSize-20, height: squareSize-20, child: const BoardRenderer()),
+                    ),
+                  ),
+                ),
+                Container(
+                    width: logicTextSize,
+                    color: Colors.yellow,
+                  ),
+              ],
+            ),
+          ),
+        ],
+      )
     );
   }
 }
