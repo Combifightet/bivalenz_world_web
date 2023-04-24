@@ -92,6 +92,8 @@ class LogicBoard {
     if (pos != null) {
       if (board[pos.dy.floor()][pos.dx.floor()].isNotEmpty) {
         board[pos.dy.floor()][pos.dx.floor()][0].sides = sides;
+      } else {
+        addObj(LogicObj(id: [], sides: sides), pos);
       }
     }
   }
@@ -150,7 +152,6 @@ class BorderRendererState extends State<BoardRenderer> {
   void _onTapDown(TapDownDetails details) {
     setState(() {
       mainBoard.selectTile(Offset((details.localPosition.dx/(_boardKey.currentContext!.size!.width/8)).floorToDouble(), (details.localPosition.dy/(_boardKey.currentContext!.size!.width/8)).floorToDouble()));
-      // mainBoard.addObj(LogicObj(id: [''], sides: 3+math.Random().nextInt(3), size: math.Random().nextInt(3)), Offset((details.localPosition.dx/(_boardKey.currentContext!.size!.width/8)).floorToDouble(), (details.localPosition.dy/(_boardKey.currentContext!.size!.width/8)).floorToDouble()));
     });
   }
 
@@ -190,7 +191,7 @@ class BorderRendererState extends State<BoardRenderer> {
             return CustomPaint(
               painter: BoardPainter(
                 board: mainBoard,
-                width: constraints.maxWidth ,
+                width: constraints.maxWidth
               ),
               willChange: true,
             );
@@ -267,7 +268,5 @@ class BoardPainter extends CustomPainter {
   }
 
   @override
-  bool shouldRepaint(covariant CustomPainter oldDelegate) {
-    return true;
-  }
+  bool shouldRepaint(covariant CustomPainter oldDelegate) => true;
 }

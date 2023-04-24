@@ -40,7 +40,6 @@ class TwoRowsWidget extends StatelessWidget {
       color: backgroundColor,
       child: Column(
         children: [
-          // First row
           SizedBox(
             height: topBarSize,
             child: Row(
@@ -52,7 +51,6 @@ class TwoRowsWidget extends StatelessWidget {
                 ),
                 SizedBox(
                   width: width - logicTextSize - 40,
-                  // color: Colors.green,
                   child: Center(
                     child: Container(
                       width: min(width - logicTextSize - 40, topBarSize*3),
@@ -69,24 +67,26 @@ class TwoRowsWidget extends StatelessWidget {
               ],
             ),
           ),
-          // Second row
           Expanded(
             child: Row(
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
                 Expanded(
                   child: Container(
-                      padding: const EdgeInsets.all(10),
+                    padding: const EdgeInsets.all(10),
                     color: backgroundAccentColor,
                     child: Center(
-                      child: SizedBox(width: squareSize-20, height: squareSize-20, child: const BoardRenderer()),
+                      child: SizedBox(
+                        width: squareSize-20,
+                        height: squareSize-20,
+                        child: const BoardRenderer()),
                     ),
                   ),
                 ),
                 Container(
-                    width: logicTextSize,
-                    color: Colors.yellow,
-                  ),
+                  width: logicTextSize,
+                  color: Colors.yellow,
+                ),
               ],
             ),
           ),
