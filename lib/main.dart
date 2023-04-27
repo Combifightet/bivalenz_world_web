@@ -24,9 +24,14 @@ class MyApp extends StatelessWidget {
   }
 }
 
-class TwoRowsWidget extends StatelessWidget {
+class TwoRowsWidget extends StatefulWidget {
   const TwoRowsWidget({super.key});
+  
+  @override
+  State<StatefulWidget> createState() => TwoRowsWidgetState();
+}
 
+class TwoRowsWidgetState extends State<TwoRowsWidget> {
   @override
   Widget build(BuildContext context) {
 
@@ -38,39 +43,47 @@ class TwoRowsWidget extends StatelessWidget {
 
     return Container(
       color: backgroundColor,
-      child: Column(
+      child: Row(
         children: [
-          SizedBox(
-            height: topBarSize,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                Container(
-                  width: 40,
-                  color: Colors.red,
-                ),
-                SizedBox(
-                  width: width - logicTextSize - 40,
-                  child: Center(
-                    child: Container(
-                      width: min(width - logicTextSize - 40, topBarSize*3),
-                      height: topBarSize,
-                      color: cyanAccentColor,
-                      child: const OptionButtons(),
-                    ),
-                  ),
-                ),
-                Container(
-                  width: logicTextSize,
-                  color: Colors.blue,
-                ),
-              ],
-            ),
-          ),
           Expanded(
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.end,
+            child: Column(
               children: [
+                Row(
+                  children: [
+                    Container(
+                      width: 40,
+                      height: topBarSize,
+                      color: Colors.red,
+                    ),
+                    SizedBox(
+                      width: width - logicTextSize - 40,
+                      child: Center(
+                        child: Container(
+                          width: min(width - logicTextSize - 40, topBarSize*3),
+                          height: topBarSize,
+                          color: cyanAccentColor,
+                          child: const OptionButtons(),
+                        ),
+                      ),
+                    ),
+                  ]
+                ),
+                // Tooltip(
+                //   message: 'set shape triangle',
+                //   waitDuration: const Duration(seconds: 1),
+                //   child: TextButton(
+                //     style: squareButtonStyle,
+                //     onPressed: () {
+                //       setState(() {
+                //         mainBoard.setSides(3);
+                //       });
+                //     },
+                //     child: const FittedBox(
+                //       fit: BoxFit.contain,
+                //       child: Icon(Icons.change_history_rounded, color: redAccentColor,),
+                //     ),
+                //   ),
+                // ),
                 Expanded(
                   child: Container(
                     padding: const EdgeInsets.all(10),
@@ -83,13 +96,23 @@ class TwoRowsWidget extends StatelessWidget {
                     ),
                   ),
                 ),
-                Container(
-                  width: logicTextSize,
-                  color: Colors.yellow,
-                ),
               ],
-            ),
+            )
           ),
+          SizedBox(
+            width: logicTextSize,
+            child: Column(
+              children: [
+                Container(
+                  height: topBarSize,
+                  color: Colors.blue,
+                ),
+                Expanded(child: Container(
+                  color: Colors.yellow,
+                ),)
+              ]
+            ),
+          )
         ],
       )
     );
