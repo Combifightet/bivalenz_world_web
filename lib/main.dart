@@ -1,8 +1,10 @@
+import 'package:flutter/material.dart';
 import 'dart:math';
 
-import 'package:flutter/material.dart';
 import 'object_handeling.dart';
-import 'option_buttons.dart';
+import 'object_buttons.dart';
+import 'logic_handeling.dart';
+import 'logic_buttons.dart';
 import 'theme.dart';
 
 void main() {

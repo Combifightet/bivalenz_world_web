@@ -1,6 +1,9 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
-import 'theme.dart';
 import 'dart:math' as math;
+
+import 'theme.dart';
 
 
 // import 'grid_snap.dart';
@@ -24,7 +27,7 @@ class LogicObj {
 class LogicBoard {
   List<List<List<LogicObj>>> board = [
   [[], [], [], [], [], [], [], []],
-  [[], [], [LogicObj(id: ['a','b'])], [], [], [], [], []],
+  [[], [], [LogicObj(id: ['g'])], [], [], [], [], []],
   [[], [], [], [], [], [], [], []],
   [[], [], [], [], [], [], [], []],
   [[], [], [], [], [], [], [], []],
@@ -66,13 +69,13 @@ class LogicBoard {
     pos = pos ?? selected;
     if (pos != null) {
       if(board[pos.dy.floor()][pos.dx.floor()].isNotEmpty) {
-        board[pos.dy.floor()][pos.dx.floor()][0].id.add(id);
-        if (!board[pos.dx.floor()][pos.dy.floor()][0].id.contains(id)) {
+        if (!board[pos.dy.floor()][pos.dx.floor()][0].id.contains(id)) {
           board[pos.dy.floor()][pos.dx.floor()][0].id.add(id);
         } else {
           board[pos.dy.floor()][pos.dx.floor()][0].id.remove(id);
         }
       }
+    debugPrint('ID: ${board[pos.dy.floor()][pos.dx.floor()][0].id}');
     }
   }
 
@@ -254,6 +257,11 @@ class BoardPainter extends CustomPainter {
 
   @override
   void paint(Canvas canvas, Size size) {
+    final textStyle = TextStyle(
+      color: foregroundColor,
+      fontSize: 0.2*width/8
+    );
+
     if (board.selected != null) {
       canvas.drawRect(
         Rect.fromCircle(
@@ -265,6 +273,7 @@ class BoardPainter extends CustomPainter {
           ..style = PaintingStyle.fill,
       );
     }
+
     for (int i=0; i<board.board.length; i++) {
       for (int j=0; j<board.board[i].length; j++) {
         if (board.board[i][j].isNotEmpty){
@@ -274,10 +283,50 @@ class BoardPainter extends CustomPainter {
             ..color = board.board[i][j][0].sides==3?redAccentColor:board.board[i][j][0].sides==4?blueAccentColor:board.board[i][j][0].sides==5?yellowAccentColor:foregroundColor
             ..style = PaintingStyle.fill
           );
+          if (board.board[i][j][0].id.isNotEmpty) {
+            final textSpan = TextSpan(
+              text: '${board.board[i][j][0].id}',
+              style: textStyle,
+            );
+            final textPainter = TextPainter(
+              text: textSpan,
+              textDirection: TextDirection.ltr,
+              // textAlign: TextAlign.center,
+            );
+            textPainter.layout(
+              minWidth: 0,
+              maxWidth: size.width,
+            );
+            textPainter.paint(canvas, Offset(j*(width/8)+width/16, i*(width/8)+width/8));
+          }
         }
       }
     }
   }
+
+  // @override
+  // void paint(Canvas canvas, Size size) {
+  //   final textStyle = TextStyle(
+  //     color: Colors.black,
+  //     fontSize: 30,
+  //   );
+  //   final textSpan = TextSpan(
+  //     text: 'Hello, world.',
+  //     style: textStyle,
+  //   );
+  //   final textPainter = TextPainter(
+  //     text: textSpan,
+  //     textDirection: TextDirection.ltr,
+  //   );
+  //   textPainter.layout(
+  //     minWidth: 0,
+  //     maxWidth: size.width,
+  //   );
+  //   final xCenter = (size.width - textPainter.width) / 2;
+  //   final yCenter = (size.height - textPainter.height) / 2;
+  //   final offset = Offset(xCenter, yCenter);
+  //   textPainter.paint(canvas, offset);
+  // }
 
   @override
   bool shouldRepaint(covariant CustomPainter oldDelegate) => true;
