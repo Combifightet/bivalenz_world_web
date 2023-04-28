@@ -16,7 +16,7 @@ class LogicObj {
   LogicObj({
     required this.id,
     // required this.pos,
-    this.size = 2,
+    this.size = 1,
     this.sides = 4,
   });
 }
@@ -52,6 +52,13 @@ class LogicBoard {
       if (board[pos.dy.floor()][pos.dx.floor()].isEmpty) {
         board[pos.dy.floor()][pos.dx.floor()].add(logicObj);
       }
+    }
+  }
+
+  void removeObj([Offset? pos]) {
+    pos = pos ?? selected;
+    if (pos != null) {
+      board[pos.dy.floor()][pos.dx.floor()] = [];
     }
   }
 
@@ -91,7 +98,11 @@ class LogicBoard {
     pos = pos ?? selected;
     if (pos != null) {
       if (board[pos.dy.floor()][pos.dx.floor()].isNotEmpty) {
-        board[pos.dy.floor()][pos.dx.floor()][0].sides = sides;
+        if (board[pos.dy.floor()][pos.dx.floor()][0].sides == sides) {
+          removeObj(pos);
+        } else {
+          board[pos.dy.floor()][pos.dx.floor()][0].sides = sides;
+        }
       } else {
         addObj(LogicObj(id: [], sides: sides), pos);
       }
@@ -99,15 +110,18 @@ class LogicBoard {
   }
 
   void moveObj(Offset pos1, Offset pos2) {
-    pos1 = Offset(pos1.dx.clamp(0, 7), pos1.dy.clamp(0, 7));
-    pos2 = Offset(pos2.dx.clamp(0, 7), pos2.dy.clamp(0, 7));
-    if (board[pos1.dy.floor()][pos1.dx.floor()].isNotEmpty && board[pos2.dy.floor()][pos2.dx.floor()].isEmpty) {
-     board[pos2.dy.floor()][pos2.dx.floor()] = board[pos1.dy.floor()][pos1.dx.floor()];
-     board[pos1.dy.floor()][pos1.dx.floor()] = [];
+    if (pos2 == Offset(pos2.dx.clamp(0, 7), pos2.dy.clamp(0, 7))) {
+      if (board[pos1.dy.floor()][pos1.dx.floor()].isNotEmpty && board[pos2.dy.floor()][pos2.dx.floor()].isEmpty) {
+        board[pos2.dy.floor()][pos2.dx.floor()] = board[pos1.dy.floor()][pos1.dx.floor()];
+        removeObj(pos1);
+        selectTile(pos2);
+      }
+    } else {
+       removeObj(pos1);
     }
   }
 
-  void rotateLeft() {
+  void rotateCCW() {
     List<List<List<LogicObj>>> rotArr = [];
     for (int i=0; i<board[0].length; i++) {
       rotArr.add([]);
@@ -120,7 +134,7 @@ class LogicBoard {
     selected = Offset(selected!.dy, board[0].length-1-selected!.dx);
     }
   }
-  void rotateRight() {
+  void rotateCW() {
     List<List<List<LogicObj>>> rotArr = [];
     for (int i=0; i<board[0].length; i++) {
       rotArr.add([]);
@@ -157,7 +171,6 @@ class BorderRendererState extends State<BoardRenderer> {
 
   void _onPanStart(DragStartDetails details) {
     setState(() {
-      mainBoard.selectTile(Offset((details.localPosition.dx/(_boardKey.currentContext!.size!.width/8)).floorToDouble(), (details.localPosition.dy/(_boardKey.currentContext!.size!.width/8)).floorToDouble()));
     });
     dragStartPos = details.localPosition;
   }
@@ -169,7 +182,6 @@ class BorderRendererState extends State<BoardRenderer> {
   void _onPanEnd(DragEndDetails details) {
     setState(() {
       mainBoard.moveObj(Offset((dragStartPos.dx/(_boardKey.currentContext!.size!.width/8)).floorToDouble(), (dragStartPos.dy/(_boardKey.currentContext!.size!.width/8)).floorToDouble()), Offset((dragEndPos.dx/(_boardKey.currentContext!.size!.width/8)).floorToDouble(), (dragEndPos.dy/(_boardKey.currentContext!.size!.width/8)).floorToDouble()));
-      mainBoard.selectTile(Offset((dragEndPos.dx/(_boardKey.currentContext!.size!.width/8)).floorToDouble(), (dragEndPos.dy/(_boardKey.currentContext!.size!.width/8)).floorToDouble()));
     });
   }
 

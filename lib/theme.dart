@@ -48,7 +48,5 @@ ButtonStyle squareButtonStyle = ButtonStyle(
   iconColor: MaterialStateProperty.all(foregroundAccentColor),
   iconSize: MaterialStateProperty.all(30),
 
-  // fixedSize: ,
-  // maximumSize: MaterialStateProperty.all(const Size(20, 20)),
-  // minimumSize: MaterialStateProperty.all(const Size(double.infinity, double.infinity)),
+  minimumSize: const MaterialStatePropertyAll(Size(double.infinity, double.infinity)),
 );
