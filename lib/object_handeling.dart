@@ -27,7 +27,7 @@ class LogicObj {
 class LogicBoard {
   List<List<List<LogicObj>>> board = [
   [[], [], [], [], [], [], [], []],
-  [[], [], [LogicObj(id: ['g'])], [], [], [], [], []],
+  [[], [], [LogicObj(id: ['a', 'b', 'c', 'd', 'e', 'f'], sides: 5, size: 2)], [], [], [], [], []],
   [[], [], [], [], [], [], [], []],
   [[], [], [], [], [], [], [], []],
   [[], [], [], [], [], [], [], []],
@@ -65,17 +65,31 @@ class LogicBoard {
     }
   }
 
-  void addId(String id, [Offset? pos]) {
+  void addId(String id, [Offset? pos, bool multiObjectId = false]) {
     pos = pos ?? selected;
     if (pos != null) {
       if(board[pos.dy.floor()][pos.dx.floor()].isNotEmpty) {
         if (!board[pos.dy.floor()][pos.dx.floor()][0].id.contains(id)) {
-          board[pos.dy.floor()][pos.dx.floor()][0].id.add(id);
+          if (multiObjectId) {
+            board[pos.dy.floor()][pos.dx.floor()][0].id.add(id);
+          } else {
+            bool uniqueId = true;
+            for (int i=0; i<board.length; i++) {
+              for (int j=0; j<board[i].length; j++) {
+                if (board[i][j].isNotEmpty && board[i][j][0].id.contains(id)) {
+                  uniqueId = false;
+                }
+              }
+            }
+            if (uniqueId) {
+              board[pos.dy.floor()][pos.dx.floor()][0].id.add(id);
+              debugPrint('Uniquqe Id');
+            }
+          }
         } else {
-          board[pos.dy.floor()][pos.dx.floor()][0].id.remove(id);
+          removeId(id, pos);
         }
       }
-    debugPrint('ID: ${board[pos.dy.floor()][pos.dx.floor()][0].id}');
     }
   }
 
@@ -284,49 +298,27 @@ class BoardPainter extends CustomPainter {
             ..style = PaintingStyle.fill
           );
           if (board.board[i][j][0].id.isNotEmpty) {
+            String idString = board.board[i][j][0].id.toString();
             final textSpan = TextSpan(
-              text: '${board.board[i][j][0].id}',
+              text: idString.substring(1, idString.length-1),
               style: textStyle,
             );
             final textPainter = TextPainter(
               text: textSpan,
               textDirection: TextDirection.ltr,
-              // textAlign: TextAlign.center,
+              textAlign: TextAlign.center,
             );
             textPainter.layout(
-              minWidth: 0,
-              maxWidth: size.width,
+              minWidth: 1000,
+              // maxWidth: size.width,
             );
-            textPainter.paint(canvas, Offset(j*(width/8)+width/16, i*(width/8)+width/8));
+            // double textOffset = textPainter.width;
+            textPainter.paint(canvas, Offset(j*(width/8)+width/16-500, i*(width/8)+width/8-width/100));
           }
         }
       }
     }
   }
-
-  // @override
-  // void paint(Canvas canvas, Size size) {
-  //   final textStyle = TextStyle(
-  //     color: Colors.black,
-  //     fontSize: 30,
-  //   );
-  //   final textSpan = TextSpan(
-  //     text: 'Hello, world.',
-  //     style: textStyle,
-  //   );
-  //   final textPainter = TextPainter(
-  //     text: textSpan,
-  //     textDirection: TextDirection.ltr,
-  //   );
-  //   textPainter.layout(
-  //     minWidth: 0,
-  //     maxWidth: size.width,
-  //   );
-  //   final xCenter = (size.width - textPainter.width) / 2;
-  //   final yCenter = (size.height - textPainter.height) / 2;
-  //   final offset = Offset(xCenter, yCenter);
-  //   textPainter.paint(canvas, offset);
-  // }
 
   @override
   bool shouldRepaint(covariant CustomPainter oldDelegate) => true;
