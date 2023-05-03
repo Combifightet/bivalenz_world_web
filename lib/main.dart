@@ -50,121 +50,122 @@ class TwoRowsWidgetState extends State<TwoRowsWidget> {
       color: backgroundColor,
         child: Row(
           children: [
-            Expanded(
-              child: Column(
-                children: [
-                  Row(
-                    children: [
-                      Container(
-                        width: 40,
-                        height: topBarSize,
-                        color: Colors.red,
-                        child: Column(
-                          children: [
-                            Expanded(
-                              child: Padding(
-                                padding: const EdgeInsets.all(5),
-                                child: Tooltip(
-                                  message: 'import / export',
-                                  waitDuration: const Duration(seconds: 1),
-                                  child: TextButton(
-                                    style: squareButtonStyle,
-                                    onPressed: () {
-                                      setState(() {
+            // Expanded(
+            //   child: Column(
+            //     children: [
+            //       Row(
+            //         children: [
+            //           Container(
+            //             width: 40,
+            //             height: topBarSize,
+            //             // color: Colors.red,
+            //             child: Column(
+            //               children: [
+            //                 Expanded(
+            //                   child: Padding(
+            //                     padding: const EdgeInsets.all(5),
+            //                     child: Tooltip(
+            //                       message: 'import / export',
+            //                       waitDuration: const Duration(seconds: 1),
+            //                       child: TextButton(
+            //                         style: squareButtonStyle,
+            //                         onPressed: () {
+            //                           setState(() {
                                         
-                                      });
-                                    },
-                                    child: const FittedBox(
-                                      fit: BoxFit.contain,
-                                      child: Icon(Icons.menu_outlined),
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ),
-                            Expanded(
-                              child: Padding(
-                                padding: const EdgeInsets.all(3),
-                                child: Tooltip(
-                                  message: 'rotate board counter clockwise',
-                                  waitDuration: const Duration(seconds: 1),
-                                  child: TextButton(
-                                    style: squareButtonStyle,
-                                    onPressed: () {
-                                      setState(() {
-                                        mainBoard.rotateCCW();
-                                      });
-                                    },
-                                    child: const FittedBox(
-                                      fit: BoxFit.contain,
-                                      child: Icon(Icons.rotate_90_degrees_ccw_outlined),
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ),
-                            Expanded(
-                              child: Padding(
-                                padding: const EdgeInsets.all(3),
-                                child: Tooltip(
-                                  message: 'rotate board clockwise',
-                                  waitDuration: const Duration(seconds: 1),
-                                  child: TextButton(
-                                    style: squareButtonStyle,
-                                    onPressed: () {
-                                      setState(() {
-                                        mainBoard.rotateCW();
-                                      });
-                                    },
-                                    child: const FittedBox(
-                                      fit: BoxFit.contain,
-                                      child: Icon(Icons.rotate_90_degrees_cw_outlined),
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      SizedBox(
-                        width: width - logicTextSize - 40,
-                        child: Center(
-                          child: Container(
-                            width: min(width - logicTextSize - 40, topBarSize*3),
-                            height: topBarSize,
-                            color: cyanAccentColor,
-                            child: const OptionButtons(),
-                          ),
-                        ),
-                      ),
-                    ]
-                  ),
-                  Expanded(
-                    child: Container(
-                      padding: const EdgeInsets.all(10),
-                      color: backgroundAccentColor,
-                      child: Center(
-                        child: SizedBox(
-                          width: squareSize-20,
-                          height: squareSize-20,
-                          child: const BoardRenderer()),
-                      ),
-                    ),
-                  ),
-                ],
-              )
-            ),
+            //                           });
+            //                         },
+            //                         child: const FittedBox(
+            //                           fit: BoxFit.contain,
+            //                           child: Icon(Icons.menu_outlined),
+            //                         ),
+            //                       ),
+            //                     ),
+            //                   ),
+            //                 ),
+            //                 Expanded(
+            //                   child: Padding(
+            //                     padding: const EdgeInsets.all(3),
+            //                     child: Tooltip(
+            //                       message: 'rotate board counter clockwise',
+            //                       waitDuration: const Duration(seconds: 1),
+            //                       child: TextButton(
+            //                         style: squareButtonStyle,
+            //                         onPressed: () {
+            //                           setState(() {
+            //                             mainBoard.rotateCCW();
+            //                           });
+            //                         },
+            //                         child: const FittedBox(
+            //                           fit: BoxFit.contain,
+            //                           child: Icon(Icons.rotate_90_degrees_ccw_outlined),
+            //                         ),
+            //                       ),
+            //                     ),
+            //                   ),
+            //                 ),
+            //                 Expanded(
+            //                   child: Padding(
+            //                     padding: const EdgeInsets.all(3),
+            //                     child: Tooltip(
+            //                       message: 'rotate board clockwise',
+            //                       waitDuration: const Duration(seconds: 1),
+            //                       child: TextButton(
+            //                         style: squareButtonStyle,
+            //                         onPressed: () {
+            //                           setState(() {
+            //                             mainBoard.rotateCW();
+            //                           });
+            //                         },
+            //                         child: const FittedBox(
+            //                           fit: BoxFit.contain,
+            //                           child: Icon(Icons.rotate_90_degrees_cw_outlined),
+            //                         ),
+            //                       ),
+            //                     ),
+            //                   ),
+            //                 ),
+            //               ],
+            //             ),
+            //           ),
+            //           SizedBox(
+            //             width: width - logicTextSize - 40,
+            //             child: Center(
+            //               child: Container(
+            //                 width: min(width - logicTextSize - 40, topBarSize*3),
+            //                 height: topBarSize,
+            //                // color: cyanAccentColor,
+            //                 child: const OptionButtons(),
+            //               ),
+            //             ),
+            //           ),
+            //         ]
+            //       ),
+            //       Expanded(
+            //         child: Container(
+            //           padding: const EdgeInsets.all(10),
+            //           color: backgroundAccentColor,
+            //           child: Center(
+            //             child: SizedBox(
+            //               width: squareSize-20,
+            //               height: squareSize-20,
+            //               child: const BoardRenderer()),
+            //           ),
+            //         ),
+            //       ),
+            //     ],
+            //   )
+            // ),
             SizedBox(
               width: logicTextSize,
               child: Column(
                 children: [
                   Container(
                     height: topBarSize,
-                    color: Colors.blue,
+                    color: Colors.blue.withOpacity(.1),
                   ),
                   Expanded(child: Container(
-                    color: Colors.yellow,
+                    color: Colors.yellow.withOpacity(.1),
+                    child: const Center(child: LogicElement())
                   ),)
                 ]
               ),
