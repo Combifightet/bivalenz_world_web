@@ -164,7 +164,7 @@ class TwoRowsWidgetState extends State<TwoRowsWidget> {
                     color: Colors.blue.withOpacity(.1),
                   ),
                   Expanded(child: Container(
-                    color: Colors.yellow.withOpacity(.1),
+                    // color: Colors.yellow.withOpacity(.1),
                     child: const Center(child: LogicElement())
                   ),)
                 ]
