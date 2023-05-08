@@ -2,8 +2,21 @@ import 'package:flutter/material.dart';
 
 import 'theme.dart';
 
-class LogicObj extends StatelessWidget {
+class LogicObj extends StatefulWidget {
   const LogicObj({super.key});
+
+  @override
+  State<LogicObj> createState() => LogicObjState();
+}
+
+class LogicObjState extends State<LogicObj> {
+  final _controller = TextEditingController();
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -44,8 +57,31 @@ class LogicObj extends StatelessWidget {
                 style: const TextStyle(
                   color: foregroundAccentColor,
                 ),
+                controller: _controller,
                 onChanged: (value) {
-                  
+                  int curserOffset = _controller.selection.baseOffset;
+                  String formattedInput = value.replaceAll('!', '¬');           // logical not
+                  curserOffset -= RegExp('->').allMatches(formattedInput.substring(0, curserOffset.clamp(0, value.length))).length;
+                  formattedInput = formattedInput.replaceAll('->', '→');        // logical implication
+                  curserOffset -= 2 * RegExp('<=>').allMatches(formattedInput.substring(0, curserOffset.clamp(0, value.length))).length;
+                  formattedInput = formattedInput.replaceAll('<=>', '⇔');      // logical equivalence
+                  curserOffset -= RegExp('¬=').allMatches(formattedInput.substring(0, curserOffset.clamp(0, value.length))).length;
+                  formattedInput = formattedInput.replaceAll('¬=', '≠');        // not equal
+                  curserOffset -= RegExp('¬≠').allMatches(formattedInput.substring(0, curserOffset.clamp(0, value.length))).length;
+                  formattedInput = formattedInput.replaceAll('¬≠', '=');        // equal
+                  curserOffset -= RegExp('_¬').allMatches(formattedInput.substring(0, curserOffset.clamp(0, value.length))).length;
+                  formattedInput = formattedInput.replaceAll('_¬', '⊥');        // contradiction (truth value false)
+                  formattedInput = formattedInput.replaceAll('|', '∨');         // logical disjunction (or)
+                  formattedInput = formattedInput.replaceAll('&', '∧');         // logical conjunction (and)
+                  curserOffset -= RegExp('_V').allMatches(formattedInput.substring(0, curserOffset.clamp(0, value.length))).length;
+                  formattedInput = formattedInput.replaceAll('_V', '∀');        // quantification (for all)
+                  curserOffset -= RegExp('_E').allMatches(formattedInput.substring(0, curserOffset.clamp(0, value.length))).length;
+                  formattedInput = formattedInput.replaceAll('_E', '∃');        // quantification (there exists)
+                  formattedInput = formattedInput.replaceAll('(', '()');        // autoclose brackets
+                  _controller.value = TextEditingValue(
+                    text: formattedInput,
+                    selection: TextSelection.collapsed(offset: curserOffset.clamp(0, value.length+1)),
+                  );
                 },
               )
             ),

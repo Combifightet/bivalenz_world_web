@@ -13,6 +13,8 @@
 - [ ] . . .
 - [ ] Improve ux (light mode toggle?)
 
+<https://en.wikipedia.org/wiki/List_of_logic_symbols>
+
 ## Possible new names
 
 - Bivalenz World v2
