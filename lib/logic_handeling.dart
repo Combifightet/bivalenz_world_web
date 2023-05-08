@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 
 import 'theme.dart';
 
-class LogicElement extends StatelessWidget {
-  const LogicElement({super.key});
+class LogicObj extends StatelessWidget {
+  const LogicObj({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -39,7 +39,7 @@ class LogicElement extends StatelessWidget {
                   fillColor: backgroundAccentColor,
                   hintText: 'Enter a logic statement',
                   hintStyle: TextStyle(color: foregroundAccentColor.withOpacity(.5)),
-                  border: UnderlineInputBorder(borderSide: BorderSide(color: foregroundAccentColor.withOpacity(0.5))) // TODO: Does not yet display the correct coler for the underline of th text field
+                  border: UnderlineInputBorder(borderSide: BorderSide(color: foregroundAccentColor.withOpacity(0.5))) // TODO: Does not yet display the correct coler for the underline of the text field
                 ),
                 style: const TextStyle(
                   color: foregroundAccentColor,
@@ -70,6 +70,108 @@ class LogicElement extends StatelessWidget {
           )
         ],
       )
+    );
+  }
+}
+
+
+
+
+
+
+class LogicObjList extends StatefulWidget {
+  const LogicObjList({super.key});
+
+  @override
+  LogicObjListState createState() => LogicObjListState();
+}
+
+class LogicObjListState extends State<LogicObjList> {
+  final List<LogicObj> logicObjs = [];
+
+  void _addItem() {
+    setState(() {
+      logicObjs.add(const LogicObj());
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: <Widget>[
+        Padding(
+          padding: const EdgeInsets.all(0),
+          child: Container(
+            height: 50,
+            child: Row(
+              // mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              // crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(4),
+                  child: AspectRatio(aspectRatio: 1, child:Tooltip(
+                    message: 'verify all logic statements',
+                    waitDuration: const Duration(seconds: 1),
+                    child: TextButton(
+                      style: squareButtonStyle,
+                      onPressed: () {
+                        debugPrint('verifyed all logic statements');
+                      },
+                      child: const FittedBox(
+                        fit: BoxFit.contain,
+                        child: Icon(Icons.check_rounded),
+                      ),
+                    ),
+                  ),
+                  )
+                ),
+                Expanded(
+                  child: Container(
+                    padding: const EdgeInsets.all(3.0),
+                    child: TextButton(
+                      style: squareButtonStyle,
+                      onPressed: _addItem,
+                      child: const FittedBox(
+                        fit: BoxFit.contain,
+                        child: Icon(Icons.add_rounded),
+                      ),
+                    ),
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(4),
+                  child: AspectRatio(aspectRatio: 1, child:Tooltip(
+                    message: 'delete all logic statements',
+                    waitDuration: const Duration(seconds: 1),
+                    child: TextButton(
+                      style: squareButtonStyle,
+                      onPressed: () {
+                        debugPrint('deleted all logic statements');
+                      },
+                      child: const FittedBox(
+                        fit: BoxFit.contain,
+                        child: Icon(Icons.delete_forever_outlined),
+                      ),
+                    ),
+                  ),
+                  )
+                ),
+              ],
+            ),
+          ),
+        ),
+        Expanded(
+          child: ListView.builder(
+            itemCount: logicObjs.length,
+            itemBuilder: (context, index) {
+              return Padding(
+                padding: const EdgeInsets.all(1),
+                child: logicObjs[index],
+              );
+            },
+          ),
+        ),
+      ],
     );
   }
 }
