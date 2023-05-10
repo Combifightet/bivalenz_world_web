@@ -59,28 +59,40 @@ class LogicObjState extends State<LogicObj> {
                 ),
                 controller: _controller,
                 onChanged: (value) {
-                  int curserOffset = _controller.selection.baseOffset;
+                  int cursorOffset = _controller.selection.baseOffset;
                   String formattedInput = value.replaceAll('!', '¬');           // logical not
-                  curserOffset -= RegExp('->').allMatches(formattedInput.substring(0, curserOffset.clamp(0, value.length))).length;
+                  cursorOffset -= RegExp('->').allMatches(formattedInput.substring(0, cursorOffset.clamp(0, value.length))).length;
                   formattedInput = formattedInput.replaceAll('->', '→');        // logical implication
-                  curserOffset -= 2 * RegExp('<=>').allMatches(formattedInput.substring(0, curserOffset.clamp(0, value.length))).length;
+                  cursorOffset -= 2 * RegExp('<=>').allMatches(formattedInput.substring(0, cursorOffset.clamp(0, value.length))).length;
                   formattedInput = formattedInput.replaceAll('<=>', '⇔');      // logical equivalence
-                  curserOffset -= RegExp('¬=').allMatches(formattedInput.substring(0, curserOffset.clamp(0, value.length))).length;
+                  cursorOffset -= RegExp('¬=').allMatches(formattedInput.substring(0, cursorOffset.clamp(0, value.length))).length;
                   formattedInput = formattedInput.replaceAll('¬=', '≠');        // not equal
-                  curserOffset -= RegExp('¬≠').allMatches(formattedInput.substring(0, curserOffset.clamp(0, value.length))).length;
+                  cursorOffset -= RegExp('¬≠').allMatches(formattedInput.substring(0, cursorOffset.clamp(0, value.length))).length;
                   formattedInput = formattedInput.replaceAll('¬≠', '=');        // equal
-                  curserOffset -= RegExp('_¬').allMatches(formattedInput.substring(0, curserOffset.clamp(0, value.length))).length;
+                  cursorOffset -= RegExp('_¬').allMatches(formattedInput.substring(0, cursorOffset.clamp(0, value.length))).length;
                   formattedInput = formattedInput.replaceAll('_¬', '⊥');        // contradiction (truth value false)
                   formattedInput = formattedInput.replaceAll('|', '∨');         // logical disjunction (or)
                   formattedInput = formattedInput.replaceAll('&', '∧');         // logical conjunction (and)
-                  curserOffset -= RegExp('_V').allMatches(formattedInput.substring(0, curserOffset.clamp(0, value.length))).length;
+                  cursorOffset -= RegExp('_V').allMatches(formattedInput.substring(0, cursorOffset.clamp(0, value.length))).length;
                   formattedInput = formattedInput.replaceAll('_V', '∀');        // quantification (for all)
-                  curserOffset -= RegExp('_E').allMatches(formattedInput.substring(0, curserOffset.clamp(0, value.length))).length;
+                  cursorOffset -= RegExp('_E').allMatches(formattedInput.substring(0, cursorOffset.clamp(0, value.length))).length;
                   formattedInput = formattedInput.replaceAll('_E', '∃');        // quantification (there exists)
-                  formattedInput = formattedInput.replaceAll('(', '()');        // autoclose brackets
+                  
+                  // formattedInput = formattedInput.replaceAll('(', '()');        // autoclose brackets
+                  if (cursorOffset != 0 && formattedInput[cursorOffset-1] == '(') {
+                    if (cursorOffset == value.length) {
+                      formattedInput = '$formattedInput)';
+                    } else {
+                      if (formattedInput[cursorOffset] != ')') {
+                        formattedInput = '${formattedInput.substring(0, cursorOffset)})${formattedInput.substring(cursorOffset)}';
+                      }
+                    }
+                  }
+                  
+                  
                   _controller.value = TextEditingValue(
                     text: formattedInput,
-                    selection: TextSelection.collapsed(offset: curserOffset.clamp(0, value.length+1)),
+                    selection: TextSelection.collapsed(offset: cursorOffset.clamp(0, value.length+1)),
                   );
                 },
               )
@@ -128,6 +140,18 @@ class LogicObjListState extends State<LogicObjList> {
   void _addItem() {
     setState(() {
       logicObjs.add(const LogicObj());
+    });
+  }
+
+  void _removeItem(index) {
+    setState(() {
+      logicObjs.removeAt(index);
+    });
+  }
+
+  void _clearItems() {
+    setState(() {
+      logicObjs.clear();
     });
   }
 
@@ -182,6 +206,7 @@ class LogicObjListState extends State<LogicObjList> {
                     child: TextButton(
                       style: squareButtonStyle,
                       onPressed: () {
+                        _clearItems();
                         debugPrint('deleted all logic statements');
                       },
                       child: const FittedBox(
