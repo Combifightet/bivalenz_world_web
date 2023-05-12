@@ -5,6 +5,7 @@ import 'theme.dart';
 class LogicObj extends StatelessWidget {
   LogicObj({super.key});
   final _controller = TextEditingController();
+  String? logicObjEvaluation;
 
   @override
   Widget build(BuildContext context) {
@@ -12,7 +13,7 @@ class LogicObj extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        const Padding(
+        Padding(
           padding: EdgeInsets.all(0),
           child: AspectRatio(
             aspectRatio: 1,
@@ -24,7 +25,27 @@ class LogicObj extends StatelessWidget {
                 // child: Text('T', style: TextStyle(fontWeight: FontWeight.bold, color: greenAccentColor)),
                 // child: Text('F', style: TextStyle(fontWeight: FontWeight.bold, color: redAccentColor)),
                 // child: Icon(Icons.star, color: foregroundAccentColor),
-                child: Icon(Icons.close_rounded, color: foregroundAccentColor),
+                // child: Icon(Icons.close_rounded, color: foregroundAccentColor),
+                child: Builder(
+                  builder: (BuildContext context) {
+                    switch (logicObjEvaluation) {
+                      case '⊤':
+                        
+                        return const Text('⊤', style: TextStyle(fontWeight: FontWeight.bold, color: foregroundAccentColor));
+                      case '⊥':
+                        
+                        return const Text('⊥', style: TextStyle(fontWeight: FontWeight.bold, color: foregroundAccentColor));
+                      case 'error0':
+                        
+                        return const Icon(Icons.star, color: foregroundAccentColor);
+                      case 'error1':
+                        
+                        return const Icon(Icons.close_rounded, color: foregroundAccentColor);
+                      default:
+                      return Container();
+                    }
+                  },
+                ),
               ),
             )
           )
