@@ -297,24 +297,29 @@ class BoardPainter extends CustomPainter {
             ..color = board.board[i][j][0].sides==3?redAccentColor:board.board[i][j][0].sides==4?blueAccentColor:board.board[i][j][0].sides==5?yellowAccentColor:foregroundColor
             ..style = PaintingStyle.fill
           );
-          if (board.board[i][j][0].id.isNotEmpty) {
-            String idString = board.board[i][j][0].id.toString();
-            final textSpan = TextSpan(
-              text: idString.substring(1, idString.length-1),
-              style: textStyle,
-            );
-            final textPainter = TextPainter(
-              text: textSpan,
-              textDirection: TextDirection.ltr,
-              textAlign: TextAlign.center,
-            );
-            textPainter.layout(
-              minWidth: 1000,
-              // maxWidth: size.width,
-            );
-            // double textOffset = textPainter.width;
-            textPainter.paint(canvas, Offset(j*(width/8)+width/16-500, i*(width/8)+width/8-width/100));
-          }
+        }
+      }
+    }
+
+    for (int i=0; i<board.board.length; i++) {
+      for (int j=0; j<board.board[i].length; j++) {
+        if (board.board[i][j].isNotEmpty && board.board[i][j][0].id.isNotEmpty) {
+          String idString = board.board[i][j][0].id.toString();
+          final textSpan = TextSpan(
+            text: idString.substring(1, idString.length-1),
+            style: textStyle,
+          );
+          final textPainter = TextPainter(
+            text: textSpan,
+            textDirection: TextDirection.ltr,
+            textAlign: TextAlign.center,
+          );
+          textPainter.layout(
+            minWidth: 1000,
+            // maxWidth: size.width,
+          );
+          // double textOffset = textPainter.width;
+          textPainter.paint(canvas, Offset(j*(width/8)+width/16-500, i*(width/8)+width/8-width/100));
         }
       }
     }
