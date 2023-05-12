@@ -1,5 +1,7 @@
+import 'package:bivalenz_world_web/object_handeling.dart';
 import 'package:flutter/material.dart';
 
+import 'logic_checking.dart';
 import 'theme.dart';
 
 class LogicObj extends StatelessWidget {
@@ -14,7 +16,7 @@ class LogicObj extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         Padding(
-          padding: EdgeInsets.all(0),
+          padding: const EdgeInsets.all(0),
           child: AspectRatio(
             aspectRatio: 1,
             child: Card(
@@ -28,21 +30,41 @@ class LogicObj extends StatelessWidget {
                 // child: Icon(Icons.close_rounded, color: foregroundAccentColor),
                 child: Builder(
                   builder: (BuildContext context) {
-                    switch (logicObjEvaluation) {
+                    // switch (logicObjEvaluation) {
+                    switch (checkLogicTxt('', mainBoard)) {
                       case '⊤':
                         
-                        return const Text('⊤', style: TextStyle(fontWeight: FontWeight.bold, color: foregroundAccentColor));
+                        return const Tooltip(
+                          message: 'truth value \'true\'',
+                          waitDuration: Duration(seconds: 1),
+                          child: Text('⊤', style: TextStyle(fontWeight: FontWeight.bold, color: greenAccentColor))
+                        );
                       case '⊥':
                         
-                        return const Text('⊥', style: TextStyle(fontWeight: FontWeight.bold, color: foregroundAccentColor));
+                        return const Tooltip(
+                          message: 'truth value \'false\'',
+                          waitDuration: Duration(seconds: 1),
+                          child: Text('⊥', style: TextStyle(fontWeight: FontWeight.bold, color: redAccentColor))
+                        );
                       case 'error0':
                         
-                        return const Icon(Icons.star, color: foregroundAccentColor);
+                        return const Tooltip(
+                          message: 'error 0',
+                          waitDuration: Duration(seconds: 1),
+                          child: Icon(Icons.star, color: foregroundAccentColor)
+                        );
                       case 'error1':
                         
-                        return const Icon(Icons.close_rounded, color: foregroundAccentColor);
+                        return const Tooltip(
+                          message: 'error 1',
+                          waitDuration: Duration(seconds: 1),
+                          child: Icon(Icons.close_rounded, color: foregroundAccentColor)
+                        );
                       default:
-                      return Container();
+                      return const Tooltip(
+                        message: 'enter a logic statement',
+                        waitDuration: Duration(seconds: 1),
+                      );
                     }
                   },
                 ),
@@ -192,7 +214,7 @@ class LogicObjListState extends State<LogicObjList> {
                 ),
                 Padding(
                   padding: const EdgeInsets.all(4),
-                  child: AspectRatio(aspectRatio: 1, child:Tooltip(
+                  child: AspectRatio(aspectRatio: 1, child: Tooltip(
                     message: 'delete all logic statements',
                     waitDuration: const Duration(seconds: 1),
                     child: TextButton(
