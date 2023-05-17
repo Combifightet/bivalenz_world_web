@@ -12,34 +12,37 @@ String checkLogicTxt(String logicTxt, List<List<List<LogicObj>>> logicBoard) {
         }
       }
     }
+    return null;
   }
-  posToOffset(String pos) {         // 'xxx:yyy'
-    return Offset(double.parse(pos.substring(0, pos.indexOf(':'))), double.parse(pos.substring(pos.indexOf(':'))))
+  Offset? posToOffset(String pos) {         // 'xxx:yyy'
+    return Offset(double.parse(pos.substring(0, pos.indexOf(':'))), double.parse(pos.substring(pos.indexOf(':'))));
   }
 
-  String lm(String chr){
-    for (int i=0; i<logicBoard.length; i++) {
-      for (int j=0; j<logicBoard[i].length; j++) {
-        if (logicBoard[i][j].isNotEmpty && logicBoard[i][j][0].id.contains(chr)) {
-          for (int k=0; k<=j; k++) {
-            if (logicBoard[i][k].isNotEmpty) {
-              return '$i;$k';
-            }
-          }
+  Offset? getOffset(String str) {
+    if (str.contains(':') && str.length >= 3) {
+      return posToOffset(str);
+    } else {
+      return idToOffest(str);
+    }
+  }
+
+  String lm(String str){
+    Offset? pos = getOffset(str);
+    if (pos != null) {
+      for (int k=0; k<=pos.dx.toInt(); k++) {
+        if (logicBoard[pos.dx.toInt()][k].isNotEmpty) {
+          return '$k;${pos.dy.toInt()}';
         }
       }
     }
     return 'error1';
   }
-  String rm(String chr){
-    for (int i=0; i<logicBoard.length; i++) {
-      for (int j=0; j<logicBoard[i].length; j++) {
-        if (logicBoard[i][j].isNotEmpty && logicBoard[i][j][0].id.contains(chr)) {
-          for (int k=logicBoard[i].length-1; k>=j; k--) {
-            if (logicBoard[i][k].isNotEmpty) {
-              return '$i;$k';
-            }
-          }
+  String rm(String str){
+    Offset? pos = getOffset(str);
+    if (pos != null) {
+      for (int k=logicBoard[pos.dy.toInt()].length-1; k>=pos.dx; k--) {
+        if (logicBoard[pos.dy.toInt()][k].isNotEmpty) {
+          return '$k:${pos.dy.toInt()}';
         }
       }
     }
