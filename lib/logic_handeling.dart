@@ -4,10 +4,22 @@ import 'package:flutter/material.dart';
 import 'logic_checking.dart';
 import 'theme.dart';
 
-class LogicObj extends StatelessWidget {
-  LogicObj({super.key});
+class LogicObj extends StatefulWidget {
+  const LogicObj({super.key});
+
+  @override
+  State<LogicObj> createState() => _LogicObjState();
+}
+
+class _LogicObjState extends State<LogicObj> {
   final _controller = TextEditingController();
   String? logicObjEvaluation;
+
+  void verifyLogic() {
+    setState(() {
+      logicObjEvaluation = checkLogicTxt(_controller.value.text, mainBoard.board);
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -24,37 +36,29 @@ class LogicObj extends StatelessWidget {
               elevation: 5,
               child: FittedBox(
                 fit: BoxFit.contain,
-                // child: Text('T', style: TextStyle(fontWeight: FontWeight.bold, color: greenAccentColor)),
-                // child: Text('F', style: TextStyle(fontWeight: FontWeight.bold, color: redAccentColor)),
-                // child: Icon(Icons.star, color: foregroundAccentColor),
-                // child: Icon(Icons.close_rounded, color: foregroundAccentColor),
                 child: Builder(
                   builder: (BuildContext context) {
-                    // switch (logicObjEvaluation) {
-                    switch (checkLogicTxt('', mainBoard)) {
+                    switch (logicObjEvaluation) {
+                    // switch (checkLogicTxt('rm(a)', mainBoard)) {
                       case '⊤':
-                        
                         return const Tooltip(
                           message: 'truth value \'true\'',
                           waitDuration: Duration(seconds: 1),
                           child: Text('⊤', style: TextStyle(fontWeight: FontWeight.bold, color: greenAccentColor))
                         );
                       case '⊥':
-                        
                         return const Tooltip(
                           message: 'truth value \'false\'',
                           waitDuration: Duration(seconds: 1),
                           child: Text('⊥', style: TextStyle(fontWeight: FontWeight.bold, color: redAccentColor))
                         );
                       case 'error0':
-                        
                         return const Tooltip(
                           message: 'error 0',
                           waitDuration: Duration(seconds: 1),
                           child: Icon(Icons.star, color: foregroundAccentColor)
                         );
                       case 'error1':
-                        
                         return const Tooltip(
                           message: 'error 1',
                           waitDuration: Duration(seconds: 1),
@@ -87,6 +91,8 @@ class LogicObj extends StatelessWidget {
                 color: foregroundAccentColor,
               ),
               controller: _controller,
+              onSubmitted: (event) => verifyLogic(),
+              onTapOutside: (event) => verifyLogic(),
               onChanged: (value) {
                 int cursorOffset = _controller.selection.baseOffset;
                 String formattedInput = value.replaceAll('!', '¬');             // logical not
@@ -135,10 +141,6 @@ class LogicObj extends StatelessWidget {
     );
   }
 }
-
-
-
-
 
 
 class LogicObjList extends StatefulWidget {
