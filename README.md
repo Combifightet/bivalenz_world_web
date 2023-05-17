@@ -6,10 +6,11 @@
 - [X] Create object classes
 - [X] Create shape renderer
 - [X] Create board renderer
-- [ ] Create board manager
+- [ ] Create multi board instance manager
+- [ ] Create multi logic instance manager
 - [ ] Evalueate logic statements
 - [ ] Export and import "BivalenzWorld" data
-- [ ] Create ui
+- [ ] Create ui (3/4)
 - [ ] . . .
 - [ ] Improve ux (light mode toggle?)
 
