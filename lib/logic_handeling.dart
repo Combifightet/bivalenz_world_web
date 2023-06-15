@@ -98,8 +98,10 @@ class _LogicObjState extends State<LogicObj> {
                 String formattedInput = value.replaceAll('!', '¬');             // logical not
                 cursorOffset -= RegExp('->').allMatches(formattedInput.substring(0, cursorOffset.clamp(0, value.length))).length;
                 formattedInput = formattedInput.replaceAll('->', '→');          // logical implication
-                cursorOffset -= 2 * RegExp('<=>').allMatches(formattedInput.substring(0, cursorOffset.clamp(0, value.length))).length;
-                formattedInput = formattedInput.replaceAll('<=>', '⇔');        // logical equivalence
+                cursorOffset -= 2 * RegExp('<->').allMatches(formattedInput.substring(0, cursorOffset.clamp(0, value.length))).length;
+                formattedInput = formattedInput.replaceAll('<->', '↔');        // logical equivalence
+                cursorOffset -= 1 * RegExp('<→').allMatches(formattedInput.substring(0, cursorOffset.clamp(0, value.length))).length;
+                formattedInput = formattedInput.replaceAll('<→', '↔');
                 cursorOffset -= RegExp('¬=').allMatches(formattedInput.substring(0, cursorOffset.clamp(0, value.length))).length;
                 formattedInput = formattedInput.replaceAll('¬=', '≠');          // not equal
                 cursorOffset -= RegExp('¬≠').allMatches(formattedInput.substring(0, cursorOffset.clamp(0, value.length))).length;

@@ -55,7 +55,7 @@ class TwoRowsWidgetState extends State<TwoRowsWidget> {
                 children: [
                   Row(
                     children: [
-                      Container(
+                      SizedBox(
                         width: 40,
                         height: topBarSize,
                         // color: Colors.red,
@@ -130,7 +130,7 @@ class TwoRowsWidgetState extends State<TwoRowsWidget> {
                       SizedBox(
                         width: width - logicTextSize - 40,
                         child: Center(
-                          child: Container(
+                          child: SizedBox(
                             width: min(width - logicTextSize - 40, topBarSize*3),
                             height: topBarSize,
                            // color: cyanAccentColor,
@@ -161,12 +161,10 @@ class TwoRowsWidgetState extends State<TwoRowsWidget> {
                 children: [
                   Container(
                     height: topBarSize,
-                    color: Colors.blue.withOpacity(.1),
+                    // color: Colors.blue.withOpacity(.1),
+                    child: const LogicButtons()
                   ),
-                  Expanded(child: Container(
-                    // color: Colors.yellow.withOpacity(.1),
-                    child: const Center(child: LogicObjList())
-                  ),)
+                  const Expanded(child: Center(child: LogicObjList()),)
                 ]
               ),
             )

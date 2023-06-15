@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'object_handeling.dart';
 
 // const Color backgroundColor = Color(0xff23272e);
 const Color backgroundColor = Color(0xff242836);
@@ -48,5 +49,34 @@ ButtonStyle squareButtonStyle = ButtonStyle(
   iconColor: MaterialStateProperty.all(foregroundAccentColor),
   iconSize: MaterialStateProperty.all(30),
 
+  minimumSize: const MaterialStatePropertyAll(Size(double.infinity, double.infinity)),
+);
+
+ButtonStyle smallButtonStyle = ButtonStyle(
+  backgroundColor: MaterialStateProperty.resolveWith((states) {
+    if (states.contains(MaterialState.pressed)) {
+      return foregroundAccentColor;
+    }
+      return backgroundAccentColor;
+    }),
+  foregroundColor: MaterialStateProperty.resolveWith((states) {
+    if (states.contains(MaterialState.pressed)) {
+      return backgroundAccentColor;
+    }
+      return foregroundAccentColor;
+  }),
+  overlayColor: MaterialStateProperty.all(foregroundAccentColor.withAlpha(20)),
+  elevation: MaterialStateProperty.resolveWith((states) {
+    if (states.contains(MaterialState.pressed)) {
+      return 0;
+    }
+      return 5;
+  }),
+  textStyle: MaterialStateProperty.resolveWith((states) {
+    if (states.contains(MaterialState.pressed)) {
+      return const TextStyle(color: backgroundAccentColor);
+    }
+      return const TextStyle(color: foregroundAccentColor);
+  }),
   minimumSize: const MaterialStatePropertyAll(Size(double.infinity, double.infinity)),
 );

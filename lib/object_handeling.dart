@@ -73,18 +73,14 @@ class LogicBoard {
           if (multiObjectId) {
             board[pos.dy.floor()][pos.dx.floor()][0].id.add(id);
           } else {
-            bool uniqueId = true;
             for (int i=0; i<board.length; i++) {
               for (int j=0; j<board[i].length; j++) {
                 if (board[i][j].isNotEmpty && board[i][j][0].id.contains(id)) {
-                  uniqueId = false;
+                  removeId(id, Offset(j.floorToDouble(), i.floorToDouble()));
                 }
               }
             }
-            if (uniqueId) {
-              board[pos.dy.floor()][pos.dx.floor()][0].id.add(id);
-              debugPrint('Uniquqe Id');
-            }
+            board[pos.dy.floor()][pos.dx.floor()][0].id.add(id);
           }
         } else {
           removeId(id, pos);

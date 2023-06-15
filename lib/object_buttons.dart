@@ -12,6 +12,8 @@ class OptionButtons extends StatefulWidget {
 
 class OptionButtonsState extends State<OptionButtons> {
 
+  EdgeInsetsGeometry buttonPadding = const EdgeInsets.all(5);
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -21,7 +23,7 @@ class OptionButtonsState extends State<OptionButtons> {
             children: [
               Expanded(
                 child: Padding(
-                  padding: const EdgeInsets.all(5),
+                  padding: buttonPadding,
                   child: Tooltip(
                     message: 'set id \'a\'',
                     waitDuration: const Duration(seconds: 1),
@@ -42,7 +44,7 @@ class OptionButtonsState extends State<OptionButtons> {
               ),
               Expanded(
                 child: Padding(
-                  padding: const EdgeInsets.all(5),
+                  padding: buttonPadding,
                   child: Tooltip(
                     message: 'set id \'b\'',
                     waitDuration: const Duration(seconds: 1),
@@ -63,7 +65,7 @@ class OptionButtonsState extends State<OptionButtons> {
               ),
               Expanded(
                 child: Padding(
-                  padding: const EdgeInsets.all(5),
+                  padding: buttonPadding,
                   child: Tooltip(
                     message: 'set id \'c\'',
                     waitDuration: const Duration(seconds: 1),
@@ -84,7 +86,7 @@ class OptionButtonsState extends State<OptionButtons> {
               ),
               Expanded(
                 child: Padding(
-                  padding: const EdgeInsets.all(5),
+                  padding: buttonPadding,
                   child: Tooltip(
                     message: 'set id \'d\'',
                     waitDuration: const Duration(seconds: 1),
@@ -105,7 +107,7 @@ class OptionButtonsState extends State<OptionButtons> {
               ),
               Expanded(
                 child: Padding(
-                  padding: const EdgeInsets.all(5),
+                  padding: buttonPadding,
                   child: Tooltip(
                     message: 'set id \'e\'',
                     waitDuration: const Duration(seconds: 1),
@@ -126,7 +128,7 @@ class OptionButtonsState extends State<OptionButtons> {
               ),
               Expanded(
                 child: Padding(
-                  padding: const EdgeInsets.all(5),
+                  padding: buttonPadding,
                   child: Tooltip(
                     message: 'set id \'f\'',
                     waitDuration: const Duration(seconds: 1),
@@ -153,7 +155,7 @@ class OptionButtonsState extends State<OptionButtons> {
             children: [
               Expanded(
                 child: Padding(
-                  padding: const EdgeInsets.all(5),
+                  padding: buttonPadding,
                   child: Tooltip(
                     message: 'set shape triangle',
                     waitDuration: const Duration(seconds: 1),
@@ -174,7 +176,7 @@ class OptionButtonsState extends State<OptionButtons> {
               ),
               Expanded(
                 child: Padding(
-                  padding: const EdgeInsets.all(5),
+                  padding: buttonPadding,
                   child: Tooltip(
                     message: 'set shape square',
                     waitDuration: const Duration(seconds: 1),
@@ -195,7 +197,7 @@ class OptionButtonsState extends State<OptionButtons> {
               ),
               Expanded(
                 child: Padding(
-                  padding: const EdgeInsets.all(5),
+                  padding: buttonPadding,
                   child: Tooltip(
                     message: 'set shape pentagon',
                     waitDuration: const Duration(seconds: 1),
@@ -216,7 +218,7 @@ class OptionButtonsState extends State<OptionButtons> {
               ),
               Expanded(
                 child: Padding(
-                  padding: const EdgeInsets.all(5),
+                  padding: buttonPadding,
                   child: Tooltip(
                     message: 'set size small',
                     waitDuration: const Duration(seconds: 1),
@@ -240,7 +242,7 @@ class OptionButtonsState extends State<OptionButtons> {
               ),
               Expanded(
                 child: Padding(
-                  padding: const EdgeInsets.all(5),
+                  padding: buttonPadding,
                   child: Tooltip(
                     message: 'set size medium',
                     waitDuration: const Duration(seconds: 1),
@@ -264,7 +266,7 @@ class OptionButtonsState extends State<OptionButtons> {
               ),
               Expanded(
                 child: Padding(
-                  padding: const EdgeInsets.all(5),
+                  padding: buttonPadding,
                   child: Tooltip(
                     message: 'set size big',
                     waitDuration: const Duration(seconds: 1),
