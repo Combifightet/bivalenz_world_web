@@ -1,14 +1,9 @@
 import 'package:flutter/material.dart';
-import 'object_handeling.dart';
 
-// const Color backgroundColor = Color(0xff23272e);
 const Color backgroundColor = Color(0xff242836);
-// const Color backgroundAccentColor = Color(0xff2c313c);
 const Color backgroundAccentColor = Color(0xff2f3545);
 
-// const Color foregroundColor = Color(0xffabb2bf);
 const Color foregroundColor = Color(0xfff5f9ff);
-// const Color foregroundAccentColor = Color(0xff7f848e);
 const Color foregroundAccentColor = Color(0xffe4ecfa);
 
 const Color redAccentColor = Color(0xffe06c75);
@@ -22,61 +17,53 @@ const Color purpleAccentColor = Color(0xffc678dd);
 
 ButtonStyle squareButtonStyle = ButtonStyle(
   backgroundColor: MaterialStateProperty.resolveWith((states) {
-    if (states.contains(MaterialState.pressed)) {
-      return foregroundAccentColor;
-    }
-      return backgroundAccentColor;
-    }),
+    return states.contains(MaterialState.pressed)?
+      foregroundAccentColor:
+      backgroundAccentColor;
+  }),
   foregroundColor: MaterialStateProperty.resolveWith((states) {
-    if (states.contains(MaterialState.pressed)) {
-      return backgroundAccentColor;
-    }
-      return foregroundAccentColor;
+    return states.contains(MaterialState.pressed)?
+      backgroundAccentColor:
+      foregroundAccentColor;
   }),
   overlayColor: MaterialStateProperty.all(foregroundAccentColor.withAlpha(20)),
   elevation: MaterialStateProperty.resolveWith((states) {
     if (states.contains(MaterialState.pressed)) {
       return 0;
     }
-      return 5;
+    return 5;
   }),
   textStyle: MaterialStateProperty.resolveWith((states) {
-    if (states.contains(MaterialState.pressed)) {
-      return const TextStyle(color: backgroundAccentColor, fontWeight: FontWeight.bold);
-    }
-      return const TextStyle(color: foregroundAccentColor, fontWeight: FontWeight.bold);
+    return states.contains(MaterialState.pressed)?
+      const TextStyle(color: backgroundAccentColor, fontWeight: FontWeight.bold):
+      const TextStyle(color: foregroundAccentColor, fontWeight: FontWeight.bold);
   }),
   iconColor: MaterialStateProperty.all(foregroundAccentColor),
   iconSize: MaterialStateProperty.all(30),
-
   minimumSize: const MaterialStatePropertyAll(Size(double.infinity, double.infinity)),
 );
 
 ButtonStyle smallButtonStyle = ButtonStyle(
   backgroundColor: MaterialStateProperty.resolveWith((states) {
-    if (states.contains(MaterialState.pressed)) {
-      return foregroundAccentColor;
-    }
-      return backgroundAccentColor;
-    }),
+    return states.contains(MaterialState.pressed)?
+      foregroundAccentColor:
+      backgroundAccentColor;
+  }),
   foregroundColor: MaterialStateProperty.resolveWith((states) {
-    if (states.contains(MaterialState.pressed)) {
-      return backgroundAccentColor;
-    }
-      return foregroundAccentColor;
+    return states.contains(MaterialState.pressed)?
+      backgroundAccentColor:
+      foregroundAccentColor;
   }),
   overlayColor: MaterialStateProperty.all(foregroundAccentColor.withAlpha(20)),
   elevation: MaterialStateProperty.resolveWith((states) {
-    if (states.contains(MaterialState.pressed)) {
-      return 0;
-    }
-      return 5;
+    return states.contains(MaterialState.pressed)?
+      0:
+      5;
   }),
   textStyle: MaterialStateProperty.resolveWith((states) {
-    if (states.contains(MaterialState.pressed)) {
-      return const TextStyle(color: backgroundAccentColor);
-    }
-      return const TextStyle(color: foregroundAccentColor);
+    return states.contains(MaterialState.pressed)?
+      const TextStyle(color: backgroundAccentColor):
+      const TextStyle(color: foregroundAccentColor);
   }),
   minimumSize: const MaterialStatePropertyAll(Size(double.infinity, double.infinity)),
 );

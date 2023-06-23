@@ -84,48 +84,48 @@ class LogicButtonsState extends State<LogicButtons> {
                           Expanded(
                             child: Row(
                               children: [
-                                LogicButton(padding: padding, text: '∨', tooltip: ''),
-                                LogicButton(padding: padding, text: '∧', tooltip: ''),
-                                LogicButton(padding: padding, text: '¬', tooltip: ''),
-                                LogicButton(padding: padding, text: '→', tooltip: ''),
-                                LogicButton(padding: padding, text: '↔', tooltip: ''),
-                                LogicButton(padding: padding, text: '⊥', tooltip: '')
+                                LogicButton(padding: padding, text: '∨', tooltip: 'Disjunction'),
+                                LogicButton(padding: padding, text: '∧', tooltip: 'Conjunction'),
+                                LogicButton(padding: padding, text: '¬', tooltip: 'Negation'),
+                                LogicButton(padding: padding, text: '→', tooltip: 'Implication'),
+                                LogicButton(padding: padding, text: '↔', tooltip: 'Equivalence'),
+                                LogicButton(padding: padding, text: '⊥', tooltip: 'Falsum')
                               ]
                             )
                           ),
                           Expanded(
                             child: Row(
                               children: [
-                                LogicButton(padding: padding, text: 'a', tooltip: ''),
-                                LogicButton(padding: padding, text: 'b', tooltip: ''),
-                                LogicButton(padding: padding, text: 'c', tooltip: ''),
-                                LogicButton(padding: padding, text: 'd', tooltip: ''),
-                                LogicButton(padding: padding, text: 'e', tooltip: ''),
-                                LogicButton(padding: padding, text: 'f', tooltip: '')
+                                LogicButton(padding: padding, text: 'a', tooltip: 'Individual Constant'),
+                                LogicButton(padding: padding, text: 'b', tooltip: 'Individual Constant'),
+                                LogicButton(padding: padding, text: 'c', tooltip: 'Individual Constant'),
+                                LogicButton(padding: padding, text: 'd', tooltip: 'Individual Constant'),
+                                LogicButton(padding: padding, text: 'e', tooltip: 'Individual Constant'),
+                                LogicButton(padding: padding, text: 'f', tooltip: 'Individual Constant')
                               ]
                             ),
                           ),
                           Expanded(
                             child: Row(
                               children: [
-                                LogicButton(padding: padding, text: '∀', tooltip: ''),
-                                LogicButton(padding: padding, text: '∃', tooltip: ''),
-                                LogicButton(padding: padding, text: '=', tooltip: ''),
-                                LogicButton(padding: padding, text: '≠', tooltip: ''),
-                                LogicButton(padding: padding, text: '(', tooltip: ''),
-                                LogicButton(padding: padding, text: ')', tooltip: '')
+                                LogicButton(padding: padding, text: '∀', tooltip: 'All Quantifier'),
+                                LogicButton(padding: padding, text: '∃', tooltip: 'Existential Quantifier'),
+                                LogicButton(padding: padding, text: '=', tooltip: 'Equality'),
+                                LogicButton(padding: padding, text: '≠', tooltip: 'Inequality'),
+                                LogicButton(padding: padding, text: '(', tooltip: 'Bracket'),
+                                LogicButton(padding: padding, text: ')', tooltip: 'Bracket')
                               ]
                             )
                           ),
                           Expanded(
                             child: Row(
                               children: [
-                                LogicButton(padding: padding, text: 'x', tooltip: ''),
-                                LogicButton(padding: padding, text: 'y', tooltip: ''),
-                                LogicButton(padding: padding, text: 'z', tooltip: ''),
-                                LogicButton(padding: padding, text: 'u', tooltip: ''),
-                                LogicButton(padding: padding, text: 'v', tooltip: ''),
-                                LogicButton(padding: padding, text: 'w', tooltip: '')
+                                LogicButton(padding: padding, text: 'x', tooltip: 'Variable'),
+                                LogicButton(padding: padding, text: 'y', tooltip: 'Variable'),
+                                LogicButton(padding: padding, text: 'z', tooltip: 'Variable'),
+                                LogicButton(padding: padding, text: 'u', tooltip: 'Variable'),
+                                LogicButton(padding: padding, text: 'v', tooltip: 'Variable'),
+                                LogicButton(padding: padding, text: 'w', tooltip: 'Variable')
                               ]
                             )
                           )
@@ -141,40 +141,40 @@ class LogicButtonsState extends State<LogicButtons> {
                           Expanded(
                             child: Row(
                               children: [
-                                LogicButton(padding: padding, text: 'Tet', tooltip: ''),
-                                LogicButton(padding: padding, text: 'Cube', tooltip: ''),
-                                LogicButton(padding: padding, text: 'Dodec', tooltip: ''),
-                                LogicButton(padding: padding, text: 'SameShape', tooltip: '')
+                                LogicButton(padding: padding, text: 'Tet', tooltip: 'Tet(a)'),
+                                LogicButton(padding: padding, text: 'Cube', tooltip: 'Cube(a)'),
+                                LogicButton(padding: padding, text: 'Dodec', tooltip: 'Dodec(a)'),
+                                LogicButton(padding: padding, text: 'SameShape', tooltip: 'SameShape(a, b)')
                               ]
                             )
                           ),
                           Expanded(
                             child: Row(
                               children: [
-                                LogicButton(padding: padding, text: 'Small', tooltip: ''),
-                                LogicButton(padding: padding, text: 'Medium', tooltip: ''),
-                                LogicButton(padding: padding, text: 'Large', tooltip: ''),
-                                LogicButton(padding: padding, text: 'SameSize', tooltip: '')
+                                LogicButton(padding: padding, text: 'Small', tooltip: 'Small(a)'),
+                                LogicButton(padding: padding, text: 'Medium', tooltip: 'Medium(a)'),
+                                LogicButton(padding: padding, text: 'Large', tooltip: 'Large(a)'),
+                                LogicButton(padding: padding, text: 'SameSize', tooltip: 'SameSize(a, b)')
                               ]
                             )
                           ),
                           Expanded(
                             child: Row(
                               children: [
-                                LogicButton(padding: padding, text: 'LeftOf', tooltip: ''),
-                                LogicButton(padding: padding, text: 'RightOf', tooltip: ''),
-                                LogicButton(padding: padding, text: 'FrontOf', tooltip: ''),
-                                LogicButton(padding: padding, text: 'BackOf', tooltip: '')
+                                LogicButton(padding: padding, text: 'LeftOf', tooltip: 'LeftOf(a, b)'),
+                                LogicButton(padding: padding, text: 'RightOf', tooltip: 'RightOf(a, b)'),
+                                LogicButton(padding: padding, text: 'FrontOf', tooltip: 'FrontOf(a, b)'),
+                                LogicButton(padding: padding, text: 'BackOf', tooltip: 'BackOf(a, b)')
                               ]
                             )
                           ),
                           Expanded(
                             child: Row(
                               children: [
-                                LogicButton(padding: padding, text: 'SameRow', tooltip: ''),
-                                LogicButton(padding: padding, text: 'SameCol', tooltip: ''),
-                                LogicButton(padding: padding, text: 'Between', tooltip: ''),
-                                LogicButton(padding: padding, text: 'Adjoins', tooltip: '')
+                                LogicButton(padding: padding, text: 'SameRow', tooltip: 'SameRow(a, b)'),
+                                LogicButton(padding: padding, text: 'SameCol', tooltip: 'SameCol(a, b)'),
+                                LogicButton(padding: padding, text: 'Between', tooltip: 'Between(a, b, c)'),
+                                LogicButton(padding: padding, text: 'Adjoins', tooltip: 'Adjoins(a, b)')
                               ]
                             )
                           ),
@@ -182,8 +182,8 @@ class LogicButtonsState extends State<LogicButtons> {
                             child: Row(
                               children: [
                                 Expanded(child: Container()),
-                                LogicButton(padding: padding, text: 'Smaller', tooltip: ''),
-                                LogicButton(padding: padding, text: 'Larger', tooltip: ''),
+                                LogicButton(padding: padding, text: 'Smaller', tooltip: 'Smaller(a, b)'),
+                                LogicButton(padding: padding, text: 'Larger', tooltip: 'Larger(a, b)'),
                                 Expanded(child: Container())
                               ]
                             )
@@ -199,10 +199,10 @@ class LogicButtonsState extends State<LogicButtons> {
               child: Row(
                 children: [
                   Expanded(child: Container()),
-                  LogicButton(padding: padding, text: 'lm', tooltip: ''),
-                  LogicButton(padding: padding, text: 'rm', tooltip: ''),
-                  LogicButton(padding: padding, text: 'fm', tooltip: ''),
-                  LogicButton(padding: padding, text: 'bm', tooltip: ''),
+                  LogicButton(padding: padding, text: 'lm', tooltip: 'leftmost lm(a)'),
+                  LogicButton(padding: padding, text: 'rm', tooltip: 'rightmost rm(a)'),
+                  LogicButton(padding: padding, text: 'fm', tooltip: 'bottommost fm(a)'),
+                  LogicButton(padding: padding, text: 'bm', tooltip: 'topmost bm(a)'),
                   Expanded(child: Container())
                 ],
               )

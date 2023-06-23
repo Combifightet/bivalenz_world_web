@@ -4,21 +4,35 @@ import 'package:flutter/material.dart';
 import 'logic_checking.dart';
 import 'theme.dart';
 
+int currentIndex = 0;
+
 class LogicObj extends StatefulWidget {
-  const LogicObj({super.key});
+  final TextEditingController controller;
+  final int index;
+  const LogicObj({
+    super.key,
+    required this.controller,
+    required this.index
+  });
 
   @override
   State<LogicObj> createState() => _LogicObjState();
 }
 
 class _LogicObjState extends State<LogicObj> {
-  final _controller = TextEditingController();
   String? logicObjEvaluation;
+  late int lastTextLength;
 
   void verifyLogic() {
     setState(() {
-      logicObjEvaluation = checkLogicTxt(_controller.value.text, mainBoard.board);
+      logicObjEvaluation = checkLogicTxt(widget.controller.value.text, mainBoard.board);
     });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    lastTextLength = widget.controller.text.length;
   }
 
   @override
@@ -85,16 +99,17 @@ class _LogicObjState extends State<LogicObj> {
                 fillColor: backgroundAccentColor,
                 hintText: 'Enter a logic statement',
                 hintStyle: TextStyle(color: foregroundAccentColor.withOpacity(.5)),
-                border: UnderlineInputBorder(borderSide: BorderSide(color: foregroundAccentColor.withOpacity(0.5))) // TODO: Does not yet display the correct coler for the underline of the text field
+                border: UnderlineInputBorder(borderSide: BorderSide(color: foregroundAccentColor.withOpacity(0.5))) // TODO: Does not yet display the correct color for the underline of the text field
               ),
               style: const TextStyle(
                 color: foregroundAccentColor,
               ),
-              controller: _controller,
+              controller: widget.controller,
               onSubmitted: (event) => verifyLogic(),
               onTapOutside: (event) => verifyLogic(),
+              onTap: () => currentIndex = widget.index,
               onChanged: (value) {
-                int cursorOffset = _controller.selection.baseOffset;
+                int cursorOffset = widget.controller.selection.baseOffset;
                 String formattedInput = value.replaceAll('!', '¬');             // logical not
                 cursorOffset -= RegExp('->').allMatches(formattedInput.substring(0, cursorOffset.clamp(0, value.length))).length;
                 formattedInput = formattedInput.replaceAll('->', '→');          // logical implication
@@ -121,20 +136,24 @@ class _LogicObjState extends State<LogicObj> {
                 
                 cursorOffset = cursorOffset.clamp(0, value.length);
                 
-                if (cursorOffset != 0 && formattedInput[cursorOffset-1] == '(') {
-                  if (cursorOffset == value.length) {
-                    formattedInput = '$formattedInput)';
-                  } else {
-                    if (formattedInput[cursorOffset] != ')') {
-                      formattedInput = '${formattedInput.substring(0, cursorOffset)})${formattedInput.substring(cursorOffset)}';
+                if (lastTextLength < widget.controller.text.length) {
+                  if (cursorOffset != 0 && formattedInput[cursorOffset-1] == '(') {
+                    if (cursorOffset == value.length) {
+                      formattedInput = '$formattedInput)';
+                    } else {
+                      if (formattedInput[cursorOffset] != ')') {
+                        formattedInput = '${formattedInput.substring(0, cursorOffset)})${formattedInput.substring(cursorOffset)}';
+                      }
                     }
                   }
                 }
 
-                _controller.value = TextEditingValue(
+                widget.controller.value = TextEditingValue(
                   text: formattedInput,
                   selection: TextSelection.collapsed(offset: cursorOffset.clamp(0, value.length)),
                 );
+
+                lastTextLength = widget.controller.text.length;
               },
             )
           ),
@@ -153,23 +172,27 @@ class LogicObjList extends StatefulWidget {
 }
 
 class LogicObjListState extends State<LogicObjList> {
-  final List<LogicObj> logicObjs = [LogicObj(key: UniqueKey())];
+  final List<TextEditingController> logicControllers = [TextEditingController()];
 
   void _addItem() {
     setState(() {
-      logicObjs.add(LogicObj(key: UniqueKey()));
+      logicControllers.add(TextEditingController());
     });
   }
 
   void _removeItem(index) {
     setState(() {
-      logicObjs.removeAt(index);
+      logicControllers.removeAt(index);
+      if (logicControllers.isEmpty) {
+        _addItem();
+      }
     });
   }
 
   void _clearItems() {
     setState(() {
-      logicObjs.clear();
+      logicControllers.clear();
+      _addItem();
     });
   }
 
@@ -179,11 +202,9 @@ class LogicObjListState extends State<LogicObjList> {
       children: <Widget>[
         Padding(
           padding: const EdgeInsets.all(0),
-          child: Container(
+          child: SizedBox(
             height: 50,
             child: Row(
-              // mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              // crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 Padding(
                   padding: const EdgeInsets.all(4),
@@ -240,18 +261,17 @@ class LogicObjListState extends State<LogicObjList> {
         ),
         Expanded(
           child: ListView.builder(
-            itemCount: logicObjs.length,
+            itemCount: logicControllers.length,
             itemBuilder: (context, index) {
               return Padding(
                 padding: const EdgeInsets.all(1),
-                // child: logicObjs[index],
-                child: Container(
+                child: SizedBox(
                   height: 50,
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      Expanded(child: logicObjs[index]),
+                      Expanded(child: LogicObj(controller: logicControllers[index], index: index)),
                       Padding(
                         padding: const EdgeInsets.all(4),
                         child: AspectRatio(aspectRatio: 1,

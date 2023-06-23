@@ -2,6 +2,28 @@ import 'package:bivalenz_world_web/object_handeling.dart';
 import 'package:flutter/material.dart';
 
 
+//* RegEx
+// a=a        ([a-z])=\1            //? true
+// ⊤∧⊤        ⊤∧⊤                  //? true
+// ¬(⊤∧⊤)     ⊤∧⊥|⊥∧⊤|⊥∧⊥         //? false
+// ⊥∨⊥        ⊥∨⊥                  //? true
+// ¬(⊥∨⊥)     ⊥∨⊥|⊥∨⊥|⊥∨⊥         //? false
+// ⊤→⊤        ⊤→⊤|⊥→⊤|⊥→⊥         //? true
+// ⊤→⊥        ⊤→⊥                  //? false
+// ⊤↔⊤        ([⊤⊥])↔\1            //? true
+// ⊤↔⊥        ⊤↔⊥|⊥↔⊤              //? false
+//!   ≠ = ∀ ∃
+
+//* Stärke der Bindungen in Bivalenz World:
+// =
+// ∧ ∨    (left to right)
+// 
+// 
+// 
+// 
+
+//! ∧ ∨
+
 String checkLogicTxt(String logicTxt, List<List<List<LogicObj>>> logicBoard) {
 
   Offset? idToOffest(String chr) {  // 'a'
@@ -48,7 +70,7 @@ String checkLogicTxt(String logicTxt, List<List<List<LogicObj>>> logicBoard) {
     }
     return 'error1';
   }
-  String tm(String chr){
+  String bm(String chr){
     for (int i=0; i<logicBoard.length; i++) {
       for (int j=0; j<logicBoard[i].length; j++) {
         if (logicBoard[i][j].isNotEmpty && logicBoard[i][j][0].id.contains(chr)) {
@@ -62,7 +84,7 @@ String checkLogicTxt(String logicTxt, List<List<List<LogicObj>>> logicBoard) {
     }
     return 'error1';
   }
-  String bm(String chr){
+  String fm(String chr){
     for (int i=0; i<logicBoard.length; i++) {
       for (int j=0; j<logicBoard[i].length; j++) {
         if (logicBoard[i][j].isNotEmpty && logicBoard[i][j][0].id.contains(chr)) {
@@ -104,10 +126,10 @@ String checkLogicTxt(String logicTxt, List<List<List<LogicObj>>> logicBoard) {
       return 'error1';
     } 
   }
-  while (logicTxt.contains('tm(')) {
-    final int index = logicTxt.lastIndexOf('tm(');
+  while (logicTxt.contains('bm(')) {
+    final int index = logicTxt.lastIndexOf('bm(');
     if (logicTxt[index+4] == ')') {
-      final String eval = tm(logicTxt[index+3]);
+      final String eval = bm(logicTxt[index+3]);
       if (eval == 'error1') {
         return 'error1';
       }  else {
@@ -117,10 +139,10 @@ String checkLogicTxt(String logicTxt, List<List<List<LogicObj>>> logicBoard) {
       return 'error1';
     } 
   }
-  while (logicTxt.contains('bm(')) {
-    final int index = logicTxt.lastIndexOf('bm(');
+  while (logicTxt.contains('fm(')) {
+    final int index = logicTxt.lastIndexOf('fm(');
     if (logicTxt[index+4] == ')') {
-      final String eval = bm(logicTxt[index+3]);
+      final String eval = fm(logicTxt[index+3]);
       if (eval == 'error1') {
         return 'error1';
       }  else {
