@@ -27,10 +27,10 @@ class LogicObj {
 class LogicBoard {
   List<List<List<LogicObj>>> board = [
   [[], [], [], [], [], [], [], []],
-  [[], [], [LogicObj(id: ['a', 'b', 'c', 'd', 'e', 'f'], sides: 5, size: 2)], [], [], [], [], []],
   [[], [], [], [], [], [], [], []],
-  [[], [], [], [], [], [], [], []],
-  [[], [], [], [], [], [], [], []],
+  [[], [LogicObj(id: ['b'], sides: 3)], [LogicObj(id: ['a'])], [LogicObj(id: [])], [LogicObj(id: [])], [], [], []],
+  [[], [], [LogicObj(id: [])], [], [LogicObj(id: [])], [], [], []],
+  [[], [], [LogicObj(id: [])], [LogicObj(id: [])], [LogicObj(id: [])], [], [], []],
   [[], [], [], [], [], [], [], []],
   [[], [], [], [], [], [], [], []],
   [[], [], [], [], [], [], [], []]];

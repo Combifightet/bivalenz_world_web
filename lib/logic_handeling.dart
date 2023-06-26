@@ -19,15 +19,16 @@ class LogicObj extends StatefulWidget {
   State<LogicObj> createState() => _LogicObjState();
 }
 
-class _LogicObjState extends State<LogicObj> {
-  String? logicObjEvaluation;
-  late int lastTextLength;
+String? logicObjEvaluation;
 
+class _LogicObjState extends State<LogicObj> {
   void verifyLogic() {
     setState(() {
       logicObjEvaluation = checkLogicTxt(widget.controller.value.text, mainBoard.board);
     });
   }
+  late int lastTextLength;
+
 
   @override
   void initState() {
@@ -174,6 +175,16 @@ class LogicObjList extends StatefulWidget {
 class LogicObjListState extends State<LogicObjList> {
   final List<TextEditingController> logicControllers = [TextEditingController()];
 
+  void verifyLogic() {
+    String statement = 'b = lm(bm(rm(fm(a))))';
+    setState(() {
+      debugPrint('Verifying: $statement');
+      // logicObjEvaluation = checkLogicTxt(widget.controller.value.text, mainBoard.board);
+      logicObjEvaluation = checkLogicTxt(statement, mainBoard.board);
+      debugPrint('Result: $logicObjEvaluation');
+    });
+  }
+
   void _addItem() {
     setState(() {
       logicControllers.add(TextEditingController());
@@ -214,7 +225,8 @@ class LogicObjListState extends State<LogicObjList> {
                     child: TextButton(
                       style: squareButtonStyle,
                       onPressed: () {
-                        debugPrint('verifyed all logic statements');
+                        // debugPrint('verifyed all logic statements');
+                        verifyLogic();
                       },
                       child: const FittedBox(
                         fit: BoxFit.contain,
