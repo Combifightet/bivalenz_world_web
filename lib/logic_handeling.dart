@@ -176,7 +176,8 @@ class LogicObjListState extends State<LogicObjList> {
   final List<TextEditingController> logicControllers = [TextEditingController()];
 
   void verifyLogic() {
-    String statement = 'b = lm(bm(rm(fm(a))))';
+    // String statement = 'b = lm(bm(rm(fm(a))))';
+    String statement = 'Adjoins(a, b)';
     setState(() {
       debugPrint('Verifying: $statement');
       // logicObjEvaluation = checkLogicTxt(widget.controller.value.text, mainBoard.board);

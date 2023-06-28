@@ -90,8 +90,24 @@ String checkLogicTxt(String logicTxt, List<List<List<LogicObj>>> logicBoard) {
     return 'error1';
   }
 
+  int getSides(String str) {
+    Offset? pos = posToOffset(str);
+    if (pos != null && logicBoard[pos.dy.floor()][pos.dx.floor()].isNotEmpty) {
+      return logicBoard[pos.dy.floor()][pos.dx.floor()][0].sides;
+    }
+    return -1;
+  }
+
+  int getSize(String str) {
+    Offset? pos = posToOffset(str);
+    if (pos != null && logicBoard[pos.dy.floor()][pos.dx.floor()].isNotEmpty) {
+      return logicBoard[pos.dy.floor()][pos.dx.floor()][0].size;
+    }
+    return -1;
+  }
+
   // [a-m] constants     [n-z] variables
-  logicTxt.replaceAll(' ', '');
+  logicTxt = logicTxt.replaceAll(' ', '');
   
   for (int i=logicTxt.length-1; i>=0; i--) {
     if (logicTxt[i].codeUnitAt(0) >= 97 && logicTxt[i].codeUnitAt(0) <= 109 && logicTxt.substring((i-1).clamp(0, i), (i+2).clamp(0, logicTxt.length)).replaceAll(RegExp(r'[a-zA-Z]'), '').length==logicTxt.substring((i-1).clamp(0, i), (i+2).clamp(0, logicTxt.length)).length-1) {
@@ -101,100 +117,197 @@ String checkLogicTxt(String logicTxt, List<List<List<LogicObj>>> logicBoard) {
   }
   debugPrint(logicTxt);
 
-
-  while (logicTxt.contains(RegExp(r'(lm\(|rm\(|fm\(|bm\()\d+:\d+\)'))) {
-    int index = logicTxt.lastIndexOf(RegExp(r'(lm\(|rm\(|fm\(|bm\()\d+:\d+\)'));
-    var match = RegExp(r'(lm\(|rm\(|fm\(|bm\()\d+:\d+\)').firstMatch(logicTxt);
-    print('Match: $match');
-    // print(match!.substring(0, 2));
-    // print(match.substring(3,match.length-1));
+  // Function evaluation
+  while (logicTxt.contains(RegExp(r'\b[a-z]+\(\d+:\d+\)'))) {
+    var match = RegExp(r'\b[a-z]+\(\d+:\d+\)').firstMatch(logicTxt);
     if (!match.isNull) {
-      print('True');
       String? substr = match![0];
-      switch (substr!.substring(0, 2)) {
+      switch (substr!.replaceAll(RegExp(r'[^a-z]'), '')) {
         case 'lm':
-          print('Case lm');
-          print(lm(substr.substring(3,substr.length-1)));
-          logicTxt = logicTxt.replaceAll(substr, lm(substr.substring(3,substr.length-1)));
+          logicTxt = logicTxt.replaceAll(substr, lm(substr.replaceAll(RegExp(r'[a-z\(\)]'), '')));   // !\d+:\d+
           break;
         case 'rm':
-          print('Case rm');
-          print(rm(substr.substring(3,substr.length-1)));
-          logicTxt = logicTxt.replaceAll(substr, rm(substr.substring(3,substr.length-1)));
+          logicTxt = logicTxt.replaceAll(substr, rm(substr.replaceAll(RegExp(r'[a-z\(\)]'), '')));
           break;
         case 'fm':
-          print('Case fm');
-          print(fm(substr.substring(3,substr.length-1)));
-          logicTxt = logicTxt.replaceAll(substr, fm(substr.substring(3,substr.length-1)));
+          logicTxt = logicTxt.replaceAll(substr, fm(substr.replaceAll(RegExp(r'[a-z\(\)]'), '')));
           break;
         case 'bm':
-          print('Case bm');
-          print(bm(substr.substring(3,substr.length-1)));
-          logicTxt = logicTxt.replaceAll(substr, bm(substr.substring(3,substr.length-1)));
+          logicTxt = logicTxt.replaceAll(substr, bm(substr.replaceAll(RegExp(r'[a-z\(\)]'), '')));
           break;
         default:
         return 'error1';
       }
     }
-    print('Substep:         $logicTxt');
+    debugPrint('Substep:         $logicTxt');
   }
 
+  // = sign evaluation
+  while (logicTxt.contains(RegExp(r'\d+:\d+=\d+:\d+'))) {
+    var match = RegExp(r'\d+:\d+=\d+:\d+').firstMatch(logicTxt);
+    if (!match.isNull) {
+      String? substr = match![0];
+      if (substr!.split('=')[0]==substr.split('=')[1]) {
+        logicTxt = logicTxt.replaceAll(substr, '⊤');
+      } else {
+        logicTxt = logicTxt.replaceAll(substr, '⊥');
+      }
+    }
+    debugPrint('Substep:         $logicTxt');
+  }
 
-  // while (logicTxt.contains('lm(')) {
-  //   final int index = logicTxt.lastIndexOf('lm(');
-  //   print('Substring: ${logicTxt.substring(index+3, logicTxt.length)}');
-  //   if (logicTxt[index+4] == ')') {
-  //     final String eval = lm(logicTxt[index+3]);
-  //     if (eval == 'error1') {
-  //       return 'error1';
-  //     }  else {
-  //       logicTxt = logicTxt.substring(0, index) + eval + logicTxt.substring(index+5);
-  //     }
-  //   } else {
-  //     return 'error1';
-  //   } 
-  // }
-  // while (logicTxt.contains('rm(')) {
-  //   final int index = logicTxt.lastIndexOf('rm(');
-  //   if (logicTxt[index+4] == ')') {
-  //     final String eval = rm(logicTxt[index+3]);
-  //     if (eval == 'error1') {
-  //       return 'error1';
-  //     }  else {
-  //       logicTxt = logicTxt.substring(0, index) + eval + logicTxt.substring(index+5);
-  //     }
-  //   } else {
-  //     return 'error1';
-  //   } 
-  // }
-  // while (logicTxt.contains('bm(')) {
-  //   final int index = logicTxt.lastIndexOf('bm(');
-  //   if (logicTxt[index+4] == ')') {
-  //     final String eval = bm(logicTxt[index+3]);
-  //     if (eval == 'error1') {
-  //       return 'error1';
-  //     }  else {
-  //       logicTxt = logicTxt.substring(0, index) + eval + logicTxt.substring(index+5);
-  //     }
-  //   } else {
-  //     return 'error1';
-  //   } 
-  // }
-  // while (logicTxt.contains('fm(')) {
-  //   final int index = logicTxt.lastIndexOf('fm(');
-  //   if (logicTxt[index+4] == ')') {
-  //     final String eval = fm(logicTxt[index+3]);
-  //     if (eval == 'error1') {
-  //       return 'error1';
-  //     }  else {
-  //       logicTxt = logicTxt.substring(0, index) + eval + logicTxt.substring(index+5);
-  //     }
-  //   } else {
-  //     return 'error1';
-  //   } 
-  // }
+  // evaluation of predicates with one parameter
+  while (logicTxt.contains(RegExp(r'[A-Z][a-zA-Z]+\(\d+:\d+\)'))) {
+    var match = RegExp(r'[A-Z][a-zA-Z]+\(\d+:\d+\)').firstMatch(logicTxt);
+    if (!match.isNull) {
+      String? substr = match![0];
+      switch (substr!.replaceAll(RegExp(r'[\d:\(\)]'), '')) {
+        case 'Tet':
+          if (getSides(substr.replaceAll(RegExp(r'[a-zA-Z\(\)]'), '')) == 3) {
+            logicTxt = logicTxt.replaceAll(substr, '⊤');
+          } else {
+            logicTxt = logicTxt.replaceAll(substr, '⊥');
+          }
+          break;
+        case 'Cube':
+          if (getSides(substr.replaceAll(RegExp(r'[a-zA-Z\(\)]'), '')) == 4) {
+            logicTxt = logicTxt.replaceAll(substr, '⊤');
+          } else {
+            logicTxt = logicTxt.replaceAll(substr, '⊥');
+          }
+          break;
+        case 'Dodec':
+          if (getSides(substr.replaceAll(RegExp(r'[a-zA-Z\(\)]'), '')) == 5) {
+            logicTxt = logicTxt.replaceAll(substr, '⊤');
+          } else {
+            logicTxt = logicTxt.replaceAll(substr, '⊥');
+          }
+          break;
+        case 'Small':
+          if (getSize(substr.replaceAll(RegExp(r'[a-zA-Z\(\)]'), '')) == 0) {
+            logicTxt = logicTxt.replaceAll(substr, '⊤');
+          } else {
+            logicTxt = logicTxt.replaceAll(substr, '⊥');
+          }
+          break;
+        case 'Medium':
+          if (getSize(substr.replaceAll(RegExp(r'[a-zA-Z\(\)]'), '')) == 1) {
+            logicTxt = logicTxt.replaceAll(substr, '⊤');
+          } else {
+            logicTxt = logicTxt.replaceAll(substr, '⊥');
+          }
+          break;
+        case 'Large':
+          if (getSize(substr.replaceAll(RegExp(r'[a-zA-Z\(\)]'), '')) == 2) {
+            logicTxt = logicTxt.replaceAll(substr, '⊤');
+          } else {
+            logicTxt = logicTxt.replaceAll(substr, '⊥');
+          }
+          break;
+        default:
+        return 'error1';
+      }
+    }
+    debugPrint('Substep:         $logicTxt');
+  }
 
-  debugPrint('Result: $logicTxt');
+  // evaluation of predicates with one parameter
+  while (logicTxt.contains(RegExp(r'[A-Z][a-zA-Z]+\(\d+:\d+\,\d+:\d+\)'))) {
+    var match = RegExp(r'[A-Z][a-zA-Z]+\(\d+:\d+\,\d+:\d+\)').firstMatch(logicTxt);
+    if (!match.isNull) {
+      String? substr = match![0];
+      var positions = RegExp(r'\d+:\d+').allMatches(substr!);
+      switch (substr.replaceAll(RegExp(r'[\d:\(\),]'), '')) {
+        case 'SameShape':
+          if (getSides(positions.elementAt(0)[0]!) == getSides(positions.elementAt(1)[0]!)) {
+            logicTxt = logicTxt.replaceAll(substr, '⊤');
+          } else {
+            logicTxt = logicTxt.replaceAll(substr, '⊥');
+          }
+          break;
+        case 'SameSize':
+          if (getSize(positions.elementAt(0)[0]!) == getSize(positions.elementAt(1)[0]!)) {
+            logicTxt = logicTxt.replaceAll(substr, '⊤');
+          } else {
+            logicTxt = logicTxt.replaceAll(substr, '⊥');
+          }
+          break;
+        case 'LeftOf':
+          if (int.parse(positions.elementAt(0)[0]!.split(':')[0]) < int.parse(positions.elementAt(0)[0]!.split(':')[1])) {
+            logicTxt = logicTxt.replaceAll(substr, '⊤');
+          } else {
+            logicTxt = logicTxt.replaceAll(substr, '⊥');
+          }
+          break;
+        case 'RightOf':
+          if (int.parse(positions.elementAt(0)[0]!.split(':')[0]) > int.parse(positions.elementAt(1)[0]!.split(':')[0])) {
+            logicTxt = logicTxt.replaceAll(substr, '⊤');
+          } else {
+            logicTxt = logicTxt.replaceAll(substr, '⊥');
+          }
+          break;
+        case 'FrontOf':
+          if (int.parse(positions.elementAt(0)[0]!.split(':')[1]) > int.parse(positions.elementAt(1)[0]!.split(':')[1])) {
+            logicTxt = logicTxt.replaceAll(substr, '⊤');
+          } else {
+            logicTxt = logicTxt.replaceAll(substr, '⊥');
+          }
+          break;
+        case 'BackOf':
+          if (int.parse(positions.elementAt(0)[0]!.split(':')[1]) < int.parse(positions.elementAt(1)[0]!.split(':')[1])) {
+            logicTxt = logicTxt.replaceAll(substr, '⊤');
+          } else {
+            logicTxt = logicTxt.replaceAll(substr, '⊥');
+          }
+          break;
+        case 'SameRow':
+          if (int.parse(positions.elementAt(0)[0]!.split(':')[1]) == int.parse(positions.elementAt(1)[0]!.split(':')[1])) {
+            logicTxt = logicTxt.replaceAll(substr, '⊤');
+          } else {
+            logicTxt = logicTxt.replaceAll(substr, '⊥');
+          }
+          break;
+        case 'SameCol':
+          if (int.parse(positions.elementAt(0)[0]!.split(':')[0]) == int.parse(positions.elementAt(1)[0]!.split(':')[0])) {
+            logicTxt = logicTxt.replaceAll(substr, '⊤');
+          } else {
+            logicTxt = logicTxt.replaceAll(substr, '⊥');
+          }
+          break;
+        case 'Adjoins':
+          if (((int.parse(positions.elementAt(0)[0]!.split(':')[0]) == int.parse(positions.elementAt(1)[0]!.split(':')[0])+1)
+          ^ (int.parse(positions.elementAt(0)[0]!.split(':')[0]) == int.parse(positions.elementAt(1)[0]!.split(':')[0])-1))
+          ^ ((int.parse(positions.elementAt(0)[0]!.split(':')[1]) == int.parse(positions.elementAt(1)[0]!.split(':')[1])+1)
+          ^ (int.parse(positions.elementAt(0)[0]!.split(':')[1]) == int.parse(positions.elementAt(1)[0]!.split(':')[1])-1))) {
+            logicTxt = logicTxt.replaceAll(substr, '⊤');
+          } else {
+            logicTxt = logicTxt.replaceAll(substr, '⊥');
+          }
+          break;
+        case 'Smaller':
+          if (getSize(positions.elementAt(0)[0]!) < getSize(positions.elementAt(1)[0]!)) {
+            logicTxt = logicTxt.replaceAll(substr, '⊤');
+          } else {
+            logicTxt = logicTxt.replaceAll(substr, '⊥');
+          }
+          break;
+        case 'Larger':
+          if (getSize(positions.elementAt(0)[0]!) > getSize(positions.elementAt(1)[0]!)) {
+            logicTxt = logicTxt.replaceAll(substr, '⊤');
+          } else {
+            logicTxt = logicTxt.replaceAll(substr, '⊥');
+          }
+          break;
+        default:
+        return 'error1';
+      }
+    }
+    debugPrint('Substep:         $logicTxt');
+  }
+
+  
+  debugPrint('Result:          $logicTxt');
+  return logicTxt;
 
   return '⊤';
   // return '⊥';
