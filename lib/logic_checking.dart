@@ -376,9 +376,9 @@ String checkLogicTxt(String logicTxt, List<List<List<LogicObj>>> logicBoard) {
     if (!match.isNull) {
       String? substr = match![0];
       if (substr!.contains(RegExp(r'⊤∨⊤|⊤∨⊥|⊥∨⊤|⊤∧⊤|⊤→⊤|⊥→⊤|⊥→⊥|⊤↔⊤|⊥↔⊥|¬⊥'))) {
-        logicTxt = logicTxt.replaceAll(substr, '⊤');
+        logicTxt = logicTxt.replaceFirst(substr, '⊤');
       } else {
-        logicTxt = logicTxt.replaceAll(substr, '⊥');
+        logicTxt = logicTxt.replaceFirst(substr, '⊥');
       }
     }
     debugPrint('Substep:         $logicTxt');
@@ -388,6 +388,7 @@ String checkLogicTxt(String logicTxt, List<List<List<LogicObj>>> logicBoard) {
     debugPrint('Result:          $logicTxt');
     return logicTxt;
   } else {
+    debugPrint('---   Next Iteration   ---');
     return checkLogicTxt(logicTxt, logicBoard);
   }
   
