@@ -27,6 +27,8 @@ import 'package:flutter/material.dart';
 //! ∧ ∨
 
 String checkLogicTxt(String logicTxt, List<List<List<LogicObj>>> logicBoard) {
+  logicTxt = logicTxt.replaceAll(' ', '');
+  int inputLength = logicTxt.length;
 
   Offset? idToOffest(String chr) {  // 'a'
     for (int i=0; i<logicBoard.length; i++) {
@@ -106,9 +108,8 @@ String checkLogicTxt(String logicTxt, List<List<List<LogicObj>>> logicBoard) {
     return -1;
   }
 
+
   // [a-m] constants     [n-z] variables
-  logicTxt = logicTxt.replaceAll(' ', '');
-  
   for (int i=logicTxt.length-1; i>=0; i--) {
     if (logicTxt[i].codeUnitAt(0) >= 97 && logicTxt[i].codeUnitAt(0) <= 109 && logicTxt.substring((i-1).clamp(0, i), (i+2).clamp(0, logicTxt.length)).replaceAll(RegExp(r'[a-zA-Z]'), '').length==logicTxt.substring((i-1).clamp(0, i), (i+2).clamp(0, logicTxt.length)).length-1) {
       var offset = idToOffest(logicTxt[i]);
@@ -353,15 +354,49 @@ String checkLogicTxt(String logicTxt, List<List<List<LogicObj>>> logicBoard) {
     debugPrint('Substep:         $logicTxt');
   }
 
+  // Solving of brackets ()
+  while (logicTxt.contains(RegExp(r'([^a-zA-Z]|^)\(((\d+:\d+\,*)+|⊥|⊤)\)'))) {
+    var match = RegExp(r'([^a-zA-Z]|^)\(((\d+:\d+\,*)+|⊥|⊤)\)').firstMatch(logicTxt);
+    if (!match.isNull) {
+      String? substr = match![0];
+      if (substr![0] == '(') {
+        print('case 1 ((...)');
+        logicTxt = logicTxt.replaceAll(substr, substr.substring(1, substr.length-1));
+      } else {
+        print('case 2 ?(...)');
+        logicTxt = logicTxt.replaceAll(substr, substr[0]+substr.substring(2, substr.length-1));
+      }
+    }
+    debugPrint('Substep:         $logicTxt');
+  }
+
+  // Solving logic operators ∨ ∧ → ↔ ¬
+  if (logicTxt.contains(RegExp(r'[⊤⊥][∨∧→↔][⊤⊥]|¬[⊤⊥]'))) {
+    var match = RegExp(r'[⊤⊥][∨∧→↔][⊤⊥]|¬[⊤⊥]').firstMatch(logicTxt);
+    if (!match.isNull) {
+      String? substr = match![0];
+      if (substr!.contains(RegExp(r'⊤∨⊤|⊤∨⊥|⊥∨⊤|⊤∧⊤|⊤→⊤|⊥→⊤|⊥→⊥|⊤↔⊤|⊥↔⊥|¬⊥'))) {
+        logicTxt = logicTxt.replaceAll(substr, '⊤');
+      } else {
+        logicTxt = logicTxt.replaceAll(substr, '⊥');
+      }
+    }
+    debugPrint('Substep:         $logicTxt');
+  }
+
+  if (inputLength == logicTxt.length) {
+    debugPrint('Result:          $logicTxt');
+    return logicTxt;
+  } else {
+    return checkLogicTxt(logicTxt, logicBoard);
+  }
   
-  debugPrint('Result:          $logicTxt');
-  return logicTxt;
 
   // return '⊤';
   // return '⊥';
   // return 'error0';    // Failed to parrse 'formmulaBegin'.
   // return 'error1';    // Function 'rl' not found in the signature
-  // return 'error2';    // The constant symbol [a] is nnot assigned to this world
+  // return 'error2';    // The constant symbol [a] is not assigned to this world
   // return 'error3';    // Predicate 'Smaler' not found in the signature
   // return 'error4';    // This formula contains an unknown symbol [ab]
 }
