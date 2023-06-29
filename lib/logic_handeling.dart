@@ -22,9 +22,11 @@ class LogicObj extends StatefulWidget {
 String? logicObjEvaluation;
 
 class _LogicObjState extends State<LogicObj> {
+  String _logicObjEvaluation = '';
+  
   void verifyLogic() {
     setState(() {
-      logicObjEvaluation = checkLogicTxt(widget.controller.value.text, mainBoard.board);
+      _logicObjEvaluation = checkLogicTxt(widget.controller.value.text, mainBoard.board);
     });
   }
   late int lastTextLength;
@@ -53,7 +55,7 @@ class _LogicObjState extends State<LogicObj> {
                 fit: BoxFit.contain,
                 child: Builder(
                   builder: (BuildContext context) {
-                    switch (logicObjEvaluation) {
+                    switch (_logicObjEvaluation) {
                     // switch (checkLogicTxt('rm(a)', mainBoard)) {
                       case '⊤':
                         return const Tooltip(
@@ -175,9 +177,7 @@ class LogicObjList extends StatefulWidget {
 class LogicObjListState extends State<LogicObjList> {
   final List<TextEditingController> logicControllers = [TextEditingController()];
 
-  void verifyLogic() {
-    // String statement = 'b = lm(bm(rm(fm(a))))';
-    String statement = 'Adjoins(a, b)';
+  void verifyLogic(String statement) {
     setState(() {
       debugPrint('Verifying: $statement');
       // logicObjEvaluation = checkLogicTxt(widget.controller.value.text, mainBoard.board);
@@ -225,10 +225,7 @@ class LogicObjListState extends State<LogicObjList> {
                     waitDuration: const Duration(seconds: 1),
                     child: TextButton(
                       style: squareButtonStyle,
-                      onPressed: () {
-                        // debugPrint('verifyed all logic statements');
-                        verifyLogic();
-                      },
+                      onPressed: () {},
                       child: const FittedBox(
                         fit: BoxFit.contain,
                         child: Icon(Icons.check_rounded),

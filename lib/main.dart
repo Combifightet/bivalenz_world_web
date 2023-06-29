@@ -159,9 +159,8 @@ class TwoRowsWidgetState extends State<TwoRowsWidget> {
               width: logicTextSize,
               child: Column(
                 children: [
-                  Container(
+                  SizedBox(
                     height: topBarSize,
-                    // color: Colors.blue.withOpacity(.1),
                     child: const LogicButtons()
                   ),
                   const Expanded(child: Center(child: LogicObjList()),)

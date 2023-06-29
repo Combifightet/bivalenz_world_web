@@ -155,6 +155,19 @@ String checkLogicTxt(String logicTxt, List<List<List<LogicObj>>> logicBoard) {
     }
     debugPrint('Substep:         $logicTxt');
   }
+  // ≠ sign evaluation
+  while (logicTxt.contains(RegExp(r'\d+:\d+≠\d+:\d+'))) {
+    var match = RegExp(r'\d+:\d+≠\d+:\d+').firstMatch(logicTxt);
+    if (!match.isNull) {
+      String? substr = match![0];
+      if (!(substr!.split('=')[0]==substr.split('≠')[1])) {
+        logicTxt = logicTxt.replaceAll(substr, '⊤');
+      } else {
+        logicTxt = logicTxt.replaceAll(substr, '⊥');
+      }
+    }
+    debugPrint('Substep:         $logicTxt');
+  }
 
   // evaluation of predicates with one parameter
   while (logicTxt.contains(RegExp(r'[A-Z][a-zA-Z]+\(\d+:\d+\)'))) {
@@ -275,10 +288,12 @@ String checkLogicTxt(String logicTxt, List<List<List<LogicObj>>> logicBoard) {
           }
           break;
         case 'Adjoins':
-          if (((int.parse(positions.elementAt(0)[0]!.split(':')[0]) == int.parse(positions.elementAt(1)[0]!.split(':')[0])+1)
-          ^ (int.parse(positions.elementAt(0)[0]!.split(':')[0]) == int.parse(positions.elementAt(1)[0]!.split(':')[0])-1))
-          ^ ((int.parse(positions.elementAt(0)[0]!.split(':')[1]) == int.parse(positions.elementAt(1)[0]!.split(':')[1])+1)
-          ^ (int.parse(positions.elementAt(0)[0]!.split(':')[1]) == int.parse(positions.elementAt(1)[0]!.split(':')[1])-1))) {
+          if (
+            ((int.parse(positions.elementAt(0)[0]!.split(':')[0]) == int.parse(positions.elementAt(1)[0]!.split(':')[0])+1)
+            ^ (int.parse(positions.elementAt(0)[0]!.split(':')[0]) == int.parse(positions.elementAt(1)[0]!.split(':')[0])-1))
+            ^ ((int.parse(positions.elementAt(0)[0]!.split(':')[1]) == int.parse(positions.elementAt(1)[0]!.split(':')[1])+1)
+            ^ (int.parse(positions.elementAt(0)[0]!.split(':')[1]) == int.parse(positions.elementAt(1)[0]!.split(':')[1])-1))
+          ) {
             logicTxt = logicTxt.replaceAll(substr, '⊤');
           } else {
             logicTxt = logicTxt.replaceAll(substr, '⊥');
@@ -305,11 +320,44 @@ String checkLogicTxt(String logicTxt, List<List<List<LogicObj>>> logicBoard) {
     debugPrint('Substep:         $logicTxt');
   }
 
+  while (logicTxt.contains(RegExp(r'[A-Z][a-zA-Z]+\(\d+:\d+\,\d+:\d+\,\d+:\d+\)'))) {
+    var match = RegExp(r'[A-Z][a-zA-Z]+\(\d+:\d+\,\d+:\d+\,\d+:\d+\)').firstMatch(logicTxt);
+    if (!match.isNull) {
+      String? substr = match![0];
+      var positions = RegExp(r'\d+:\d+').allMatches(substr!);
+      switch (substr.replaceAll(RegExp(r'[\d:\(\),]'), '')) {
+        case 'Between':
+          if (
+            ((int.parse(positions.elementAt(0)[0]!.split(':')[0]) > int.parse(positions.elementAt(1)[0]!.split(':')[0])
+            && int.parse(positions.elementAt(0)[0]!.split(':')[0]) < int.parse(positions.elementAt(2)[0]!.split(':')[0]))
+            ^ (int.parse(positions.elementAt(0)[0]!.split(':')[0]) < int.parse(positions.elementAt(1)[0]!.split(':')[0])
+            && int.parse(positions.elementAt(0)[0]!.split(':')[0]) > int.parse(positions.elementAt(2)[0]!.split(':')[0]))
+            && int.parse(positions.elementAt(0)[0]!.split(':')[1]) == int.parse(positions.elementAt(1)[0]!.split(':')[1])
+            && int.parse(positions.elementAt(0)[0]!.split(':')[1]) == int.parse(positions.elementAt(2)[0]!.split(':')[1]))
+            ^ ((int.parse(positions.elementAt(0)[0]!.split(':')[1]) > int.parse(positions.elementAt(1)[0]!.split(':')[1])
+            && int.parse(positions.elementAt(0)[0]!.split(':')[1]) < int.parse(positions.elementAt(2)[0]!.split(':')[1]))
+            ^ (int.parse(positions.elementAt(0)[0]!.split(':')[1]) < int.parse(positions.elementAt(1)[0]!.split(':')[1])
+            && int.parse(positions.elementAt(0)[0]!.split(':')[1]) > int.parse(positions.elementAt(2)[0]!.split(':')[1]))
+            && int.parse(positions.elementAt(0)[0]!.split(':')[0]) == int.parse(positions.elementAt(1)[0]!.split(':')[0])
+            && int.parse(positions.elementAt(0)[0]!.split(':')[0]) == int.parse(positions.elementAt(2)[0]!.split(':')[0]))
+          ) {
+              logicTxt = logicTxt.replaceAll(substr, '⊤');
+            } else {
+              logicTxt = logicTxt.replaceAll(substr, '⊥');
+            }
+          break;
+        default:
+        return 'error1';
+      }
+    }
+    debugPrint('Substep:         $logicTxt');
+  }
+
   
   debugPrint('Result:          $logicTxt');
   return logicTxt;
 
-  return '⊤';
+  // return '⊤';
   // return '⊥';
   // return 'error0';    // Failed to parrse 'formmulaBegin'.
   // return 'error1';    // Function 'rl' not found in the signature

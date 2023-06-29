@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-import 'logic_handeling.dart';
 import 'theme.dart';
 
 
@@ -51,7 +50,7 @@ class LogicButton extends StatelessWidget {
 }
 
 void inputText(String text) {
-  print('Button [$text${text.length>1?'()':''}] pressed (cursor offset: ${text.length>1?text.length+1:text.length})');
+  debugPrint('Button [$text${text.length>1?'()':''}] pressed (cursor offset: ${text.length>1?text.length+1:text.length})');
 }
 
 class LogicButtons extends StatefulWidget {
