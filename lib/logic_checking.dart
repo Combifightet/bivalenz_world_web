@@ -4,33 +4,11 @@ import 'package:bivalenz_world_web/object_handeling.dart';
 import 'package:flutter/material.dart';
 
 
-//* RegEx
-// a=a        ([a-z])=\1            //? true
-// ⊤∧⊤        ⊤∧⊤                  //? true
-// ¬(⊤∧⊤)     ⊤∧⊥|⊥∧⊤|⊥∧⊥         //? false
-// ⊥∨⊥        ⊥∨⊥                  //? true
-// ¬(⊥∨⊥)     ⊥∨⊥|⊥∨⊥|⊥∨⊥         //? false
-// ⊤→⊤        ⊤→⊤|⊥→⊤|⊥→⊥         //? true
-// ⊤→⊥        ⊤→⊥                  //? false
-// ⊤↔⊤        ([⊤⊥])↔\1            //? true
-// ⊤↔⊥        ⊤↔⊥|⊥↔⊤              //? false
-//!   ≠ = ∀ ∃
-
-//* Stärke der Bindungen in Bivalenz World:
-// =
-// ∧ ∨    (left to right)
-// 
-// 
-// 
-// 
-
-//! ∧ ∨
-
 String checkLogicTxt(String logicTxt, List<List<List<LogicObj>>> logicBoard) {
   logicTxt = logicTxt.replaceAll(' ', '');
   int inputLength = logicTxt.length;
 
-  Offset? idToOffest(String chr) {  // 'a'
+  Offset? idToOffest(String chr) {
     for (int i=0; i<logicBoard.length; i++) {
       for (int j=0; j<logicBoard[i].length; j++) {
         if (logicBoard[i][j].isNotEmpty && logicBoard[i][j][0].id.contains(chr)) {
@@ -112,8 +90,12 @@ String checkLogicTxt(String logicTxt, List<List<List<LogicObj>>> logicBoard) {
   // [a-m] constants     [n-z] variables
   for (int i=logicTxt.length-1; i>=0; i--) {
     if (logicTxt[i].codeUnitAt(0) >= 97 && logicTxt[i].codeUnitAt(0) <= 109 && logicTxt.substring((i-1).clamp(0, i), (i+2).clamp(0, logicTxt.length)).replaceAll(RegExp(r'[a-zA-Z]'), '').length==logicTxt.substring((i-1).clamp(0, i), (i+2).clamp(0, logicTxt.length)).length-1) {
-      var offset = idToOffest(logicTxt[i]);
-      logicTxt = logicTxt.replaceRange(i, i+1, '${offset!.dx}:${offset.dy}');
+      Offset? offset = idToOffest(logicTxt[i]);
+      if (!offset.isNull) {
+        logicTxt = logicTxt.replaceRange(i, i+1, '${offset!.dx}:${offset.dy}');
+      } else {
+        return 'error2 ${logicTxt[i]}';
+      }
     }
   }
   debugPrint(logicTxt);
@@ -137,7 +119,7 @@ String checkLogicTxt(String logicTxt, List<List<List<LogicObj>>> logicBoard) {
           logicTxt = logicTxt.replaceAll(substr, bm(substr.replaceAll(RegExp(r'[a-z\(\)]'), '')));
           break;
         default:
-        return 'error1';
+        return 'error1 ${substr.replaceAll(RegExp(r'[^a-z]'), '')}';
       }
     }
     debugPrint('Substep:         $logicTxt');
@@ -219,7 +201,7 @@ String checkLogicTxt(String logicTxt, List<List<List<LogicObj>>> logicBoard) {
           }
           break;
         default:
-        return 'error1';
+        return 'error3 ${substr.replaceAll(RegExp(r'[\d:\(\)]'), '')}';
       }
     }
     debugPrint('Substep:         $logicTxt');
@@ -315,7 +297,7 @@ String checkLogicTxt(String logicTxt, List<List<List<LogicObj>>> logicBoard) {
           }
           break;
         default:
-        return 'error1';
+        return 'error3 ${substr.replaceAll(RegExp(r'[\d:\(\),]'), '')}';
       }
     }
     debugPrint('Substep:         $logicTxt');
@@ -348,7 +330,7 @@ String checkLogicTxt(String logicTxt, List<List<List<LogicObj>>> logicBoard) {
             }
           break;
         default:
-        return 'error1';
+        return 'error3 ${substr.replaceAll(RegExp(r'[\d:\(\),]'), '')}';
       }
     }
     debugPrint('Substep:         $logicTxt');
@@ -386,7 +368,11 @@ String checkLogicTxt(String logicTxt, List<List<List<LogicObj>>> logicBoard) {
 
   if (inputLength == logicTxt.length) {
     debugPrint('Result:          $logicTxt');
-    return logicTxt;
+    if (logicTxt.length==1) {
+      return logicTxt;
+    } else {
+      return 'error0';
+    }
   } else {
     debugPrint('---   Next Iteration   ---');
     return checkLogicTxt(logicTxt, logicBoard);
@@ -399,5 +385,4 @@ String checkLogicTxt(String logicTxt, List<List<List<LogicObj>>> logicBoard) {
   // return 'error1';    // Function 'rl' not found in the signature
   // return 'error2';    // The constant symbol [a] is not assigned to this world
   // return 'error3';    // Predicate 'Smaler' not found in the signature
-  // return 'error4';    // This formula contains an unknown symbol [ab]
 }

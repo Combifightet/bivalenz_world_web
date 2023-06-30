@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:bivalenz_world_web/object_handeling.dart';
 import 'package:flutter/material.dart';
 
@@ -55,7 +57,7 @@ class _LogicObjState extends State<LogicObj> {
                 fit: BoxFit.contain,
                 child: Builder(
                   builder: (BuildContext context) {
-                    switch (_logicObjEvaluation) {
+                    switch (_logicObjEvaluation.substring(0, min(6, _logicObjEvaluation.length-1))) {
                     // switch (checkLogicTxt('rm(a)', mainBoard)) {
                       case '⊤':
                         return const Tooltip(
@@ -71,15 +73,27 @@ class _LogicObjState extends State<LogicObj> {
                         );
                       case 'error0':
                         return const Tooltip(
-                          message: 'error 0',
+                          message: 'Failed to parrse \'formmulaBegin\'',
                           waitDuration: Duration(seconds: 1),
                           child: Icon(Icons.star, color: foregroundAccentColor)
                         );
                       case 'error1':
+                        return Tooltip(
+                          message: 'Function \'${_logicObjEvaluation.substring(min(7, _logicObjEvaluation.length-1), _logicObjEvaluation.length-1)}\' not found in the signature',
+                          waitDuration: const Duration(seconds: 1),
+                          child: const Icon(Icons.close_rounded, color: foregroundAccentColor)
+                        );
+                      case 'error2':
                         return const Tooltip(
-                          message: 'error 1',
+                          message: 'The constant symbol [a] is not assigned to this world',
                           waitDuration: Duration(seconds: 1),
                           child: Icon(Icons.close_rounded, color: foregroundAccentColor)
+                        );
+                      case 'error3':
+                        return Tooltip(
+                          message: 'Predicate \'${_logicObjEvaluation.substring(min(7, _logicObjEvaluation.length-1), _logicObjEvaluation.length-1)}\' not found in the signature',
+                          waitDuration: const Duration(seconds: 1),
+                          child: const Icon(Icons.close_rounded, color: foregroundAccentColor)
                         );
                       default:
                       return const Tooltip(
