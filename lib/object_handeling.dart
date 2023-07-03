@@ -1,3 +1,5 @@
+import 'dart:js_interop';
+
 import 'package:flutter/material.dart';
 import 'dart:math' as math;
 
@@ -34,6 +36,7 @@ class LogicBoard {
   [[], [], [], [], [], [], [], []]];
 
   Offset? selected;
+  Offset? dragging;
 
   void selectTile(Offset pos) {
     if (selected != Offset(pos.dx.floorToDouble(),pos.dy.floorToDouble())) {
@@ -171,8 +174,8 @@ class BoardRenderer extends StatefulWidget{
 class BorderRendererState extends State<BoardRenderer> {
   final _boardKey = GlobalKey();
 
-  late Offset dragStartPos;
-  late Offset dragEndPos;
+  Offset? dragStartPos;
+  Offset? dragEndPos;
 
   void _onTapDown(TapDownDetails details) {
     setState(() {
@@ -182,18 +185,30 @@ class BorderRendererState extends State<BoardRenderer> {
 
   void _onPanStart(DragStartDetails details) {
     setState(() {
+      dragStartPos = details.localPosition;
+      _dragPos = Offset(
+        (dragStartPos!.dy/(_boardKey.currentContext!.size!.width/8))-0.5,
+        (dragStartPos!.dx/(_boardKey.currentContext!.size!.width/8))-0.5);
     });
-    dragStartPos = details.localPosition;
+    mainBoard.dragging = Offset(
+      (dragStartPos!.dx/(_boardKey.currentContext!.size!.width/8)).floorToDouble(),
+      (dragStartPos!.dy/(_boardKey.currentContext!.size!.width/8)).floorToDouble());
   }
 
   void _onPanUpdate(DragUpdateDetails details) {
     dragEndPos = details.localPosition;
+    setState(() {
+      _dragPos = Offset(
+        (dragEndPos!.dy/(_boardKey.currentContext!.size!.width/8))-0.5,
+        (dragEndPos!.dx/(_boardKey.currentContext!.size!.width/8))-0.5);
+    });
   }
 
   void _onPanEnd(DragEndDetails details) {
     setState(() {
-      mainBoard.moveObj(Offset((dragStartPos.dx/(_boardKey.currentContext!.size!.width/8)).floorToDouble(), (dragStartPos.dy/(_boardKey.currentContext!.size!.width/8)).floorToDouble()), Offset((dragEndPos.dx/(_boardKey.currentContext!.size!.width/8)).floorToDouble(), (dragEndPos.dy/(_boardKey.currentContext!.size!.width/8)).floorToDouble()));
+      mainBoard.moveObj(mainBoard.dragging!, Offset((dragEndPos!.dx/(_boardKey.currentContext!.size!.width/8)).floorToDouble(), (dragEndPos!.dy/(_boardKey.currentContext!.size!.width/8)).floorToDouble()));
     });
+    mainBoard.dragging = null;
   }
 
 
@@ -231,7 +246,7 @@ class BorderRendererState extends State<BoardRenderer> {
   }
 }
 
-
+late Offset _dragPos;
 class BoardPainter extends CustomPainter {
   final LogicBoard board;
   final double width;
@@ -285,12 +300,29 @@ class BoardPainter extends CustomPainter {
     for (int i=0; i<board.board.length; i++) {
       for (int j=0; j<board.board[i].length; j++) {
         if (board.board[i][j].isNotEmpty){
-          canvas.drawPath(
-            drawPoly(((board.board[i][j][0].size+1)*15*(width/700)).floor(), board.board[i][j][0].sides, Offset(i.toDouble(), j.toDouble()), width),
-            Paint()
-            ..color = board.board[i][j][0].sides==3?redAccentColor:board.board[i][j][0].sides==4?blueAccentColor:board.board[i][j][0].sides==5?yellowAccentColor:foregroundColor
-            ..style = PaintingStyle.fill
-          );
+          if (board.dragging.isNull || board.dragging != Offset(j.toDouble(), i.toDouble())) {
+            canvas.drawPath(
+              drawPoly(((board.board[i][j][0].size+1)*15*(width/700)).floor(), board.board[i][j][0].sides, Offset(i.toDouble(), j.toDouble()), width),
+              Paint()
+              ..color = board.board[i][j][0].sides==3?redAccentColor:board.board[i][j][0].sides==4?blueAccentColor:board.board[i][j][0].sides==5?yellowAccentColor:foregroundColor
+              ..style = PaintingStyle.fill
+            );
+          } else {              // TODO: Parent Polygon to mouse cursor position
+            canvas.drawPath(
+              // Offset((dragStartPos!.dx/(_boardKey.currentContext!.size!.width/8)), (dragStartPos!.dy/(_boardKey.currentContext!.size!.width/8)));
+
+              drawPoly(
+                ((board.board[i][j][0].size+1)*15*(width/700)).floor(),
+                board.board[i][j][0].sides,
+                _dragPos,
+                width
+              ),
+              // drawPoly(((board.board[i][j][0].size+1)*15*(width/700)).floor(), board.board[i][j][0].sides, Offset(i.toDouble(), j.toDouble()), width),
+              Paint()
+              ..color = board.board[i][j][0].sides==3?redAccentColor:board.board[i][j][0].sides==4?blueAccentColor:board.board[i][j][0].sides==5?yellowAccentColor:foregroundColor
+              ..style = PaintingStyle.fill
+            );
+          }
         }
       }
     }
