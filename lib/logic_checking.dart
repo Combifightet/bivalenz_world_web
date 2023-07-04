@@ -342,10 +342,8 @@ String checkLogicTxt(String logicTxt, List<List<List<LogicObj>>> logicBoard) {
     if (!match.isNull) {
       String? substr = match![0];
       if (substr![0] == '(') {
-        print('case 1 ((...)');
         logicTxt = logicTxt.replaceAll(substr, substr.substring(1, substr.length-1));
       } else {
-        print('case 2 ?(...)');
         logicTxt = logicTxt.replaceAll(substr, substr[0]+substr.substring(2, substr.length-1));
       }
     }
@@ -366,8 +364,65 @@ String checkLogicTxt(String logicTxt, List<List<List<LogicObj>>> logicBoard) {
     debugPrint('Substep:         $logicTxt');
   }
 
-  if (inputLength == logicTxt.length) {
-    debugPrint('Result:          $logicTxt');
+  // Solving  existential quantifiers
+  if (logicTxt.contains(RegExp(r'[∃∀]([n-z]).*\1.*'))) {
+    var match = RegExp(r'[∃∀]([n-z]).*\1.*').firstMatch(logicTxt);
+    if (!match.isNull) {
+      String? substr = match![0];
+      if (substr![2] == '(') {
+        int counter = 1;
+        for (int i=3; i<substr!.length; i++) {
+          if (substr[i] == '(') {
+            counter ++;
+          } else if (substr[i] == ')') {
+            counter --;
+          }
+          print(counter);
+          if (counter == 0) {
+            substr = substr.substring(0, i+1);
+            break;
+          }
+        }
+      } else {
+      if (substr.contains(RegExp(r'[⊤⊥∨∧→↔]'))) {
+        substr = substr.substring(0, substr.indexOf(RegExp(r'[⊤⊥∨∧→↔]')));
+      }
+      }
+      if (substr[0] == '∃') {
+        String? result;
+        String char = substr[1];
+        for (int y=0; y<mainBoard.board.length; y++) {
+          for (int x=0; x<mainBoard.board[y].length; x++) {
+            if (mainBoard.board[y][x].isNotEmpty) {
+              String? substrTemp = substr.substring(2);
+              for (int i=substrTemp!.length-1; i>=0; i--) {
+                if (substrTemp![i] == substr[1] && substrTemp.substring((i-1).clamp(0, i), (i+2).clamp(0, substrTemp.length)).replaceAll(RegExp(r'[a-zA-Z]'), '').length == substrTemp.substring((i-1).clamp(0, i), (i+2).clamp(0, substrTemp.length)).length-1) {
+                  substrTemp = substrTemp!.replaceRange(i, i+1, '$x:$y');
+                }
+              }
+              result = checkLogicTxt(substrTemp!, logicBoard)=='⊤'?'⊤':null;
+              print('$x:$y');
+              print('substr:        $substr');
+              print('substrTemp:    $substrTemp');
+              print('result:        $result');
+              if (!result.isNull) {break;}
+            }
+            if (!result.isNull) {break;}
+          }
+          if (!result.isNull) {break;}
+        }
+        if (result.isNull) {
+          logicTxt = logicTxt.replaceAll(substr, '⊥');
+        } else {
+          logicTxt = logicTxt.replaceAll(substr, '⊤');
+        }
+      } else {
+
+      }
+    }
+  }
+
+  if (logicTxt.length == 1 || logicTxt.contains('error') || inputLength == logicTxt.length) {
     if (logicTxt.length==1) {
       return logicTxt;
     } else {
@@ -385,4 +440,5 @@ String checkLogicTxt(String logicTxt, List<List<List<LogicObj>>> logicBoard) {
   // return 'error1';    // Function 'rl' not found in the signature
   // return 'error2';    // The constant symbol [a] is not assigned to this world
   // return 'error3';    // Predicate 'Smaler' not found in the signature
+  // return 'error4';    // The formula contains a free variable 'x'
 }

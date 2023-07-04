@@ -29,6 +29,7 @@ class _LogicObjState extends State<LogicObj> {
   void verifyLogic() {
     setState(() {
       _logicObjEvaluation = checkLogicTxt(widget.controller.value.text, mainBoard.board);
+      debugPrint('Result:          $_logicObjEvaluation');
     });
   }
   late int lastTextLength;
@@ -57,7 +58,7 @@ class _LogicObjState extends State<LogicObj> {
                 fit: BoxFit.contain,
                 child: Builder(
                   builder: (BuildContext context) {
-                    switch (_logicObjEvaluation.substring(0, min(6, _logicObjEvaluation.length-1))) {
+                    switch (_logicObjEvaluation.substring(0, min(6, _logicObjEvaluation.length))) {
                     // switch (checkLogicTxt('rm(a)', mainBoard)) {
                       case '⊤':
                         return const Tooltip(
