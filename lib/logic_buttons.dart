@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'theme.dart';
+import 'logic_handeling.dart';
 
 
 //  ∨  ∧  ¬  →  ↔  ⊥
@@ -20,15 +21,17 @@ class LogicButton extends StatelessWidget {
   final EdgeInsetsGeometry padding;
   final String? tooltip;
   final String text;
-  const LogicButton({
+  LogicButton({
     super.key,
     required this.padding,
     required this.text,
     this.tooltip
   });
 
+
   @override
   Widget build(BuildContext context) {
+    int cursorOffset = 0;
     return Expanded(
       child: Padding(
         padding: padding,
@@ -37,7 +40,12 @@ class LogicButton extends StatelessWidget {
           waitDuration: const Duration(seconds: 1),
           child: TextButton(
             style: smallButtonStyle,
-            onPressed: () => inputText(text),
+            onPressed: () => {
+              inputText(text),
+              cursorOffset = logicControllers[currentIndex].selection.baseOffset,
+              logicControllers[currentIndex].text = logicControllers[currentIndex].text.replaceRange(cursorOffset, cursorOffset = logicControllers[currentIndex].selection.extentOffset, '$text${text.length>1?'()':''}'),
+              logicControllers[currentIndex].selection = TextSelection.collapsed(offset: cursorOffset+text.length+(text.length>1?1:0)),
+            },
             child: FittedBox(
               fit: BoxFit.contain,
               child: Text(text)

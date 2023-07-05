@@ -195,8 +195,8 @@ class LogicObjList extends StatefulWidget {
   LogicObjListState createState() => LogicObjListState();
 }
 
+final List<TextEditingController> logicControllers = [TextEditingController()];
 class LogicObjListState extends State<LogicObjList> {
-  final List<TextEditingController> logicControllers = [TextEditingController()];
 
   void verifyLogic(String statement) {
     setState(() {
