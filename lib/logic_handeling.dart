@@ -96,6 +96,12 @@ class _LogicObjState extends State<LogicObj> {
                           waitDuration: const Duration(seconds: 1),
                           child: const Icon(Icons.close_rounded, color: foregroundAccentColor)
                         );
+                      case 'error4':
+                        return Tooltip(
+                          message: 'Existential quantor \'${_logicObjEvaluation.substring(min(7, _logicObjEvaluation.length-1), _logicObjEvaluation.length-1)}\' found no objects in the world',
+                          waitDuration: const Duration(seconds: 1),
+                          child: const Icon(Icons.close_rounded, color: foregroundAccentColor)
+                        );
                       default:
                       return const Tooltip(
                         message: 'enter a logic statement',
