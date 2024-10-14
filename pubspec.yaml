@@ -1,21 +1,21 @@
 name: bivalenz_world_web
-description: A new Flutter project.
+description: "A new Flutter project."
 publish_to: 'none'
 version: 0.1.0
 
 environment:
-  sdk: '>=2.19.6 <3.0.0'
+  sdk: ^3.5.0-323.2.beta
 
 dependencies:
   flutter:
     sdk: flutter
+  logic_expr_tree:
+    path: ../logic_expr_tree
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  flutter_lints: ^2.0.0
+  flutter_lints: ^4.0.0
 
 flutter:
   uses-material-design: true
-  assets:
-    - assets/8x8_grid.png
