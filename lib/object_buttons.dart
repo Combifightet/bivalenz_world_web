@@ -55,18 +55,82 @@ class _ObjectButtonsState extends State<ObjectButtons> {
         )
       );
     }
+    for (ObjectType type in [ObjectType.Tet, ObjectType.Cube, ObjectType.Tet]) {
+      buttons.add(
+        ElevatedButton(
+          onPressed: () {
+            if (selectedTile!=null) {
+              int index = folWorlds[folWorldIndex].getWorld().indexWhere((obj) => obj.getX()==selectedTile!.dx.round() && obj.getY()==selectedTile!.dy.round());
+              if (index>=0) {
+                folWorlds[folWorldIndex].getWorld()[index].type=type;
+              }
+            }
+          },
+          style: ButtonStyle(
+            padding: const WidgetStatePropertyAll(EdgeInsets.zero),
+            shape: WidgetStateProperty.all<RoundedRectangleBorder>(
+              RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(5*uiScale),
+              )
+            ),
+          ),
+          child: Icon(
+            type==ObjectType.Tet
+              ? Icons.play_arrow_rounded
+              : type==ObjectType.Cube
+                ? Icons.square_rounded
+                : Icons.pentagon_rounded,
+            color: type==ObjectType.Tet
+              ? redAccentColor
+              : type==ObjectType.Cube
+                ? blueAccentColor
+                : yellowAccentColor,
+            size: 28*uiScale,
+          )
+        )
+      );
+    }
+    for (ObjectSize size in [ObjectSize.Small, ObjectSize.Medium, ObjectSize.Large]) {
+      buttons.add(
+        ElevatedButton(
+          onPressed: () {
+            if (selectedTile!=null) {
+              int index = folWorlds[folWorldIndex].getWorld().indexWhere((obj) => obj.getX()==selectedTile!.dx.round() && obj.getY()==selectedTile!.dy.round());
+              if (index>=0) {
+                folWorlds[folWorldIndex].getWorld()[index].size=size;
+              }
+            }
+          },
+          style: ButtonStyle(
+            padding: const WidgetStatePropertyAll(EdgeInsets.zero),
+            shape: WidgetStateProperty.all<RoundedRectangleBorder>(
+              RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(5*uiScale),
+              )
+            ),
+          ),
+          child: Icon(
+            Icons.circle_rounded,
+            size: (size.index+2*7)*uiScale,
+          )
+        )
+      );
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.all(24*uiScale),
-      child: GridView.count(
-        crossAxisCount: 6,
-        physics: const NeverScrollableScrollPhysics(),
-        mainAxisSpacing: 4*uiScale,
-        crossAxisSpacing: 4*uiScale,
-        children: buttons,
+      padding: EdgeInsets.all(24*uiScale*0),  // TODO: fix this so hat it doesnt overflow
+      child: AspectRatio(
+        aspectRatio: 6/2,
+        child: GridView.count(
+          crossAxisCount: 6,
+          physics: const NeverScrollableScrollPhysics(),
+          mainAxisSpacing: 4*uiScale,
+          crossAxisSpacing: 4*uiScale,
+          children: buttons,
+        ),
       ),
     );
   }
