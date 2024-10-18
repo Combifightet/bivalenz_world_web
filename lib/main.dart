@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
-import 'dart:math';
+// import 'dart:math';
 
 // import 'package:logic_expr_tree/logic_expr_tree.dart';
-
 import 'home_page.dart';
 
 
@@ -17,10 +16,9 @@ class MainApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return LayoutBuilder(
       builder: (BuildContext context, BoxConstraints constraints) {
-        double uiScale = max(min(constraints.maxHeight, constraints.maxWidth/16*9)/6.4, 64)/97;
+        // double uiScale = max(min(constraints.maxHeight, constraints.maxWidth/16*9)/6.4, 64)/97;
         return MaterialApp(
           home: HomePage(
-            uiScale: uiScale,
           ),
         );
       },
