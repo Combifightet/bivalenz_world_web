@@ -35,7 +35,7 @@ class _HomePageState extends State<HomePage> {
       backgroundColor: backgroundColor,
       body: LayoutBuilder(
         builder: (BuildContext context, BoxConstraints constraints) {
-          uiScale = max(min(constraints.maxHeight, constraints.maxWidth/10*9)/6.4, 64)/97;
+          uiScale = min(constraints.maxHeight, constraints.maxWidth/10*9)/820;
           return Column(
             children: [
               Expanded(
@@ -52,10 +52,9 @@ class _HomePageState extends State<HomePage> {
                               padding: EdgeInsets.all(6*uiScale),
                               child: AspectRatio(
                                 aspectRatio:  1/3,
-                                child: Expanded(
-                                  child: RotateExport(
-                                  ),
-                                ),
+                                // child: Expanded(
+                                  child: RotateExport(),
+                                // ),
                               ),
                             ),
                             Expanded(
@@ -117,11 +116,14 @@ class _HomePageState extends State<HomePage> {
                       // child: Padding(
                         // padding: EdgeInsets.all(8*uiScale),
                         child: Center(
-                          child: AspectRatio(
-                            aspectRatio: 1,
-                            child: FolWorldBoard(
-                              uiScale: uiScale,
-                            )
+                          child: Padding(
+                            padding: EdgeInsets.all(8*uiScale),
+                            child: AspectRatio(
+                              aspectRatio: 1,
+                              child: FolWorldBoard(
+                                uiScale: uiScale,
+                              )
+                            ),
                           ),
                         ),
                       // )

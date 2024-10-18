@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:logic_expr_tree/logic_expr_tree.dart';
 import 'package:flutter/material.dart';
 import 'dart:math';
@@ -20,6 +22,7 @@ class FolWorldBoard extends StatefulWidget {
 
 class _FolWorldBoardState extends State<FolWorldBoard> {
   late double canvasSize;
+  double uiScale = 1;
 
   void rebuild() => setState(() {});
 
@@ -28,6 +31,7 @@ class _FolWorldBoardState extends State<FolWorldBoard> {
     return LayoutBuilder(
       builder: (BuildContext context, BoxConstraints constraints) {
         canvasSize = min(constraints.maxWidth, constraints.maxHeight);
+        uiScale = canvasSize/520;
         return AspectRatio(
           aspectRatio: 1,
           child: Stack(
@@ -36,8 +40,8 @@ class _FolWorldBoardState extends State<FolWorldBoard> {
                 painter: BoardPainter(
                   world: folWorlds[folWorldIndex],
                   canvasSize: canvasSize,
-                  uiScale: widget.uiScale,
                 ),
+                size: Size(canvasSize, canvasSize),
               ),
               GestureDetector(
                 onTapDown: _onTapDown,
@@ -54,16 +58,6 @@ class _FolWorldBoardState extends State<FolWorldBoard> {
 
   void _onTapDown(TapDownDetails details) {
     print('_onTapDown');
-    List<String> chars = ['a','b','c','d','e','f','g','h','i','j','k','l','m'];
-    chars.shuffle();
-    folWorlds[folWorldIndex].createObj(
-      Random().nextInt(folWorldSize),
-      Random().nextInt(folWorldSize),
-      ObjectType.values[Random().nextInt(3)],
-      ObjectSize.values[Random().nextInt(3)],
-      chars.sublist(Random().nextInt(7)).sublist(Random().nextInt(6))
-    );
-
     Offset newSelection = details.localPosition/canvasSize*(folWorldSize*1);
     newSelection = Offset(newSelection.dx.floorToDouble(), newSelection.dy.floorToDouble());
     if (selectedTile==null || (newSelection.distanceSquared-selectedTile!.distanceSquared).abs()!=0) {
@@ -105,20 +99,19 @@ class _FolWorldBoardState extends State<FolWorldBoard> {
 class BoardPainter extends CustomPainter {
   final FolWorld world;
   final double canvasSize;
-  final double uiScale;
 
   BoardPainter({
     required this.world,
     required this.canvasSize,
-    this.uiScale=1,
   });
 
   late double width;
+  late double uiScale;
 
 
   Path drawPoly(int sides, Offset pos, ObjectSize size) {
     final double centerX = width*pos.dx + width/2;
-    final double centerY = width*pos.dy + width/2 + (sides==3?4:sides==5?2:0*uiScale);  // TODO: scale addition by some factor
+    final double centerY = width*pos.dy + width/2 + (sides==3?4:sides==5?2:0*uiScale*8/folWorldSize);
     final double angle = (pi*2)/sides;
     final Path polygonPath = Path();
     final double radius = width/7 * (size.index+1);
@@ -141,6 +134,7 @@ class BoardPainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
     width = canvasSize/folWorldSize;
+    uiScale = canvasSize/520;
     // drawing background tiles
     canvas.drawRect(
       Rect.fromPoints(
@@ -196,6 +190,27 @@ class BoardPainter extends CustomPainter {
                 ? yellowAccentColor
                 : const Color(0xffff00ff)
           ..style = PaintingStyle.fill
+        );
+        String constsString = obj.getConsts().toString();
+        constsString = constsString.substring(1, constsString.length-1);
+        final TextPainter textPainter = TextPainter(
+          text: TextSpan(
+            text: constsString,
+            style: TextStyle(
+              fontSize: 14*uiScale*8/folWorldSize,
+              fontWeight: FontWeight.bold,
+              color: foregroundAccentColor
+            )
+          ),
+          textAlign: TextAlign.center,
+          textDirection: TextDirection.ltr
+        )..layout(maxWidth: size.width/folWorldSize-12*uiScale);
+        textPainter.paint(
+          canvas,
+          Offset(
+            width*obj.getX() + width*0.5 - textPainter.width*0.5,
+            width*obj.getY() + width*0.8
+          )
         );
       // } else {
       // }

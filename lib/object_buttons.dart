@@ -24,9 +24,8 @@ class ObjectButtons extends StatefulWidget {
 //   tet   cube  dodec  small  medium large
 
 class _ObjectButtonsState extends State<ObjectButtons> {
-  List<Widget> buttons1 = [];
-  List<Widget> buttons2 = [];
-  
+  double uiScale = 1;
+    
   void _addConst(String chr) {
     if (selectedTile!=null) {
       int index = folWorlds[folWorldIndex].getWorld().indexWhere((obj) => obj.getX()==selectedTile!.dx.round() && obj.getY()==selectedTile!.dy.round());
@@ -60,29 +59,28 @@ class _ObjectButtonsState extends State<ObjectButtons> {
     }
   }
 
-  @override
-  void initState() {
-    super.initState();
+  List<Widget> buttons1(double uiScale) {
+    List<Widget> buttons = [];
 
     for (String chr in ['a','b','c','d','e','f']) {
-      buttons1.add(
+      buttons.add(
         Expanded(
           child: Padding(
-            padding: EdgeInsets.all(2*widget.uiScale),
+            padding: EdgeInsets.all(2*uiScale),
             child: ElevatedButton(
               onPressed: () => _addConst(chr),
               style: ButtonStyle(
                 padding: const WidgetStatePropertyAll(EdgeInsets.zero),
                 shape: WidgetStateProperty.all<RoundedRectangleBorder>(
                   RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(5*widget.uiScale),
+                    borderRadius: BorderRadius.circular(5*uiScale),
                   )
                 ),
               ),
               child: Text(
                 chr,
                 style: TextStyle(
-                  fontSize: 42*widget.uiScale
+                  fontSize: 42*uiScale
                 ),
               )
             ),
@@ -90,83 +88,96 @@ class _ObjectButtonsState extends State<ObjectButtons> {
         )
       );
     }
+    return buttons;
+  }
+
+  List<Widget> buttons2(double uiScale) {
+    List<Widget> buttons = [];
     for (ObjectType type in [ObjectType.Tet, ObjectType.Cube, ObjectType.Dodec]) {
-      buttons2.add(
+      buttons.add(
         Expanded(
           child: Padding(
-            padding: EdgeInsets.all(2*widget.uiScale),
+            padding: EdgeInsets.all(2*uiScale),
             child: ElevatedButton(
               onPressed: () => _createObj(type),
               style: ButtonStyle(
                 padding: const WidgetStatePropertyAll(EdgeInsets.zero),
                 shape: WidgetStateProperty.all<RoundedRectangleBorder>(
                   RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(5*widget.uiScale),
+                    borderRadius: BorderRadius.circular(5*uiScale),
                   )
                 ),
               ),
               child: type==ObjectType.Tet
                 ? Transform.rotate(
                     angle: -90*pi/180,
-                    child: Icon(Icons.play_arrow_rounded, color: redAccentColor, size: 56*widget.uiScale)
+                    child: Icon(Icons.play_arrow_rounded, color: redAccentColor, size: 56*uiScale)
                   )
                 : type==ObjectType.Cube
-                  ? Icon(Icons.square_rounded, color: blueAccentColor, size: 56*widget.uiScale)
-                  : Icon(Icons.pentagon_rounded, color: yellowAccentColor, size: 56*widget.uiScale),
+                  ? Icon(Icons.square_rounded, color: blueAccentColor, size: 56*uiScale)
+                  : Icon(Icons.pentagon_rounded, color: yellowAccentColor, size: 56*uiScale),
             ),
           ),
         )
       );
     }
     for (ObjectSize size in [ObjectSize.Small, ObjectSize.Medium, ObjectSize.Large]) {
-      buttons2.add(
+      buttons.add(
         Expanded(
           child: Padding(
-            padding: EdgeInsets.all(2*widget.uiScale),
+            padding: EdgeInsets.all(2*uiScale),
             child: ElevatedButton(
               onPressed: () => _modifySize(size),
               style: ButtonStyle(
                 padding: const WidgetStatePropertyAll(EdgeInsets.zero),
                 shape: WidgetStateProperty.all<RoundedRectangleBorder>(
                   RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(5*widget.uiScale),
+                    borderRadius: BorderRadius.circular(5*uiScale),
                   )
                 ),
               ),
               child: Icon(
                 Icons.circle_rounded,
-                size: (size.index+2)*14*widget.uiScale,
+                size: (size.index+2)*14*uiScale,
               )
             ),
           ),
         )
       );
     }
+    return buttons;
   }
+
 
   @override
   Widget build(BuildContext context) {
     return AspectRatio(
       aspectRatio: 6/2,
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          Expanded(
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: buttons1,
-            ),
-          ),
-          Expanded(
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: buttons2,
-            ),
-          )
-        ],
+      child: LayoutBuilder(
+        builder: (BuildContext context, BoxConstraints constraints) {
+          uiScale = min(constraints.maxHeight, constraints.maxWidth/3)/130;
+
+          return Column(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Expanded(
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: buttons1(uiScale),
+                ),
+              ),
+              Expanded(
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: buttons2(uiScale),
+                ),
+              )
+            ],
+          );
+        }
       )
     );
   }
