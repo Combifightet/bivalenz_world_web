@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:bivalenz_world_web/fol_world_board.dart';
+import 'package:bivalenz_world_web/logic_sentences.dart';
 import 'package:bivalenz_world_web/object_buttons.dart';
 import 'package:bivalenz_world_web/theme.dart';
 import 'package:flutter/material.dart';
@@ -132,7 +133,7 @@ class _HomePageState extends State<HomePage> {
                       flex: 6,
                       child: Container(
                         color: backgroundAccentColor,
-                        child: Container(color: Colors.cyan),
+                        child: LogicSentences(),
                       )
                     )
                   ],
