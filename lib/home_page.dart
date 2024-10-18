@@ -6,13 +6,20 @@ import 'package:flutter/material.dart';
 import 'rotate_export.dart';
 
 class HomePage extends StatefulWidget {
-  const HomePage({super.key});
+  final double uiScale;
+
+  const HomePage({
+    super.key,
+    this.uiScale=1,
+  });
 
   @override
   State<HomePage> createState() => _HomePageState();
 }
 
 class _HomePageState extends State<HomePage> {
+  GlobalKey boardKey = GlobalKey();
+
   @override
   Widget build(BuildContext context) {
 
@@ -20,7 +27,7 @@ class _HomePageState extends State<HomePage> {
     for (int i=0; i<11*17; i++) {
       boxes.add(Container(
         decoration: BoxDecoration(
-          border: Border.all(color: Colors.black.withOpacity(0.3))
+          border: Border.all(color: Colors.black.withAlpha(77))
         ),
       ));
     }
@@ -35,16 +42,21 @@ class _HomePageState extends State<HomePage> {
               color: backgroundAccentColor,
               child: Row(
                 children: [
-                  const Expanded(
+                  Expanded(
                     flex: 1,
-                    child: RotateExport(),
+                    child: RotateExport(
+                      uiScale: widget.uiScale,
+                    ),
                   ),
-                  const Expanded(
+                  Expanded(
                     flex: 10,
                     child: Center(
                       child: AspectRatio(
                         aspectRatio: 17/6,
-                        child: ObjectButtons()
+                        child: ObjectButtons(
+                          boardRefresher: () => boardKey.currentState!.setState(() {}),
+                          uiScale: widget.uiScale,
+                        )
                       )
                     )
                   ),
@@ -82,14 +94,17 @@ class _HomePageState extends State<HomePage> {
             flex: 8,
             child: Row(
               children: [
-                const Expanded(
+                Expanded(
                   flex: 11,
                   // child: Padding(
-                    // padding: EdgeInsets.all(8*uiScale),
+                    // padding: EdgeInsets.all(8*widget.uiScale),
                     child: Center(
                       child: AspectRatio(
                         aspectRatio: 1,
-                        child: FolWorldBoard()
+                        child: FolWorldBoard(
+                          key: boardKey,
+                          uiScale: widget.uiScale,
+                        )
                       ),
                     ),
                   // )

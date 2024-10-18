@@ -7,7 +7,12 @@ import 'theme.dart';
 Offset? cursorLocation;
 
 class FolWorldBoard extends StatefulWidget {
-  const FolWorldBoard({super.key});
+  final double uiScale;
+
+  const FolWorldBoard({
+    super.key,
+    this.uiScale=1,
+  });
 
   @override
   State<FolWorldBoard> createState() => _FolWorldBoardState();
@@ -15,6 +20,8 @@ class FolWorldBoard extends StatefulWidget {
 
 class _FolWorldBoardState extends State<FolWorldBoard> {
   late double canvasSize;
+
+  void rebuild() => setState(() {});
 
   @override
   Widget build(BuildContext context) {
@@ -28,7 +35,8 @@ class _FolWorldBoardState extends State<FolWorldBoard> {
               CustomPaint(
                 painter: BoardPainter(
                   world: folWorlds[folWorldIndex],
-                  canvasSize: canvasSize
+                  canvasSize: canvasSize,
+                  uiScale: widget.uiScale,
                 ),
               ),
               GestureDetector(
@@ -97,10 +105,12 @@ class _FolWorldBoardState extends State<FolWorldBoard> {
 class BoardPainter extends CustomPainter {
   final FolWorld world;
   final double canvasSize;
+  final double uiScale;
 
   BoardPainter({
     required this.world,
     required this.canvasSize,
+    this.uiScale=1,
   });
 
   late double width;
@@ -164,7 +174,7 @@ class BoardPainter extends CustomPainter {
         radius: width/2,
       ),
       Paint()
-        ..color = greenAccentColor.withOpacity(0.5)
+        ..color = greenAccentColor.withAlpha(127)
         ..style = PaintingStyle.fill,
       );
     }
@@ -175,7 +185,7 @@ class BoardPainter extends CustomPainter {
           drawPoly(
             obj.type.sides(),
             Offset(obj.getX()*1, obj.getY()*1),
-            obj.size
+            obj.size,
           ),
           Paint()
           ..color = obj.type==ObjectType.Tet

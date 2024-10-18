@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 
 //-- GLOBAL VARIABLES --\\
 
-double uiScale = 1;
 int folWorldIndex = 0;
 const int folWorldSize = 8;
 List<FolWorld> folWorlds = [FolWorld()];
