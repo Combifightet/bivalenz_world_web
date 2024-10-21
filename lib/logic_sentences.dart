@@ -175,7 +175,17 @@ class _LogicSentencesState extends State<LogicSentences> {
                               padding: EdgeInsets.symmetric(horizontal: 8*uiScale),
                               child: TextField(
                                 focusNode: focusNode,
-                                controller: sentenceTiles[index].controller, 
+                                controller: sentenceTiles[index].controller,
+                                decoration: InputDecoration(
+                                  contentPadding: EdgeInsets.symmetric(horizontal: 12*uiScale, vertical: 4*uiScale),
+                                  border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(5*uiScale),
+                                  )
+                                ),
+                                style: TextStyle(
+                                  fontSize: 16*uiScale,
+                                  color: foregroundColor
+                                ),
                                 onTap: () {
                                   activeController=sentenceTiles[index].controller;
                                   activeTextField =focusNode;
