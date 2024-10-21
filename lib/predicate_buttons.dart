@@ -41,52 +41,56 @@ class _PredicateButtonsState extends State<PredicateButtons> {
         for (int i=0; i<strings.length; i++) {
           List<Widget> currentRow = [];
           for (int j=0; j<strings[i].length; j++){
-            currentRow.add(
-              Expanded(
-                child: Padding(
-                  padding: EdgeInsets.all(uiScale),
-                  child: ElevatedButton(
-                    onPressed: () {
-                      setState(() {
-                        if (activeController!=null) {
-                          int offset = min(activeController!.selection.baseOffset, activeController!.selection.extentOffset)+strings[i][j].length+1;
-                          activeController!.text = '${activeController!.selection.textBefore(activeController!.text)}${strings[i][j]}()${activeController!.selection.textAfter(activeController!.text)}';
-                          activeController!.selection = TextSelection(
-                            baseOffset: offset,
-                            extentOffset: offset
-                          );
-                          // TODO: fix one frame long flicker ???
-                          Future.microtask(() {
-                            activeTextField!.requestFocus();
-                            SchedulerBinding.instance.addPostFrameCallback((_) {
-                              activeController!.selection = TextSelection(
-                                baseOffset: offset,
-                                extentOffset: offset
-                              );
+            if (strings[i][j].isEmpty) {
+              currentRow.add(Expanded(child: SizedBox()));
+            } else {
+              currentRow.add(
+                Expanded(
+                  child: Padding(
+                    padding: EdgeInsets.all(uiScale),
+                    child: ElevatedButton(
+                      onPressed: () {
+                        setState(() {
+                          if (activeController!=null) {
+                            int offset = min(activeController!.selection.baseOffset, activeController!.selection.extentOffset)+strings[i][j].length+1;
+                            activeController!.text = '${activeController!.selection.textBefore(activeController!.text)}${strings[i][j]}()${activeController!.selection.textAfter(activeController!.text)}';
+                            activeController!.selection = TextSelection(
+                              baseOffset: offset,
+                              extentOffset: offset
+                            );
+                            // TODO: fix one frame long flicker ???
+                            Future.microtask(() {
+                              activeTextField!.requestFocus();
+                              SchedulerBinding.instance.addPostFrameCallback((_) {
+                                activeController!.selection = TextSelection(
+                                  baseOffset: offset,
+                                  extentOffset: offset
+                                );
+                              });
                             });
-                          });
-                        }
-                      });
-                    },
-                    style: ButtonStyle(
-                      padding: const WidgetStatePropertyAll(EdgeInsets.zero),
-                      shape: WidgetStateProperty.all<RoundedRectangleBorder>(
-                        RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(5*uiScale),
-                        )
+                          }
+                        });
+                      },
+                      style: ButtonStyle(
+                        padding: const WidgetStatePropertyAll(EdgeInsets.zero),
+                        shape: WidgetStateProperty.all<RoundedRectangleBorder>(
+                          RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(5*uiScale),
+                          )
+                        ),
                       ),
-                    ),
-                    child: Text(
-                      strings[i][j],
-                      style: TextStyle(
-                        fontSize: 16*uiScale,
-                        fontWeight: FontWeight.bold
-                      ),
+                      child: Text(
+                        strings[i][j],
+                        style: TextStyle(
+                          fontSize: 16*uiScale,
+                          fontWeight: FontWeight.bold
+                        ),
+                      )
                     )
-                  )
-                ),
-              )
-            );
+                  ),
+                )
+              );
+            }
           }
           rows.add(
             Expanded(

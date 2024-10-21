@@ -54,7 +54,43 @@ class _LogicSentencesState extends State<LogicSentences> {
                       AspectRatio(
                         aspectRatio: 1,
                         // child: Expanded(
-                          child: Container(color: Colors.green),
+                          child: ElevatedButton(
+                              onPressed: () {
+                                for (int i=0; i<sentenceTiles.length; i++) {
+                                  ExpressionParser p = ExpressionParser();
+                                  ExpressionTree tree = p.parse(sentenceTiles[i].controller.text);
+                                  var result;
+                                  try {
+                                    result = tree.getValue(folWorlds[folWorldIndex], {});
+                                  } catch (e) {
+                                    print('Expression parser encountered an error:\n$e');
+                                  }
+                                  setState(() {
+                                    if (result == true) {
+                                      sentenceTiles[i].result = true;
+                                    } else if (result == false) {
+                                      sentenceTiles[i].result = false;
+                                    } else {
+                                      sentenceTiles[i].result = null;
+                                    }
+                                  });
+                                }
+                              },
+                              style: ButtonStyle(
+                                backgroundColor: const WidgetStatePropertyAll(backgroundColor),
+                                padding: const WidgetStatePropertyAll(EdgeInsets.zero),
+                                shape: WidgetStateProperty.all<RoundedRectangleBorder>(
+                                  RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(5*uiScale),
+                                  )
+                                ),
+                              ),
+                              child: Icon(
+                                Icons.check_rounded,
+                                color: foregroundAccentColor,
+                                size: 32*uiScale,
+                              )
+                            ),
                         // )
                       ),
                     Expanded(
@@ -143,7 +179,25 @@ class _LogicSentencesState extends State<LogicSentences> {
                           AspectRatio(
                             aspectRatio: 1,
                             child: ElevatedButton(
-                              onPressed: null,
+                              onPressed: () {
+                                ExpressionParser p = ExpressionParser();
+                                ExpressionTree tree = p.parse(sentenceTiles[index].controller.text);
+                                var result;
+                                try {
+                                  result = tree.getValue(folWorlds[folWorldIndex], {});
+                                } catch (e) {
+                                  print('Expression parser encountered an error:\n$e');
+                                }
+                                setState(() {
+                                  if (result == true) {
+                                    sentenceTiles[index].result = true;
+                                  } else if (result == false) {
+                                    sentenceTiles[index].result = false;
+                                  } else {
+                                    sentenceTiles[index].result = null;
+                                  }
+                                });
+                              },
                               style: ButtonStyle(
                                 backgroundColor: const WidgetStatePropertyAll(backgroundColor),
                                 padding: const WidgetStatePropertyAll(EdgeInsets.zero),
