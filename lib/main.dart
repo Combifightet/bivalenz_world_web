@@ -9,6 +9,7 @@ void main() {
   runApp(const MainApp());
 }
 
+//TODO: add tooltips for each button
 class MainApp extends StatelessWidget {
   const MainApp({super.key});
 

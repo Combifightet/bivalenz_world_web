@@ -2,6 +2,21 @@ import 'dart:math';
 
 import 'package:bivalenz_world_web/theme.dart';
 import 'package:flutter/material.dart';
+import 'package:logic_expr_tree/logic_expr_tree.dart';
+
+class SentenceTile{
+  final Key key;
+  // ExpressionTree? tree;
+  bool? result;
+  final TextEditingController controller;
+
+  SentenceTile({
+    required this.key,
+    // this.tree,
+    this.result,
+    required this.controller,
+  });
+}
 
 class LogicSentences extends StatefulWidget {
   const LogicSentences({super.key});
@@ -12,6 +27,13 @@ class LogicSentences extends StatefulWidget {
 
 class _LogicSentencesState extends State<LogicSentences> {
   double uiScale = 1;
+
+  List<SentenceTile> sentenceTiles = [
+    SentenceTile(
+      key: UniqueKey(),
+      controller: TextEditingController(),
+    )
+  ];
 
   @override
   Widget build(BuildContext context) {
@@ -27,7 +49,7 @@ class _LogicSentencesState extends State<LogicSentences> {
                 padding: EdgeInsets.all(8*uiScale),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  // crossAxisAlignment: CrossAxisAlignment.stretch,
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
                       AspectRatio(
                         aspectRatio: 1,
@@ -38,14 +60,59 @@ class _LogicSentencesState extends State<LogicSentences> {
                     Expanded(
                       child: Padding(
                         padding: EdgeInsets.symmetric(horizontal: 8*uiScale),
-                        child: Container(color: Colors.amber),
+                        child: ElevatedButton(
+                          onPressed: () {
+                            setState(() {
+                              sentenceTiles.add(
+                                SentenceTile(
+                                  key: UniqueKey(),
+                                  controller: TextEditingController(),
+                                )
+                              );
+                            });
+                          },
+                          style: ButtonStyle(
+                            padding: const WidgetStatePropertyAll(EdgeInsets.zero),
+                            shape: WidgetStateProperty.all<RoundedRectangleBorder>(
+                              RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(5*uiScale),
+                              )
+                            ),
+                          ),
+                          child: Icon(
+                            Icons.add,
+                            size: 32*uiScale,
+                          )
+                        )
                       ),
                     ),
                     AspectRatio(
                       aspectRatio: 1,
-                      // child: Expanded(
-                        child: Container(color: Colors.red),
-                      // )
+                      child: ElevatedButton(
+                        onPressed: () {
+                          setState(() {
+                            sentenceTiles.clear();
+                            sentenceTiles.add(
+                              SentenceTile(
+                                key: UniqueKey(),
+                                controller: TextEditingController(),
+                              )
+                            );
+                          });
+                        },
+                        style: ButtonStyle(
+                          padding: const WidgetStatePropertyAll(EdgeInsets.zero),
+                          shape: WidgetStateProperty.all<RoundedRectangleBorder>(
+                            RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(5*uiScale),
+                            )
+                          ),
+                        ),
+                        child: Icon(
+                          Icons.delete_forever,
+                          size: 32*uiScale,
+                        )
+                      ),
                     ),
                   ],
                 ),
@@ -58,10 +125,122 @@ class _LogicSentencesState extends State<LogicSentences> {
                 color: backgroundColor
               ),
             ),
-            SingleChildScrollView(
-              child: Column(
-                
-              )
+            Expanded(
+              child: ListView.builder(
+                itemCount: sentenceTiles.length,
+                itemBuilder: (BuildContext context, int index) {
+                  FocusNode focusNode = FocusNode();
+
+                  return SizedBox(
+                    key: sentenceTiles[index].key,
+                    height: 64*uiScale,
+                    child: Padding(
+                      padding: EdgeInsets.all(8*uiScale),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: [
+                          AspectRatio(
+                            aspectRatio: 1,
+                            child: ElevatedButton(
+                              onPressed: null,
+                              style: ButtonStyle(
+                                backgroundColor: const WidgetStatePropertyAll(backgroundColor),
+                                padding: const WidgetStatePropertyAll(EdgeInsets.zero),
+                                shape: WidgetStateProperty.all<RoundedRectangleBorder>(
+                                  RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(5*uiScale),
+                                  )
+                                ),
+                              ),
+                              child: sentenceTiles[index].controller.text.replaceAll(' ', '').isEmpty
+                                ? SizedBox()
+                                : Icon(
+                                  sentenceTiles[index].result==null
+                                    ? Icons.pentagon_rounded
+                                    : sentenceTiles[index].result!
+                                      ? Icons.check_rounded
+                                      : Icons.close_rounded,
+                                  color: sentenceTiles[index].result==null
+                                    ? foregroundAccentColor
+                                    : sentenceTiles[index].result!
+                                      ? greenAccentColor
+                                      : redAccentColor,
+                                  size: 32*uiScale,
+                                )
+                            ),
+                          ),
+                          Expanded(
+                            child: Padding(
+                              padding: EdgeInsets.symmetric(horizontal: 8*uiScale),
+                              child: TextField(
+                                focusNode: focusNode,
+                                controller: sentenceTiles[index].controller, 
+                                onTap: () {
+                                  activeController=sentenceTiles[index].controller;
+                                  activeTextField =focusNode;
+                                },
+                                onSubmitted: (value) {
+                                  print('submitted');
+                                  activeController=null;
+                                  activeTextField =null;
+                                  ExpressionParser p = ExpressionParser();
+                                  ExpressionTree tree = p.parse(value);
+                                  var result;
+                                  try {
+                                    result = tree.getValue(folWorlds[folWorldIndex], {});
+                                  } catch (e) {
+                                    print('Expression parser encountered an error:\n$e');
+                                  }
+                                  setState(() {
+                                    if (result == true) {
+                                      sentenceTiles[index].result = true;
+                                    } else if (result == false) {
+                                      sentenceTiles[index].result = false;
+                                    } else {
+                                      sentenceTiles[index].result = null;
+                                    }
+                                  });
+                                },
+                              )
+                            ),
+                          ),
+                          AspectRatio(
+                            aspectRatio: 1,
+                            child: ElevatedButton(
+                              onPressed: () {
+                                setState(() {
+                                  sentenceTiles.removeWhere((st) => st.key == sentenceTiles[index].key);
+                                  if (sentenceTiles.isEmpty) {
+                                    sentenceTiles.add(
+                                      SentenceTile(
+                                        key: UniqueKey(),
+                                        controller: TextEditingController(),
+                                      )
+                                    );
+                                  }
+                                });
+                              },
+                              style: ButtonStyle(
+                                padding: const WidgetStatePropertyAll(EdgeInsets.zero),
+                                shape: WidgetStateProperty.all<RoundedRectangleBorder>(
+                                  RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(5*uiScale),
+                                  )
+                                ),
+                              ),
+                              child: Icon(
+                                Icons.delete,
+                                size: 32*uiScale,
+                              )
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  );
+                },
+              ),
             ),
           ],
         );

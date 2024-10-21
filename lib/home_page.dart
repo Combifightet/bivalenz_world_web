@@ -1,8 +1,11 @@
 import 'dart:math';
 
 import 'package:bivalenz_world_web/fol_world_board.dart';
+import 'package:bivalenz_world_web/function_buttons.dart';
 import 'package:bivalenz_world_web/logic_sentences.dart';
 import 'package:bivalenz_world_web/object_buttons.dart';
+import 'package:bivalenz_world_web/operator_buttons.dart';
+import 'package:bivalenz_world_web/predicate_buttons.dart';
 import 'package:bivalenz_world_web/theme.dart';
 import 'package:flutter/material.dart';
 
@@ -88,18 +91,27 @@ class _HomePageState extends State<HomePage> {
                                 children: [
                                   Expanded(
                                     flex: 5,
-                                    child: Container(color: Colors.blue)
+                                    child: Padding(
+                                      padding: EdgeInsets.symmetric(vertical: 10*uiScale, horizontal: 6*uiScale),
+                                      child: OperatorButtons(),
+                                    )
                                   ),
                                   Expanded(
                                     flex: 7,
-                                    child: Container(color: Colors.blueGrey)
+                                    child: Padding(
+                                      padding: EdgeInsets.all(6*uiScale),
+                                      child: PredicateButtons(),
+                                    )
                                   )
                                 ],
                               ),
                             ),
                             Expanded(
                               flex: 1,
-                              child: Container(color: Colors.deepPurple),
+                              child: Padding(
+                                padding: EdgeInsets.symmetric(vertical: 8*uiScale, horizontal: 18*uiScale),
+                                child: FunctionButtons(),
+                              )
                             )
                           ]
                         )

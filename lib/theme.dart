@@ -7,6 +7,8 @@ int folWorldIndex = 0;
 const int folWorldSize = 8;
 List<FolWorld> folWorlds = [FolWorld()];
 Offset? selectedTile;
+TextEditingController? activeController;
+FocusNode? activeTextField;
 
 
 //----- COLOR DATA -----\\
