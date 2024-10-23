@@ -19,6 +19,7 @@ class MainApp extends StatelessWidget {
       builder: (BuildContext context, BoxConstraints constraints) {
         // double uiScale = max(min(constraints.maxHeight, constraints.maxWidth/16*9)/6.4, 64)/97;
         return MaterialApp(
+          debugShowCheckedModeBanner: false,
           home: HomePage(
           ),
         );

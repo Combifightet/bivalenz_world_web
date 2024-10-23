@@ -80,7 +80,8 @@ class _PredicateButtonsState extends State<PredicateButtons> {
                         ),
                       ),
                       child: Text(
-                        strings[i][j],
+                        strings[i][ j],
+                        maxLines: 1,
                         style: TextStyle(
                           fontSize: 16*uiScale,
                           fontWeight: FontWeight.bold

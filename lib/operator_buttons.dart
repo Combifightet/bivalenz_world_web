@@ -71,6 +71,7 @@ class _OperatorButtonsState extends State<OperatorButtons> {
                     ),
                     child: Text(
                       strings[i][j],
+                      maxLines: 1,
                       style: TextStyle(
                         fontSize: 16*uiScale,
                         fontWeight: FontWeight.bold

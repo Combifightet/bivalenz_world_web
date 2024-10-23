@@ -36,7 +36,7 @@ class _HomePageState extends State<HomePage> {
     }
 
     return Scaffold(
-      backgroundColor: backgroundColor,
+      backgroundColor: backgroundAccentColor,
       body: LayoutBuilder(
         builder: (BuildContext context, BoxConstraints constraints) {
           uiScale = min(constraints.maxHeight, constraints.maxWidth/10*9)/820;
@@ -45,7 +45,7 @@ class _HomePageState extends State<HomePage> {
               Expanded(
                 flex: 3,
                 child: Container(
-                  color: backgroundAccentColor,
+                  color: backgroundColor,
                   child: Row(
                     children: [
                       Expanded(
@@ -144,7 +144,7 @@ class _HomePageState extends State<HomePage> {
                     Expanded(
                       flex: 6,
                       child: Container(
-                        color: backgroundAccentColor,
+                        color: backgroundColor,
                         child: LogicSentences(),
                       )
                     )

@@ -6,13 +6,11 @@ import 'package:logic_expr_tree/logic_expr_tree.dart';
 
 class SentenceTile{
   final Key key;
-  // ExpressionTree? tree;
   bool? result;
   final TextEditingController controller;
 
   SentenceTile({
     required this.key,
-    // this.tree,
     this.result,
     required this.controller,
   });
@@ -77,7 +75,7 @@ class _LogicSentencesState extends State<LogicSentences> {
                                 }
                               },
                               style: ButtonStyle(
-                                backgroundColor: const WidgetStatePropertyAll(backgroundColor),
+                                backgroundColor: const WidgetStatePropertyAll(backgroundAccentColor),
                                 padding: const WidgetStatePropertyAll(EdgeInsets.zero),
                                 shape: WidgetStateProperty.all<RoundedRectangleBorder>(
                                   RoundedRectangleBorder(
@@ -158,7 +156,7 @@ class _LogicSentencesState extends State<LogicSentences> {
               padding: EdgeInsets.symmetric(horizontal: 8*uiScale),
               child: Divider(
                 height: 4*uiScale,
-                color: backgroundColor
+                color: backgroundAccentColor
               ),
             ),
             Expanded(
@@ -199,7 +197,7 @@ class _LogicSentencesState extends State<LogicSentences> {
                                 });
                               },
                               style: ButtonStyle(
-                                backgroundColor: const WidgetStatePropertyAll(backgroundColor),
+                                backgroundColor: const WidgetStatePropertyAll(backgroundAccentColor),
                                 padding: const WidgetStatePropertyAll(EdgeInsets.zero),
                                 shape: WidgetStateProperty.all<RoundedRectangleBorder>(
                                   RoundedRectangleBorder(
@@ -227,45 +225,47 @@ class _LogicSentencesState extends State<LogicSentences> {
                           Expanded(
                             child: Padding(
                               padding: EdgeInsets.symmetric(horizontal: 8*uiScale),
-                              child: TextField(
-                                focusNode: focusNode,
-                                controller: sentenceTiles[index].controller,
-                                decoration: InputDecoration(
-                                  contentPadding: EdgeInsets.symmetric(horizontal: 12*uiScale, vertical: 4*uiScale),
-                                  border: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(5*uiScale),
-                                  )
-                                ),
-                                style: TextStyle(
-                                  fontSize: 16*uiScale,
-                                  color: foregroundColor
-                                ),
-                                onTap: () {
-                                  activeController=sentenceTiles[index].controller;
-                                  activeTextField =focusNode;
-                                },
-                                onSubmitted: (value) {
-                                  print('submitted');
-                                  activeController=null;
-                                  activeTextField =null;
-                                  ExpressionParser p = ExpressionParser();
-                                  ExpressionTree tree = p.parse(value);
-                                  var result;
-                                  try {
-                                    result = tree.getValue(folWorlds[folWorldIndex], {});
-                                  } catch (e) {
-                                    print('Expression parser encountered an error:\n$e');
-                                  }
-                                  setState(() {
-                                    if (result == true) {
-                                      sentenceTiles[index].result = true;
-                                    } else if (result == false) {
-                                      sentenceTiles[index].result = false;
-                                    } else {
-                                      sentenceTiles[index].result = null;
+                              child: Center(
+                                child: TextField(
+                                  focusNode: focusNode,
+                                  controller: sentenceTiles[index].controller,
+                                  decoration: InputDecoration(
+                                    contentPadding: EdgeInsets.symmetric(horizontal: 12*uiScale, vertical: 4*uiScale),
+                                    border: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(5*uiScale),
+                                    )
+                                  ),
+                                  style: TextStyle(
+                                    fontSize: 16*uiScale,
+                                    color: foregroundColor
+                                  ),
+                                  onTap: () {
+                                    activeController=sentenceTiles[index].controller;
+                                    activeTextField =focusNode;
+                                  },
+                                  onSubmitted: (value) {
+                                    print('submitted');
+                                    activeController=null;
+                                    activeTextField =null;
+                                    ExpressionParser p = ExpressionParser();
+                                    ExpressionTree tree = p.parse(value);
+                                    var result;
+                                    try {
+                                      result = tree.getValue(folWorlds[folWorldIndex], {});
+                                    } catch (e) {
+                                      print('Expression parser encountered an error:\n$e');
                                     }
-                                  });
-                                },
+                                    setState(() {
+                                      if (result == true) {
+                                        sentenceTiles[index].result = true;
+                                      } else if (result == false) {
+                                        sentenceTiles[index].result = false;
+                                      } else {
+                                        sentenceTiles[index].result = null;
+                                      }
+                                    });
+                                  },
+                                ),
                               )
                             ),
                           ),
