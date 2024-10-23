@@ -80,7 +80,6 @@ class _FolWorldBoardState extends State<FolWorldBoard> {
   }
 
   void _onPanUpdate(DragUpdateDetails details) {
-    // print('_onPanUpdate');
     cursorLocation = details.localPosition/canvasSize*(folWorldSize*1);
     setState(() {});    // To force repaint
   }
@@ -88,6 +87,9 @@ class _FolWorldBoardState extends State<FolWorldBoard> {
   void _onPanEnd(DragEndDetails details) {
     Offset newSelection = details.localPosition/canvasSize*(folWorldSize*1);
     newSelection = Offset(newSelection.dx.floorToDouble(), newSelection.dy.floorToDouble());
+    if (newSelection.dx.floor()<0||newSelection.dx.floor()>=folWorldSize || newSelection.dy.floor()<0||newSelection.dy.floor()>=folWorldSize) {
+      folWorlds[folWorldIndex].clear(selectedTile!.dx.floor(), selectedTile!.dy.floor());
+    }
     if (folWorlds[folWorldIndex].move(selectedTile!.dx.floor(), selectedTile!.dy.floor(), newSelection.dx.floor(), newSelection.dy.floor())) {
       selectedTile = newSelection;
     }
@@ -182,11 +184,12 @@ class BoardPainter extends CustomPainter {
     }
     // paint objects
     for (LogicObj obj in folWorlds[folWorldIndex].getWorld()) {
-      // if (curerntlyDragging) {
+      double objX = cursorLocation!=null&&selectedTile!=null&&((selectedTile!.distanceSquared-Offset(obj.getX()*1, obj.getY()*1).distanceSquared).abs()<0.001)?cursorLocation!.dx-.5:obj.getX()*1;
+      double objY = cursorLocation!=null&&selectedTile!=null&&((selectedTile!.distanceSquared-Offset(obj.getX()*1, obj.getY()*1).distanceSquared).abs()<0.001)?cursorLocation!.dy-.5:obj.getY()*1;
         canvas.drawPath(
           drawPoly(
             obj.type.sides(),
-            Offset(obj.getX()*1, obj.getY()*1),
+            Offset(objX*1, objY*1),
             obj.size,
           ),
           Paint()
@@ -216,12 +219,10 @@ class BoardPainter extends CustomPainter {
         textPainter.paint(
           canvas,
           Offset(
-            width*obj.getX() + width*0.5 - textPainter.width*0.5,
-            width*obj.getY() + width*0.8
+            width*objX + width*0.5 - textPainter.width*0.5,
+            width*objY + width*0.8
           )
         );
-      // } else {
-      // }
     }
   }
 

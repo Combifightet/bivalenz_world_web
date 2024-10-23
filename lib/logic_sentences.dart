@@ -205,7 +205,9 @@ class _LogicSentencesState extends State<LogicSentences> {
                                 ? SizedBox()
                                 : Icon(
                                   sentenceTiles[index].result==null
-                                    ? Icons.pentagon_rounded
+                                    // TODO: add plus sign with error messages
+                                    // star only for not beeing able to parse formula
+                                    ? Icons.star
                                     : sentenceTiles[index].result!
                                       ? Icons.check_rounded
                                       : Icons.close_rounded,
