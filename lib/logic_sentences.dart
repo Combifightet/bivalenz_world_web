@@ -75,7 +75,6 @@ class _LogicSentencesState extends State<LogicSentences> {
                                 }
                               },
                               style: ButtonStyle(
-                                backgroundColor: const WidgetStatePropertyAll(backgroundAccentColor),
                                 padding: const WidgetStatePropertyAll(EdgeInsets.zero),
                                 shape: WidgetStateProperty.all<RoundedRectangleBorder>(
                                   RoundedRectangleBorder(
@@ -85,7 +84,6 @@ class _LogicSentencesState extends State<LogicSentences> {
                               ),
                               child: Icon(
                                 Icons.check_rounded,
-                                color: foregroundAccentColor,
                                 size: 32*uiScale,
                               )
                             ),
@@ -156,7 +154,6 @@ class _LogicSentencesState extends State<LogicSentences> {
               padding: EdgeInsets.symmetric(horizontal: 8*uiScale),
               child: Divider(
                 height: 4*uiScale,
-                color: backgroundAccentColor
               ),
             ),
             Expanded(
@@ -197,7 +194,6 @@ class _LogicSentencesState extends State<LogicSentences> {
                                 });
                               },
                               style: ButtonStyle(
-                                backgroundColor: const WidgetStatePropertyAll(backgroundAccentColor),
                                 padding: const WidgetStatePropertyAll(EdgeInsets.zero),
                                 shape: WidgetStateProperty.all<RoundedRectangleBorder>(
                                   RoundedRectangleBorder(
@@ -214,7 +210,7 @@ class _LogicSentencesState extends State<LogicSentences> {
                                       ? Icons.check_rounded
                                       : Icons.close_rounded,
                                   color: sentenceTiles[index].result==null
-                                    ? foregroundAccentColor
+                                    ? null
                                     : sentenceTiles[index].result!
                                       ? greenAccentColor
                                       : redAccentColor,
@@ -237,7 +233,6 @@ class _LogicSentencesState extends State<LogicSentences> {
                                   ),
                                   style: TextStyle(
                                     fontSize: 16*uiScale,
-                                    color: foregroundColor
                                   ),
                                   onTap: () {
                                     activeController=sentenceTiles[index].controller;

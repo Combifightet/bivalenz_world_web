@@ -1,5 +1,3 @@
-import 'dart:ui';
-
 import 'package:logic_expr_tree/logic_expr_tree.dart';
 import 'package:flutter/material.dart';
 import 'dart:math';
@@ -40,6 +38,8 @@ class _FolWorldBoardState extends State<FolWorldBoard> {
                 painter: BoardPainter(
                   world: folWorlds[folWorldIndex],
                   canvasSize: canvasSize,
+                  lightTheme: Theme.of(context).brightness==Brightness.light,
+                  textColor: Theme.of(context).elevatedButtonTheme.style!.foregroundColor!.resolve({WidgetState.selected})!,
                 ),
                 size: Size(canvasSize, canvasSize),
               ),
@@ -99,10 +99,14 @@ class _FolWorldBoardState extends State<FolWorldBoard> {
 class BoardPainter extends CustomPainter {
   final FolWorld world;
   final double canvasSize;
+  final bool lightTheme;
+  final Color textColor;
 
   BoardPainter({
     required this.world,
     required this.canvasSize,
+    this.lightTheme=true,
+    this.textColor=Colors.black,
   });
 
   late double width;
@@ -142,7 +146,9 @@ class BoardPainter extends CustomPainter {
         Offset(canvasSize, canvasSize)
       ),
       Paint()
-        ..color = invertBoard?boardLightColor:boardDarkColor
+        ..color = lightTheme
+          ? invertBoard?boardLightLightColor:boardLightDarkColor
+          : invertBoard?boardDarkLightColor:boardDarkDarkColor
         ..style = PaintingStyle.fill,
     );
     for (int y=0; y<folWorldSize; y++) {
@@ -153,7 +159,9 @@ class BoardPainter extends CustomPainter {
             radius: width/2,
           ),
           Paint()
-            ..color = invertBoard?boardDarkColor:boardLightColor
+            ..color = lightTheme
+              ? invertBoard?boardLightDarkColor:boardLightLightColor
+              : invertBoard?boardDarkDarkColor:boardDarkLightColor
             ..style = PaintingStyle.fill,
         );
       }
@@ -199,7 +207,7 @@ class BoardPainter extends CustomPainter {
             style: TextStyle(
               fontSize: 14*uiScale*8/folWorldSize,
               fontWeight: FontWeight.bold,
-              color: foregroundAccentColor
+              color: textColor
             )
           ),
           textAlign: TextAlign.center,

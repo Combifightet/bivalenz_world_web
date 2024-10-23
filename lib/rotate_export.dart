@@ -33,8 +33,37 @@ class _RotateExportState extends State<RotateExport> {
                   padding: EdgeInsets.all(6*uiScale),
                   child: ElevatedButton(
                     onPressed: () {
-                      // TODO: implement import export menue
-                      print('open import / export menue');
+                      showMenu(
+                        context: context,
+                        position: RelativeRect.fromLTRB(constraints.maxWidth, 0, constraints.maxWidth+100*uiScale, 100*uiScale),
+                        items: [
+                          PopupMenuItem(
+                            child: ValueListenableBuilder(
+                              valueListenable: themeMode,
+                              builder: (BuildContext context, ThemeMode value, Widget? child) {
+                                return SwitchListTile(
+                                  value: value==ThemeMode.dark,
+                                  title: Text('dark mode'),
+                                  onChanged: null,
+                                );
+                              }
+                            ),
+                            onTap: () {
+                              setState(() {
+                                if (themeMode.value==ThemeMode.dark) {
+                                  themeMode.value = ThemeMode.light;
+                                } else {
+                                  themeMode.value = ThemeMode.dark;
+                                }
+                              });
+                            },
+                          ),
+                          PopupMenuItem(
+                            child: Text('Import files'),
+                            onTap: () => print('TODO: implement file import'),
+                          ),
+                        ]
+                      );
                     },
                     style: ButtonStyle(
                       padding: const WidgetStatePropertyAll(EdgeInsets.zero),

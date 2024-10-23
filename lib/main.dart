@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 
 // import 'package:logic_expr_tree/logic_expr_tree.dart';
 import 'home_page.dart';
+import 'theme.dart';
 
 
 void main() {
@@ -18,15 +19,19 @@ class MainApp extends StatelessWidget {
     return LayoutBuilder(
       builder: (BuildContext context, BoxConstraints constraints) {
         // double uiScale = max(min(constraints.maxHeight, constraints.maxWidth/16*9)/6.4, 64)/97;
-        return MaterialApp(
-          debugShowCheckedModeBanner: false,
-          home: HomePage(
-          ),
+        return ValueListenableBuilder(
+          valueListenable: themeMode,
+          builder: (BuildContext context, ThemeMode currentMode, Widget? child) {
+            return MaterialApp(
+              // debugShowCheckedModeBanner: false,
+              theme: lightTheme,
+              darkTheme: darkTheme,
+              themeMode: currentMode,
+              home: HomePage(),
+            );
+          }
         );
       },
     );
-    // return const MaterialApp(
-    //   home: HomePage(),
-    // );
   }
 }
