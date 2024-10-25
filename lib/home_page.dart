@@ -7,7 +7,7 @@ import 'function_buttons.dart';
 import 'logic_sentences.dart';
 import 'fol_world_board.dart';
 import 'object_buttons.dart';
-import 'rotate_export.dart';
+import 'rotate_import.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({
@@ -43,7 +43,7 @@ class _HomePageState extends State<HomePage> {
                             child: AspectRatio(
                               aspectRatio:  1/3,
                               // child: Expanded(
-                                child: RotateExport(),
+                                child: RotateImport(),
                               // ),
                             ),
                           ),

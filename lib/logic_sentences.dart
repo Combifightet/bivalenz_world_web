@@ -57,6 +57,7 @@ class _LogicSentencesState extends State<LogicSentences> {
                                 for (int i=0; i<sentenceTiles.length; i++) {
                                   ExpressionParser p = ExpressionParser();
                                   ExpressionTree tree = p.parse(sentenceTiles[i].controller.text);
+                                  // ignore: prefer_typing_uninitialized_variables
                                   var result;
                                   try {
                                     result = tree.getValue(folWorlds[folWorldIndex], {});
@@ -177,6 +178,7 @@ class _LogicSentencesState extends State<LogicSentences> {
                               onPressed: () {
                                 ExpressionParser p = ExpressionParser();
                                 ExpressionTree tree = p.parse(sentenceTiles[index].controller.text);
+                                // ignore: prefer_typing_uninitialized_variables
                                 var result;
                                 try {
                                   result = tree.getValue(folWorlds[folWorldIndex], {});

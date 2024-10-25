@@ -1,20 +1,84 @@
+import 'dart:convert';
+
+import 'package:file_picker/file_picker.dart';
+import 'package:flutter/material.dart';
 import 'dart:math';
 
 import 'package:bivalenz_world_web/theme.dart';
-import 'package:flutter/material.dart';
+import 'package:logic_expr_tree/logic_expr_tree.dart';
 
-class RotateExport extends StatefulWidget {
 
-  const RotateExport({
+class RotateImport extends StatefulWidget {
+
+  const RotateImport({
     super.key,
   });
 
   @override
-  State<RotateExport> createState() => _RotateExportState();
+  State<RotateImport> createState() => _RotateImportState();
 }
 
-class _RotateExportState extends State<RotateExport> {
+class _RotateImportState extends State<RotateImport> {
   double uiScale = 1;
+
+  bool _isLoading = false;
+  Future<void> _importFile() async {
+    print('_importFile()');
+    if (_isLoading) {return;}
+    setState(() {
+      _isLoading = true;
+    });
+    try {
+      FilePickerResult? result = await FilePicker.platform.pickFiles(
+        type: FileType.custom,
+        allowedExtensions: ['wld', 'sen'],
+      );
+      
+      if (result!=null) {
+        String jsonString = Utf8Decoder().convert(result.files.first.bytes!);
+        final dynamic jsonData = json.decode(jsonString);
+        print(result.files.first.name);
+        print(result.files.first.extension);
+        // print(jsonString);
+        print(jsonData[0]);
+        if (result.files[0].extension=='wld') {
+          FolWorld world = FolWorld();
+          for(dynamic wld in jsonData) {
+            world.createObj(
+              wld['Tags'][0],
+              wld['Tags'][1],
+              wld['Predicates'][0]=='Tet'
+                ? ObjectType.Tet
+                : wld['Predicates'][0]=='Cube'
+                  ? ObjectType.Cube
+                  : ObjectType.Dodec,
+              wld['Predicates'][1]=='Small'
+                ? ObjectSize.Small
+                : wld['Predicates'][1]=='Medium'
+                  ? ObjectSize.Medium
+                  : ObjectSize.Large,
+              wld['Consts']
+            );
+          }
+          print(world);
+        } else if (result.files[0].extension=='sen') {
+          for (String sen in jsonData) {
+            print('Sentence: \'$sen\'');
+          }
+        }
+      }
+    } on Exception catch (e) {
+      print('Error picking file: $e');
+      // ignore: use_build_context_synchronously
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Error picking file: $e')),
+      );
+    } finally {
+      setState(() {
+        _isLoading = false;
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -60,7 +124,10 @@ class _RotateExportState extends State<RotateExport> {
                           ),
                           PopupMenuItem(
                             child: Text('Import files'),
-                            onTap: () => print('TODO: implement file import'),
+                            onTap: () {
+                              print('TODO: implement file import');
+                              _importFile();
+                            },
                           ),
                         ]
                       );

@@ -57,7 +57,6 @@ class _FolWorldBoardState extends State<FolWorldBoard> {
   }
 
   void _onTapDown(TapDownDetails details) {
-    print('_onTapDown');
     Offset newSelection = details.localPosition/canvasSize*(folWorldSize*1);
     newSelection = Offset(newSelection.dx.floorToDouble(), newSelection.dy.floorToDouble());
     if (selectedTile==null || (newSelection.distanceSquared-selectedTile!.distanceSquared).abs()!=0) {
@@ -70,7 +69,6 @@ class _FolWorldBoardState extends State<FolWorldBoard> {
   }
 
   void _onPanStart(DragStartDetails details) {
-    print('_onPanStart');
     Offset newSelection = details.localPosition/canvasSize*(folWorldSize*1);
     newSelection = Offset(newSelection.dx.floorToDouble(), newSelection.dy.floorToDouble());
     selectedTile = newSelection;

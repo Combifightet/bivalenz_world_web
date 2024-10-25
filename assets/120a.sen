@@ -1,0 +1,1 @@
+[" ∀x(Tet(x) ∨ Cube(x))"," ∃x(Small(x) ∧ x ≠ b)"," ∃x ∃y(Between(b, x, y) ∨ Between(a, x, y))"," ∀x(fm(x) ≠ x → Tet(fm(x)))"," ∀x(Cube(x) →  ∃y(Cube(y) ∧ (y=rm(x) ∨ Adjoins(y, x))))"]
