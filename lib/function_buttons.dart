@@ -15,8 +15,8 @@ class FunctionButtons extends StatefulWidget {
 class _FunctionButtonsState extends State<FunctionButtons> {
   double uiScale = 1;
 
-  final List<String> strings = ['rm','lm','fm','bm'];
-  final List<String> tooltips = ['rightmost','leftmost','frontmost','backmost'];
+  final List<String> strings = ['rm','fm','bm','lm'];
+  final List<String> tooltips = ['rightmost','frontmost','backmost','leftmost'];
 
   @override
   Widget build(BuildContext context) {

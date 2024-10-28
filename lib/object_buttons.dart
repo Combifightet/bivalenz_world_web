@@ -113,7 +113,7 @@ class ObjectButtonsState extends State<ObjectButtons> {
 
   List<Widget> buttons2(double uiScale) {
     List<Widget> buttons = [];
-    for (ObjectType type in [ObjectType.Tet, ObjectType.Cube, ObjectType.Dodec]) {
+    for (ObjectType type in [ObjectType.Cube, ObjectType.Tet, ObjectType.Dodec]) {
       buttons.add(
         Expanded(
           child: Padding(

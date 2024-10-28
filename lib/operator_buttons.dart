@@ -15,16 +15,16 @@ class OperatorButtons extends StatefulWidget {
 class _OperatorButtonsState extends State<OperatorButtons> {
   double uiScale = 1;
   final List<List<String>> strings = [
-    ['∨','∧','¬','→','↔','⊥',],
+    ['∧','∨','¬','→','↔','⊥',],
     ['a','b','c','d','e','f',],
     ['∀','∃','=','≠','(',')',],
-    ['u','v','w','x','y','z',],
+    ['x','y','z','u','v','w',],
   ];
   final List<List<String>> tooltips = [
-    ['conjunction','discunction','negation','implication','biimplication','contradiction',],
+    ['discunction','conjunction','negation','implication','biimplication','contradiction',],
     ['constant a','constant b','constant c','constant d','constant e','constant f',],
     ['universal quantification','existential  quantification','equal','not equal','bracket open','bracket close',],
-    ['variable u','variable v','variable w','variable x','variable y','variable z',],
+    ['variable x','variable y','variable z','variable u','variable v','variable w',],
   ];
 
   @override
