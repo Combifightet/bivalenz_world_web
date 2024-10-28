@@ -46,7 +46,11 @@ class ObjectButtonsState extends State<ObjectButtons> {
     if (selectedTile!=null) {
       int index = folWorlds[folWorldIndex].getWorld().indexWhere((obj) => obj.getX()==selectedTile!.dx.round() && obj.getY()==selectedTile!.dy.round());
       if (index>=0) {
-        folWorlds[folWorldIndex].getWorld()[index].type=type;
+        if (folWorlds[folWorldIndex].getWorld()[index].type==type) {
+          folWorlds[folWorldIndex].clear(selectedTile!.dx.round(), selectedTile!.dy.round());
+        } else {
+          folWorlds[folWorldIndex].getWorld()[index].type=type;
+        }
       } else {
         folWorlds[folWorldIndex].createObj(selectedTile!.dx.round(), selectedTile!.dy.round(), type, ObjectSize.Medium);
       }
@@ -84,6 +88,14 @@ class ObjectButtonsState extends State<ObjectButtons> {
                     borderRadius: BorderRadius.circular(5*uiScale),
                   )
                 ),
+                backgroundColor: selectedTile==null || !folWorlds[folWorldIndex].getWorld().firstWhere((obj) => obj.getX()==selectedTile!.dx.round() && obj.getY()==selectedTile!.dy.round(), orElse: () => LogicObj(-1, -1, ObjectType.Cube, ObjectSize.Medium)).getConsts().contains(chr)
+                  ? null
+                  : WidgetStatePropertyAll(
+                    Color.alphaBlend(
+                      Theme.of(context).elevatedButtonTheme.style!.overlayColor!.resolve({WidgetState.pressed})!,
+                      Theme.of(context).elevatedButtonTheme.style!.backgroundColor!.resolve({WidgetState.pressed})!,
+                    )
+                  ),
               ),
               child: Text(
                 chr,
@@ -115,6 +127,14 @@ class ObjectButtonsState extends State<ObjectButtons> {
                     borderRadius: BorderRadius.circular(5*uiScale),
                   )
                 ),
+                backgroundColor: selectedTile==null || !(folWorlds[folWorldIndex].getWorld().any((obj) => obj.getX()==selectedTile!.dx.round() && obj.getY()==selectedTile!.dy.round()) && folWorlds[folWorldIndex].getWorld().firstWhere((obj) => obj.getX()==selectedTile!.dx.round() && obj.getY()==selectedTile!.dy.round()).type==type)
+                  ? null
+                  : WidgetStatePropertyAll(
+                    Color.alphaBlend(
+                      Theme.of(context).elevatedButtonTheme.style!.overlayColor!.resolve({WidgetState.pressed})!,
+                      Theme.of(context).elevatedButtonTheme.style!.backgroundColor!.resolve({WidgetState.pressed})!,
+                    )
+                  ),
               ),
               child: type==ObjectType.Tet
                 ? Transform.rotate(
@@ -143,6 +163,14 @@ class ObjectButtonsState extends State<ObjectButtons> {
                     borderRadius: BorderRadius.circular(5*uiScale),
                   )
                 ),
+                backgroundColor: selectedTile==null || !(folWorlds[folWorldIndex].getWorld().any((obj) => obj.getX()==selectedTile!.dx.round() && obj.getY()==selectedTile!.dy.round()) && folWorlds[folWorldIndex].getWorld().firstWhere((obj) => obj.getX()==selectedTile!.dx.round() && obj.getY()==selectedTile!.dy.round()).size==size)
+                  ? null
+                  : WidgetStatePropertyAll(
+                    Color.alphaBlend(
+                      Theme.of(context).elevatedButtonTheme.style!.overlayColor!.resolve({WidgetState.pressed})!,
+                      Theme.of(context).elevatedButtonTheme.style!.backgroundColor!.resolve({WidgetState.pressed})!,
+                    )
+                  ),
               ),
               child: Icon(
                 Icons.circle_rounded,

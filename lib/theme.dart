@@ -127,7 +127,6 @@ ThemeData darkTheme = ThemeData(
       }),
       foregroundColor: WidgetStatePropertyAll(foregroundAccentColor),
       iconColor: WidgetStatePropertyAll(foregroundAccentColor),
-      // surfaceTintColor: ,    // TODO: when is this used
       overlayColor: WidgetStatePropertyAll(cyanAccentColor.withAlpha(50)),
     )
   ),
