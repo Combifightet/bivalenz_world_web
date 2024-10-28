@@ -74,7 +74,7 @@ class ObjectButtonsState extends State<ObjectButtons> {
             padding: EdgeInsets.all(2*uiScale),
             child: ElevatedButton(
               onPressed: folWorlds[folWorldIndex].getConsts().contains(chr)
-              && !(selectedTile==null || folWorlds[folWorldIndex].getWorld().firstWhere((obj) => obj.getX()==selectedTile!.dx.round() && obj.getY()==selectedTile!.dy.round(), orElse: () => LogicObj(-1, -1, ObjectType.Cube, ObjectSize.Medium)).getConsts().contains(chr))
+              && (selectedTile==null || !folWorlds[folWorldIndex].getWorld().firstWhere((obj) => obj.getX()==selectedTile!.dx.round() && obj.getY()==selectedTile!.dy.round(), orElse: () => LogicObj(-1, -1, ObjectType.Cube, ObjectSize.Medium)).getConsts().contains(chr))
                 ? null
                 : () => _addConst(chr),
               style: ButtonStyle(

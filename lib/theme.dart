@@ -75,9 +75,9 @@ ThemeData lightTheme = ThemeData(
     style: ButtonStyle(
       backgroundColor: WidgetStateColor.resolveWith((states) {
         if (states.contains(WidgetState.disabled)) {
-          return foregroundAccentColor;
-        } else {
           return foregroundColor;
+        } else {
+          return foregroundAccentColor;
         }
       }),
       foregroundColor: WidgetStatePropertyAll(backgroundAccentColor),
@@ -127,6 +127,7 @@ ThemeData darkTheme = ThemeData(
       }),
       foregroundColor: WidgetStatePropertyAll(foregroundAccentColor),
       iconColor: WidgetStatePropertyAll(foregroundAccentColor),
+      // surfaceTintColor: ,    // TODO: when is this used
       overlayColor: WidgetStatePropertyAll(cyanAccentColor.withAlpha(50)),
     )
   ),
