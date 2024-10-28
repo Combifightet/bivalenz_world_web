@@ -10,7 +10,9 @@ void main() {
   runApp(const MainApp());
 }
 
-//TODO: add tooltips for each button
+// TODO: add tooltips for each button
+// TODO: y-coordinates are flipped
+
 class MainApp extends StatelessWidget {
   const MainApp({super.key});
 

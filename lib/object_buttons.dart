@@ -13,7 +13,7 @@ class ObjectButtons extends StatefulWidget {
   });
 
   @override
-  State<ObjectButtons> createState() => _ObjectButtonsState();
+  State<ObjectButtons> createState() => ObjectButtonsState();
 }
 
 
@@ -23,8 +23,10 @@ class ObjectButtons extends StatefulWidget {
 //    a     b      c      d      e      f
 //   tet   cube  dodec  small  medium large
 
-class _ObjectButtonsState extends State<ObjectButtons> {
+class ObjectButtonsState extends State<ObjectButtons> {
   double uiScale = 1;
+
+  void refresh() => setState(() {});
     
   void _addConst(String chr) {
     if (selectedTile!=null) {
@@ -32,11 +34,12 @@ class _ObjectButtonsState extends State<ObjectButtons> {
       if (index>=0) {
         if (folWorlds[folWorldIndex].getWorld()[index].hasConst(chr)) {
           folWorlds[folWorldIndex].getWorld()[index].removeConst(chr);
-        } else {
+        } else if (!folWorlds[folWorldIndex].getConsts().contains(chr)) {
           folWorlds[folWorldIndex].getWorld()[index].addConst(chr);
         }
       }
     }
+    refresh();
   }
 
   void _createObj(ObjectType type) {
@@ -48,6 +51,7 @@ class _ObjectButtonsState extends State<ObjectButtons> {
         folWorlds[folWorldIndex].createObj(selectedTile!.dx.round(), selectedTile!.dy.round(), type, ObjectSize.Medium);
       }
     }
+    refresh();
   }
 
   void _modifySize(ObjectSize size) {
@@ -57,6 +61,7 @@ class _ObjectButtonsState extends State<ObjectButtons> {
         folWorlds[folWorldIndex].getWorld()[index].size=size;
       }
     }
+    refresh();
   }
 
   List<Widget> buttons1(double uiScale) {
@@ -68,7 +73,10 @@ class _ObjectButtonsState extends State<ObjectButtons> {
           child: Padding(
             padding: EdgeInsets.all(2*uiScale),
             child: ElevatedButton(
-              onPressed: () => _addConst(chr),
+              onPressed: folWorlds[folWorldIndex].getConsts().contains(chr)
+              && !(selectedTile==null || folWorlds[folWorldIndex].getWorld().firstWhere((obj) => obj.getX()==selectedTile!.dx.round() && obj.getY()==selectedTile!.dy.round(), orElse: () => LogicObj(-1, -1, ObjectType.Cube, ObjectSize.Medium)).getConsts().contains(chr))
+                ? null
+                : () => _addConst(chr),
               style: ButtonStyle(
                 padding: const WidgetStatePropertyAll(EdgeInsets.zero),
                 shape: WidgetStateProperty.all<RoundedRectangleBorder>(

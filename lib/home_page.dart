@@ -59,6 +59,7 @@ class _HomePageState extends State<HomePage> {
                                 child: AspectRatio(
                                   aspectRatio: 6/2,
                                   child: ObjectButtons(
+                                    key: objecButtonsKey,
                                     uiScale: uiScale,
                                   )
                                 ),

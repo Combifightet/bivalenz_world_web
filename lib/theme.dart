@@ -2,6 +2,7 @@ import 'package:logic_expr_tree/logic_expr_tree.dart';
 import 'package:flutter/material.dart';
 
 import 'logic_sentences.dart';
+import 'object_buttons.dart';
 
 //-- GLOBAL VARIABLES --\\
 
@@ -16,6 +17,7 @@ List<List<SentenceTile>> folSentences = [[SentenceTile(
 )]];
 List<String?> folSentenceNames = [''];
 final GlobalKey<LogicSentencesState> folScentenceKey = GlobalKey();
+final GlobalKey<ObjectButtonsState> objecButtonsKey = GlobalKey();
 Offset? selectedTile;
 TextEditingController? activeController;
 FocusNode? activeTextField;
@@ -71,7 +73,13 @@ ThemeData lightTheme = ThemeData(
   scaffoldBackgroundColor: foregroundColor,
   elevatedButtonTheme: ElevatedButtonThemeData(
     style: ButtonStyle(
-      backgroundColor: WidgetStatePropertyAll(foregroundAccentColor),
+      backgroundColor: WidgetStateColor.resolveWith((states) {
+        if (states.contains(WidgetState.disabled)) {
+          return foregroundAccentColor;
+        } else {
+          return foregroundColor;
+        }
+      }),
       foregroundColor: WidgetStatePropertyAll(backgroundAccentColor),
       iconColor: WidgetStatePropertyAll(backgroundAccentColor),
       overlayColor: WidgetStatePropertyAll(cyanAccentColor.withAlpha(50)),
@@ -110,7 +118,13 @@ ThemeData darkTheme = ThemeData(
   scaffoldBackgroundColor: backgroundColor,
   elevatedButtonTheme: ElevatedButtonThemeData(
     style: ButtonStyle(
-      backgroundColor: WidgetStatePropertyAll(backgroundAccentColor),
+      backgroundColor: WidgetStateColor.resolveWith((states) {
+        if (states.contains(WidgetState.disabled)) {
+          return backgroundColor;
+        } else {
+          return backgroundAccentColor;
+        }
+      }),
       foregroundColor: WidgetStatePropertyAll(foregroundAccentColor),
       iconColor: WidgetStatePropertyAll(foregroundAccentColor),
       overlayColor: WidgetStatePropertyAll(cyanAccentColor.withAlpha(50)),

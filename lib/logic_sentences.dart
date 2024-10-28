@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:bivalenz_world_web/theme.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:logic_expr_tree/logic_expr_tree.dart';
 
@@ -161,6 +162,10 @@ class LogicSentencesState extends State<LogicSentences> {
                             child: ElevatedButton(
                               onPressed: () {
                                 ExpressionParser p = ExpressionParser();
+                                print('verbose: $kDebugMode');
+                                if (kDebugMode) {
+                                  p.setVerbose(true);
+                                }
                                 ExpressionTree tree = p.parse(folSentences[folSentenceIndex][index].controller.text);
                                 // ignore: prefer_typing_uninitialized_variables
                                 var result;
