@@ -15,7 +15,7 @@ List<List<SentenceTile>> folSentences = [[SentenceTile(
   key: UniqueKey(),
   controller: TextEditingController(),
 )]];
-List<String?> folSentenceNames = [''];
+List<String?> folSentenceNames = [null];
 final GlobalKey<LogicSentencesState> folScentenceKey = GlobalKey();
 final GlobalKey<ObjectButtonsState> objecButtonsKey = GlobalKey();
 Offset? selectedTile;
@@ -80,7 +80,13 @@ ThemeData lightTheme = ThemeData(
           return foregroundAccentColor;
         }
       }),
-      foregroundColor: WidgetStatePropertyAll(backgroundAccentColor),
+      foregroundColor: WidgetStateColor.resolveWith((states) {
+        if (states.contains(WidgetState.disabled)) {
+          return backgroundAccentColor.withAlpha(127);
+        } else {
+          return backgroundAccentColor;
+        }
+      }),
       iconColor: WidgetStatePropertyAll(backgroundAccentColor),
       overlayColor: WidgetStatePropertyAll(cyanAccentColor.withAlpha(50)),
     )
@@ -125,7 +131,13 @@ ThemeData darkTheme = ThemeData(
           return backgroundAccentColor;
         }
       }),
-      foregroundColor: WidgetStatePropertyAll(foregroundAccentColor),
+      foregroundColor: WidgetStateColor.resolveWith((states) {
+        if (states.contains(WidgetState.disabled)) {
+          return foregroundAccentColor.withAlpha(127);
+        } else {
+          return foregroundAccentColor;
+        }
+      }),
       iconColor: WidgetStatePropertyAll(foregroundAccentColor),
       overlayColor: WidgetStatePropertyAll(cyanAccentColor.withAlpha(50)),
     )

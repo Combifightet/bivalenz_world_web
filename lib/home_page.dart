@@ -2,6 +2,7 @@ import 'package:bivalenz_world_web/theme.dart';
 import 'package:flutter/material.dart';
 import 'dart:math';
 
+import 'board_handeler.dart';
 import 'predicate_buttons.dart';
 import 'operator_buttons.dart';
 import 'function_buttons.dart';
@@ -113,19 +114,33 @@ class _HomePageState extends State<HomePage> {
                   children: [
                     Expanded(
                       flex: 11,
-                        child: Container(
-                          color: Theme.of(context).elevatedButtonTheme.style!.backgroundColor!.resolve({WidgetState.selected}),
-                          child: Center(
-                            child: Padding(
-                              padding: EdgeInsets.all(8*uiScale),
-                              child: AspectRatio(
-                                aspectRatio: 1,
-                                child: FolWorldBoard(
-                                  uiScale: uiScale,
-                                )
+                        child: Column(
+                          children: [
+                            Container(
+                              height: 42*uiScale,
+                              color: Colors.pink.withAlpha(100),
+                              child: Padding(
+                                padding: EdgeInsets.symmetric(vertical: 4*uiScale, horizontal: 2*uiScale),
+                                child: BoardHandeler()
                               ),
                             ),
-                          ),
+                            Expanded(
+                              child: Container(
+                                color: Theme.of(context).elevatedButtonTheme.style!.backgroundColor!.resolve({WidgetState.selected}),
+                                child: Center(
+                                  child: Padding(
+                                    padding: EdgeInsets.all(8*uiScale),
+                                    child: AspectRatio(
+                                      aspectRatio: 1,
+                                      child: FolWorldBoard(
+                                        uiScale: uiScale,
+                                      )
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
                         ),
                     ),
                     Expanded(
