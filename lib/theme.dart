@@ -1,11 +1,21 @@
 import 'package:logic_expr_tree/logic_expr_tree.dart';
 import 'package:flutter/material.dart';
 
+import 'logic_sentences.dart';
+
 //-- GLOBAL VARIABLES --\\
 
 int folWorldIndex = 0;
+int folSentenceIndex = 0;
 const int folWorldSize = 8;
 List<FolWorld> folWorlds = [FolWorld()];
+List<String?> folWorldNames = [null];
+List<List<SentenceTile>> folSentences = [[SentenceTile(
+  key: UniqueKey(),
+  controller: TextEditingController(),
+)]];
+List<String?> folSentenceNames = [''];
+final GlobalKey<LogicSentencesState> folScentenceKey = GlobalKey();
 Offset? selectedTile;
 TextEditingController? activeController;
 FocusNode? activeTextField;
@@ -132,3 +142,18 @@ ThemeData darkTheme = ThemeData(
     color: backgroundAccentColor
   )
 );
+
+
+//--  UTILITY CLASS --//
+
+class SentenceTile{
+  final Key key;
+  bool? result;
+  final TextEditingController controller;
+
+  SentenceTile({
+    required this.key,
+    this.result,
+    required this.controller,
+  });
+}

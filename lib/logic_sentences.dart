@@ -4,34 +4,18 @@ import 'package:bivalenz_world_web/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:logic_expr_tree/logic_expr_tree.dart';
 
-class SentenceTile{
-  final Key key;
-  bool? result;
-  final TextEditingController controller;
-
-  SentenceTile({
-    required this.key,
-    this.result,
-    required this.controller,
-  });
-}
 
 class LogicSentences extends StatefulWidget {
   const LogicSentences({super.key});
 
   @override
-  State<LogicSentences> createState() => _LogicSentencesState();
+  State<LogicSentences> createState() => LogicSentencesState();
 }
 
-class _LogicSentencesState extends State<LogicSentences> {
+class LogicSentencesState extends State<LogicSentences> {
   double uiScale = 1;
 
-  List<SentenceTile> sentenceTiles = [
-    SentenceTile(
-      key: UniqueKey(),
-      controller: TextEditingController(),
-    )
-  ];
+  void refresh() => setState(() {});
 
   @override
   Widget build(BuildContext context) {
@@ -54,9 +38,9 @@ class _LogicSentencesState extends State<LogicSentences> {
                         // child: Expanded(
                           child: ElevatedButton(
                               onPressed: () {
-                                for (int i=0; i<sentenceTiles.length; i++) {
+                                for (int i=0; i<folSentences[folSentenceIndex].length; i++) {
                                   ExpressionParser p = ExpressionParser();
-                                  ExpressionTree tree = p.parse(sentenceTiles[i].controller.text);
+                                  ExpressionTree tree = p.parse(folSentences[folSentenceIndex][i].controller.text);
                                   // ignore: prefer_typing_uninitialized_variables
                                   var result;
                                   try {
@@ -66,11 +50,11 @@ class _LogicSentencesState extends State<LogicSentences> {
                                   }
                                   setState(() {
                                     if (result == true) {
-                                      sentenceTiles[i].result = true;
+                                      folSentences[folSentenceIndex][i].result = true;
                                     } else if (result == false) {
-                                      sentenceTiles[i].result = false;
+                                      folSentences[folSentenceIndex][i].result = false;
                                     } else {
-                                      sentenceTiles[i].result = null;
+                                      folSentences[folSentenceIndex][i].result = null;
                                     }
                                   });
                                 }
@@ -96,7 +80,7 @@ class _LogicSentencesState extends State<LogicSentences> {
                         child: ElevatedButton(
                           onPressed: () {
                             setState(() {
-                              sentenceTiles.add(
+                              folSentences[folSentenceIndex].add(
                                 SentenceTile(
                                   key: UniqueKey(),
                                   controller: TextEditingController(),
@@ -124,8 +108,8 @@ class _LogicSentencesState extends State<LogicSentences> {
                       child: ElevatedButton(
                         onPressed: () {
                           setState(() {
-                            sentenceTiles.clear();
-                            sentenceTiles.add(
+                            folSentences[folSentenceIndex].clear();
+                            folSentences[folSentenceIndex].add(
                               SentenceTile(
                                 key: UniqueKey(),
                                 controller: TextEditingController(),
@@ -159,12 +143,12 @@ class _LogicSentencesState extends State<LogicSentences> {
             ),
             Expanded(
               child: ListView.builder(
-                itemCount: sentenceTiles.length,
+                itemCount: folSentences[folSentenceIndex].length,
                 itemBuilder: (BuildContext context, int index) {
                   FocusNode focusNode = FocusNode();
 
                   return SizedBox(
-                    key: sentenceTiles[index].key,
+                    key: folSentences[folSentenceIndex][index].key,
                     height: 64*uiScale,
                     child: Padding(
                       padding: EdgeInsets.all(8*uiScale),
@@ -177,7 +161,7 @@ class _LogicSentencesState extends State<LogicSentences> {
                             child: ElevatedButton(
                               onPressed: () {
                                 ExpressionParser p = ExpressionParser();
-                                ExpressionTree tree = p.parse(sentenceTiles[index].controller.text);
+                                ExpressionTree tree = p.parse(folSentences[folSentenceIndex][index].controller.text);
                                 // ignore: prefer_typing_uninitialized_variables
                                 var result;
                                 try {
@@ -187,11 +171,11 @@ class _LogicSentencesState extends State<LogicSentences> {
                                 }
                                 setState(() {
                                   if (result == true) {
-                                    sentenceTiles[index].result = true;
+                                    folSentences[folSentenceIndex][index].result = true;
                                   } else if (result == false) {
-                                    sentenceTiles[index].result = false;
+                                    folSentences[folSentenceIndex][index].result = false;
                                   } else {
-                                    sentenceTiles[index].result = null;
+                                    folSentences[folSentenceIndex][index].result = null;
                                   }
                                 });
                               },
@@ -203,19 +187,19 @@ class _LogicSentencesState extends State<LogicSentences> {
                                   )
                                 ),
                               ),
-                              child: sentenceTiles[index].controller.text.replaceAll(' ', '').isEmpty
+                              child: folSentences[folSentenceIndex][index].controller.text.replaceAll(' ', '').isEmpty
                                 ? SizedBox()
                                 : Icon(
-                                  sentenceTiles[index].result==null
+                                  folSentences[folSentenceIndex][index].result==null
                                     // TODO: add plus sign with error messages
                                     // star only for not beeing able to parse formula
                                     ? Icons.star
-                                    : sentenceTiles[index].result!
+                                    : folSentences[folSentenceIndex][index].result!
                                       ? Icons.check_rounded
                                       : Icons.close_rounded,
-                                  color: sentenceTiles[index].result==null
+                                  color: folSentences[folSentenceIndex][index].result==null
                                     ? null
-                                    : sentenceTiles[index].result!
+                                    : folSentences[folSentenceIndex][index].result!
                                       ? greenAccentColor
                                       : redAccentColor,
                                   size: 32*uiScale,
@@ -228,7 +212,7 @@ class _LogicSentencesState extends State<LogicSentences> {
                               child: Center(
                                 child: TextField(
                                   focusNode: focusNode,
-                                  controller: sentenceTiles[index].controller,
+                                  controller: folSentences[folSentenceIndex][index].controller,
                                   decoration: InputDecoration(
                                     contentPadding: EdgeInsets.symmetric(horizontal: 12*uiScale, vertical: 4*uiScale),
                                     border: OutlineInputBorder(
@@ -239,7 +223,7 @@ class _LogicSentencesState extends State<LogicSentences> {
                                     fontSize: 16*uiScale,
                                   ),
                                   onTap: () {
-                                    activeController=sentenceTiles[index].controller;
+                                    activeController=folSentences[folSentenceIndex][index].controller;
                                     activeTextField =focusNode;
                                   },
                                   onSubmitted: (value) {
@@ -256,11 +240,11 @@ class _LogicSentencesState extends State<LogicSentences> {
                                     }
                                     setState(() {
                                       if (result == true) {
-                                        sentenceTiles[index].result = true;
+                                        folSentences[folSentenceIndex][index].result = true;
                                       } else if (result == false) {
-                                        sentenceTiles[index].result = false;
+                                        folSentences[folSentenceIndex][index].result = false;
                                       } else {
-                                        sentenceTiles[index].result = null;
+                                        folSentences[folSentenceIndex][index].result = null;
                                       }
                                     });
                                   },
@@ -273,9 +257,9 @@ class _LogicSentencesState extends State<LogicSentences> {
                             child: ElevatedButton(
                               onPressed: () {
                                 setState(() {
-                                  sentenceTiles.removeWhere((st) => st.key == sentenceTiles[index].key);
-                                  if (sentenceTiles.isEmpty) {
-                                    sentenceTiles.add(
+                                  folSentences[folSentenceIndex].removeWhere((st) => st.key == folSentences[folSentenceIndex][index].key);
+                                  if (folSentences[folSentenceIndex].isEmpty) {
+                                    folSentences[folSentenceIndex].add(
                                       SentenceTile(
                                         key: UniqueKey(),
                                         controller: TextEditingController(),

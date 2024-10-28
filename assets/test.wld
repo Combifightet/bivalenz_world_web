@@ -1,73 +1,32 @@
 [
 	{
 		"Consts": ["a"],
-		"Predicates": [
-			"Cube",
-			"Large"
-		],
+		"Predicates": ["Cube","Large"],
 		"Tags": [1,2]
 	},
 	{
-		"Consts": [
-			"b"
-		],
-		"Predicates": [
-			"Tet",
-			"Medium"
-		],
-		"Tags": [
-			3,
-			2
-		]
+		"Consts": ["b"],
+		"Predicates": ["Tet","Medium"],
+		"Tags": [3,2]
 	},
 	{
-		"Consts": [
-			"c"
-		],
-		"Predicates": [
-			"Cube",
-			"Small"
-		],
-		"Tags": [
-			5,
-			2
-		]
+		"Consts": ["c"],
+		"Predicates": ["Cube","Small"],
+		"Tags": [5,2]
 	},
 	{
-		"Consts": [
-			"d"
-		],
-		"Predicates": [
-			"Cube",
-			"Medium"
-		],
-		"Tags": [
-			1,
-			4
-		]
+		"Consts": ["d"],
+		"Predicates": ["Cube","Medium"],
+		"Tags": [1,4]
 	},
 	{
-		"Consts": [
-			"e"
-		],
-		"Predicates": [
-			"Tet",
-			"Large"
-		],
-		"Tags": [
-			3,
-			4
-		]
+		"Consts": ["e"],
+		"Predicates": ["Tet","Large"],
+		"Tags": [3,4]
 	},
 	{
 		"Consts": [],
-		"Predicates": [
-			"Cube",
-			"Large"
-		],
-		"Tags": [
-			5,
-			4
-		]
+		"Predicates": ["Cube","Large"],
+		"Tags": [5,4]
 	}
 ]

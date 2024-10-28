@@ -1,3 +1,4 @@
+import 'package:bivalenz_world_web/theme.dart';
 import 'package:flutter/material.dart';
 import 'dart:math';
 
@@ -128,7 +129,9 @@ class _HomePageState extends State<HomePage> {
                     ),
                     Expanded(
                       flex: 6,
-                      child: LogicSentences()
+                      child: LogicSentences(
+                        key: folScentenceKey,
+                      )
                     )
                   ],
                 ),
