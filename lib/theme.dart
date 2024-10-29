@@ -166,6 +166,13 @@ ThemeData darkTheme = ThemeData(
   ),
   popupMenuTheme: PopupMenuThemeData(
     color: backgroundAccentColor
+  ),
+  chipTheme: ChipThemeData(
+    backgroundColor: backgroundAccentColor,
+    selectedColor: cyanAccentColor,
+    deleteIconColor: foregroundAccentColor,
+    padding: EdgeInsets.zero,
+
   )
 );
 

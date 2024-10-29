@@ -24,25 +24,45 @@ class _BoardHandelerState extends State<BoardHandeler> {
         for (int i=0; i<folWorldNames.length; i++) {
           String str = folWorldNames[i]??'Unsaved World';
           children.add(
-            Chip(
-              deleteIcon: folWorldIndex!=i?null:Icon(Icons.close, size: 32*uiScale,),
-              label: Text(
-                str,
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 20*uiScale
+            Expanded(
+              child: InkWell(
+                onTap: () {
+                  setState(() {
+                    folWorldIndex = i;
+                    objecButtonsKey.currentState!.refresh();
+                  });
+                },
+                child: Chip(
+                  color: folWorldIndex!=i
+                    ? null
+                    : WidgetStatePropertyAll(
+                      Color.alphaBlend(
+                        Theme.of(context).elevatedButtonTheme.style!.overlayColor!.resolve({WidgetState.pressed})!,
+                        Theme.of(context).elevatedButtonTheme.style!.backgroundColor!.resolve({WidgetState.pressed})!,
+                      ),
+                    ),
+                  deleteIcon: Icon(Icons.close, size: 32*uiScale,),
+                  label: Text(
+                    str,
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 20*uiScale
+                    ),
+                  ),
+                  onDeleted: folWorldIndex!=i?null:() {
+                    folWorlds.removeAt(i);
+                    folWorldNames.removeAt(i);
+                    if(folWorlds.isEmpty) {
+                      folWorlds.add(FolWorld());
+                      folWorldNames.add(null);
+                    }
+                    setState(() {
+                      folWorldIndex = max(0, i-1);
+                    });
+                    objecButtonsKey.currentState!.refresh();
+                  },
                 ),
               ),
-              onDeleted: () {
-                folWorlds.removeAt(i);
-                folWorldNames.removeAt(i);
-                if(folWorlds.isEmpty) {
-                  folWorlds.add(FolWorld());
-                  folWorldNames.add(null);
-                }
-                folWorldIndex = max(0, i-1);
-              },
-              padding: EdgeInsets.zero,
             )
           );
         }
@@ -50,7 +70,14 @@ class _BoardHandelerState extends State<BoardHandeler> {
           AspectRatio(
             aspectRatio: 1,
             child: IconButton(
-              onPressed: () => print('TODO: create new world'),
+              onPressed: () {
+                setState(() {
+                  folWorlds.add(FolWorld());
+                  folWorldNames.add(null);
+                  folWorldIndex = folWorlds.length-1;
+                });
+                objecButtonsKey.currentState!.refresh();
+              },
               icon: Icon(Icons.add, size: 32*uiScale),
               style: ButtonStyle(
                 padding: WidgetStatePropertyAll(EdgeInsets.zero)
