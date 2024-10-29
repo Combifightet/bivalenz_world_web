@@ -1,3 +1,4 @@
+import 'package:bivalenz_world_web/sentence_handeler.dart';
 import 'package:bivalenz_world_web/theme.dart';
 import 'package:flutter/material.dart';
 import 'dart:math';
@@ -114,38 +115,52 @@ class _HomePageState extends State<HomePage> {
                   children: [
                     Expanded(
                       flex: 11,
-                        child: Column(
-                          children: [
-                            SizedBox(
-                              height: 42*uiScale,
-                              child: Padding(
-                                padding: EdgeInsets.symmetric(vertical: 4*uiScale, horizontal: 2*uiScale),
-                                child: BoardHandeler()
-                              ),
+                      child: Column(
+                        children: [
+                          SizedBox(
+                            height: 42*uiScale,
+                            child: Padding(
+                              padding: EdgeInsets.symmetric(vertical: 4*uiScale, horizontal: 2*uiScale),
+                              child: BoardHandeler()
                             ),
-                            Expanded(
-                              child: Container(
-                                color: Theme.of(context).elevatedButtonTheme.style!.backgroundColor!.resolve({WidgetState.selected}),
-                                child: Center(
-                                  child: Padding(
-                                    padding: EdgeInsets.all(8*uiScale),
-                                    child: AspectRatio(
-                                      aspectRatio: 1,
-                                      child: FolWorldBoard(
-                                        uiScale: uiScale,
-                                      )
-                                    ),
+                          ),
+                          Expanded(
+                            child: Container(
+                              color: Theme.of(context).elevatedButtonTheme.style!.backgroundColor!.resolve({WidgetState.selected}),
+                              child: Center(
+                                child: Padding(
+                                  padding: EdgeInsets.all(8*uiScale),
+                                  child: AspectRatio(
+                                    aspectRatio: 1,
+                                    child: FolWorldBoard(
+                                      uiScale: uiScale,
+                                    )
                                   ),
                                 ),
                               ),
                             ),
-                          ],
-                        ),
+                          ),
+                        ],
+                      ),
                     ),
                     Expanded(
                       flex: 6,
-                      child: LogicSentences(
-                        key: folScentenceKey,
+                      child: 
+                      Column(
+                        children: [
+                          SizedBox(
+                            height: 42*uiScale,
+                            child: Padding(
+                              padding: EdgeInsets.symmetric(vertical: 4*uiScale, horizontal: 2*uiScale),
+                              child: SentenceHandeler()
+                            ),
+                          ),
+                          Expanded(
+                            child: LogicSentences(
+                              key: folScentenceKey,
+                            ),
+                          ),
+                        ],
                       )
                     )
                   ],
