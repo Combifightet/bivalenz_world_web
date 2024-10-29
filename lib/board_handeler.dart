@@ -23,47 +23,117 @@ class _BoardHandelerState extends State<BoardHandeler> {
         List<Widget> children = [];
         for (int i=0; i<folWorldNames.length; i++) {
           String str = folWorldNames[i]??'Unsaved World';
-          children.add(
-            Expanded(
-              child: InkWell(
-                onTap: () {
-                  setState(() {
-                    folWorldIndex = i;
-                    objecButtonsKey.currentState!.refresh();
-                  });
-                },
-                child: Chip(
-                  color: folWorldIndex!=i
-                    ? null
-                    : WidgetStatePropertyAll(
-                      Color.alphaBlend(
-                        Theme.of(context).elevatedButtonTheme.style!.overlayColor!.resolve({WidgetState.pressed})!,
-                        Theme.of(context).elevatedButtonTheme.style!.backgroundColor!.resolve({WidgetState.pressed})!,
+          final style = TextStyle(
+            fontWeight: FontWeight.bold,
+            fontSize: 20*uiScale
+          );
+          final span = TextSpan(
+            text: str,
+            style: style,
+          );
+          final painter = TextPainter(
+            text: span,
+            maxLines: 1,
+            textScaler: MediaQuery.of(context).textScaler,
+            textDirection: TextDirection.ltr,
+          );
+          painter.layout();
+          double textWidth = painter.size.width;
+          Widget chip = InkWell(
+            splashColor: Colors.transparent,
+            hoverColor: Colors.transparent,
+            overlayColor: WidgetStatePropertyAll(Colors.transparent),
+            onTap: () {
+              if (folWorldIndex!=i) {
+                setState(() {
+                  folWorldIndex = i;
+                  objecButtonsKey.currentState!.refresh();
+                });
+              }
+            },
+            child: Container(
+              alignment: Alignment.centerLeft,
+              child: LayoutBuilder(
+                builder: (BuildContext context, BoxConstraints constraints) {
+                  double chipWidth = (folWorldIndex==i?52:20)+textWidth;
+                  double padding = max(0, constraints.maxWidth-chipWidth)/2;
+                  return Chip(
+                    color: folWorldIndex!=i
+                      ? null
+                      : WidgetStatePropertyAll(
+                        Color.alphaBlend(
+                          Theme.of(context).elevatedButtonTheme.style!.overlayColor!.resolve({WidgetState.pressed})!,
+                          Theme.of(context).elevatedButtonTheme.style!.backgroundColor!.resolve({WidgetState.pressed})!,
+                        ),
+                      ),
+                    deleteIcon: Center(child: Icon(Icons.close, size: 32*uiScale,)),
+                    label: Padding(
+                      padding: EdgeInsets.symmetric(horizontal: padding),
+                      child: Text(
+                        str,
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 20*uiScale
+                        ),
                       ),
                     ),
-                  deleteIcon: Icon(Icons.close, size: 32*uiScale,),
-                  label: Text(
-                    str,
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 20*uiScale
-                    ),
-                  ),
-                  onDeleted: folWorldIndex!=i?null:() {
-                    folWorlds.removeAt(i);
-                    folWorldNames.removeAt(i);
-                    if(folWorlds.isEmpty) {
-                      folWorlds.add(FolWorld());
-                      folWorldNames.add(null);
-                    }
-                    setState(() {
-                      folWorldIndex = max(0, i-1);
-                    });
-                    objecButtonsKey.currentState!.refresh();
-                  },
+                    onDeleted: folWorldIndex!=i?null:() {
+                      folWorlds.removeAt(i);
+                      folWorldNames.removeAt(i);
+                      if(folWorlds.isEmpty) {
+                        folWorlds.add(FolWorld());
+                        folWorldNames.add(null);
+                      }
+                      setState(() {
+                        folWorldIndex = max(0, i-1);
+                      });
+                      objecButtonsKey.currentState!.refresh();
+                    },
+                  );
+                }
+              ),
+            ),
+          );
+          Widget expandedChip = InkWell(
+            splashColor: Colors.transparent,
+            hoverColor: Colors.transparent,
+            overlayColor: WidgetStatePropertyAll(Colors.transparent),
+            onTap: () {},
+            child: Chip(
+              color: WidgetStatePropertyAll(
+                Color.alphaBlend(
+                  Theme.of(context).elevatedButtonTheme.style!.overlayColor!.resolve({WidgetState.pressed})!,
+                  Theme.of(context).elevatedButtonTheme.style!.backgroundColor!.resolve({WidgetState.pressed})!,
                 ),
               ),
-            )
+              deleteIcon: Center(child: Icon(Icons.close, size: 32*uiScale,)),
+              label: Text(
+                str,
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 20*uiScale
+                ),
+              ),
+              onDeleted: folWorldIndex!=i?null:() {
+                folWorlds.removeAt(i);
+                folWorldNames.removeAt(i);
+                if(folWorlds.isEmpty) {
+                  folWorlds.add(FolWorld());
+                  folWorldNames.add(null);
+                }
+                setState(() {
+                  folWorldIndex = max(0, i-1);
+                });
+                objecButtonsKey.currentState!.refresh();
+              },
+            ),
+          );
+          children.add(folWorldIndex==i && constraints.maxWidth/folWorlds.length<textWidth+52
+            ? expandedChip
+            : Expanded(child: chip)
+            // folWorldIndex==i
+            // ? chip
+            // : 
           );
         }
         children.add(

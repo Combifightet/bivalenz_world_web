@@ -151,7 +151,9 @@ ThemeData darkTheme = ThemeData(
     bodyColor: foregroundAccentColor,
     displayColor: foregroundAccentColor,
   ),
-  dividerColor: backgroundAccentColor,
+  dividerTheme: DividerThemeData(
+    color: backgroundAccentColor
+  ),
   disabledColor: foregroundAccentColor,
   switchTheme: SwitchThemeData(
     thumbColor: WidgetStatePropertyAll(foregroundAccentColor),
@@ -172,7 +174,11 @@ ThemeData darkTheme = ThemeData(
     selectedColor: cyanAccentColor,
     deleteIconColor: foregroundAccentColor,
     padding: EdgeInsets.zero,
-
+    side: BorderSide.none
+  ),
+  inputDecorationTheme: InputDecorationTheme(
+    enabledBorder: OutlineInputBorder(borderSide: BorderSide(color: backgroundAccentColor)),
+    focusedBorder: OutlineInputBorder(borderSide: BorderSide(color: cyanAccentColor)),
   )
 );
 

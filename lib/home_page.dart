@@ -116,9 +116,8 @@ class _HomePageState extends State<HomePage> {
                       flex: 11,
                         child: Column(
                           children: [
-                            Container(
+                            SizedBox(
                               height: 42*uiScale,
-                              color: Colors.pink.withAlpha(100),
                               child: Padding(
                                 padding: EdgeInsets.symmetric(vertical: 4*uiScale, horizontal: 2*uiScale),
                                 child: BoardHandeler()
