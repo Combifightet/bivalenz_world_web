@@ -1,16 +1,16 @@
-import 'package:bivalenz_world_web/sentence_handeler.dart';
-import 'package:bivalenz_world_web/theme.dart';
 import 'package:flutter/material.dart';
 import 'dart:math';
 
-import 'board_handeler.dart';
+import 'sentence_handeler.dart';
 import 'predicate_buttons.dart';
 import 'operator_buttons.dart';
 import 'function_buttons.dart';
 import 'logic_sentences.dart';
 import 'fol_world_board.dart';
+import 'board_handeler.dart';
 import 'object_buttons.dart';
 import 'rotate_import.dart';
+import 'theme.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({
@@ -121,7 +121,9 @@ class _HomePageState extends State<HomePage> {
                             height: 42*uiScale,
                             child: Padding(
                               padding: EdgeInsets.symmetric(vertical: 4*uiScale, horizontal: 2*uiScale),
-                              child: BoardHandeler()
+                              child: BoardHandeler(
+                                key: boardHandelerKey,
+                              )
                             ),
                           ),
                           Expanded(
@@ -152,7 +154,9 @@ class _HomePageState extends State<HomePage> {
                             height: 42*uiScale,
                             child: Padding(
                               padding: EdgeInsets.symmetric(vertical: 4*uiScale, horizontal: 2*uiScale),
-                              child: SentenceHandeler()
+                              child: SentenceHandeler(
+                                key: sentenceHandelerKey,
+                              )
                             ),
                           ),
                           Expanded(

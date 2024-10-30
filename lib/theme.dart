@@ -1,7 +1,9 @@
 import 'package:logic_expr_tree/logic_expr_tree.dart';
 import 'package:flutter/material.dart';
 
+import 'sentence_handeler.dart';
 import 'logic_sentences.dart';
+import 'board_handeler.dart';
 import 'object_buttons.dart';
 
 //-- GLOBAL VARIABLES --\\
@@ -10,14 +12,16 @@ int folWorldIndex = 0;
 int folSentenceIndex = 0;
 const int folWorldSize = 8;
 List<FolWorld> folWorlds = [FolWorld()];
-List<String?> folWorldNames = [null];
+List<FileData?> folWorldNames = [null];
 List<List<SentenceTile>> folSentences = [[SentenceTile(
   key: UniqueKey(),
   controller: TextEditingController(),
 )]];
-List<String?> folSentenceNames = [null];
+List<FileData?> folSentenceNames = [null];
 final GlobalKey<LogicSentencesState> folScentenceKey = GlobalKey();
 final GlobalKey<ObjectButtonsState> objecButtonsKey = GlobalKey();
+final GlobalKey<BoardHandelerState> boardHandelerKey = GlobalKey();
+final GlobalKey<SentenceHandelerState> sentenceHandelerKey = GlobalKey();
 Offset? selectedTile;
 TextEditingController? activeController;
 FocusNode? activeTextField;
@@ -194,5 +198,15 @@ class SentenceTile{
     required this.key,
     this.result,
     required this.controller,
+  });
+}
+
+class FileData{
+  final String name;
+  String? path;
+
+  FileData({
+    required this.name,
+    this.path,
   });
 }

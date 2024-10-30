@@ -9,11 +9,28 @@ class BoardHandeler extends StatefulWidget {
   const BoardHandeler({super.key});
 
   @override
-  State<BoardHandeler> createState() => _BoardHandelerState();
+  State<BoardHandeler> createState() => BoardHandelerState();
 }
 
-class _BoardHandelerState extends State<BoardHandeler> {
+class BoardHandelerState extends State<BoardHandeler> {
   double uiScale = 1;
+
+  void refresh() => setState(() {});
+
+  void delete(int index) {
+    folWorlds.removeAt(index);
+    folWorldNames.removeAt(index);
+    if(folWorlds.isEmpty) {
+      folWorlds.add(FolWorld());
+      folWorldNames.add(null);
+    }
+    setState(() {
+      if (index<=folWorldIndex) {
+          folWorldIndex = max(0, folWorldIndex-1);
+      }
+    });
+    objecButtonsKey.currentState?.refresh();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -22,7 +39,7 @@ class _BoardHandelerState extends State<BoardHandeler> {
         uiScale = constraints.maxHeight/42;
         List<Widget> children = [];
         for (int i=0; i<folWorldNames.length; i++) {
-          String str = folWorldNames[i]??'Unsaved World';
+          String str = folWorldNames[i]!=null?folWorldNames[i]!.name:'Unsaved World';
           final style = TextStyle(
             fontWeight: FontWeight.bold,
             fontSize: 20*uiScale
@@ -39,18 +56,19 @@ class _BoardHandelerState extends State<BoardHandeler> {
           );
           painter.layout();
           double textWidth = painter.size.width;
-          Widget chip = InkWell(
-            splashColor: Colors.transparent,
-            hoverColor: Colors.transparent,
-            overlayColor: WidgetStatePropertyAll(Colors.transparent),
+          Widget chip = GestureDetector(
+            // splashColor: Colors.transparent,
+            // hoverColor: Colors.transparent,
+            // overlayColor: WidgetStatePropertyAll(Colors.transparent),
             onTap: () {
               if (folWorldIndex!=i) {
                 setState(() {
                   folWorldIndex = i;
-                  objecButtonsKey.currentState!.refresh();
+                  objecButtonsKey.currentState?.refresh();
                 });
               }
             },
+            onTertiaryTapUp: (_) => delete(i),
             child: Container(
               alignment: Alignment.centerLeft,
               child: LayoutBuilder(
@@ -77,28 +95,18 @@ class _BoardHandelerState extends State<BoardHandeler> {
                         ),
                       ),
                     ),
-                    onDeleted: folWorldIndex!=i?null:() {
-                      folWorlds.removeAt(i);
-                      folWorldNames.removeAt(i);
-                      if(folWorlds.isEmpty) {
-                        folWorlds.add(FolWorld());
-                        folWorldNames.add(null);
-                      }
-                      setState(() {
-                        folWorldIndex = max(0, i-1);
-                      });
-                      objecButtonsKey.currentState!.refresh();
-                    },
+                    onDeleted: folWorldIndex!=i?null:() => delete(i),
                   );
                 }
               ),
             ),
           );
-          Widget expandedChip = InkWell(
-            splashColor: Colors.transparent,
-            hoverColor: Colors.transparent,
-            overlayColor: WidgetStatePropertyAll(Colors.transparent),
-            onTap: () {},
+          Widget expandedChip = GestureDetector(
+            // splashColor: Colors.transparent,
+            // hoverColor: Colors.transparent,
+            // overlayColor: WidgetStatePropertyAll(Colors.transparent),
+            // onTap: () {},
+            onTertiaryTapUp: (_) => delete(i),
             child: Chip(
               color: WidgetStatePropertyAll(
                 Color.alphaBlend(
@@ -124,16 +132,13 @@ class _BoardHandelerState extends State<BoardHandeler> {
                 setState(() {
                   folWorldIndex = max(0, i-1);
                 });
-                objecButtonsKey.currentState!.refresh();
+                objecButtonsKey.currentState?.refresh();
               },
             ),
           );
           children.add(folWorldIndex==i && constraints.maxWidth/folWorlds.length<textWidth+52
             ? expandedChip
             : Expanded(child: chip)
-            // folWorldIndex==i
-            // ? chip
-            // : 
           );
         }
         children.add(
@@ -146,7 +151,7 @@ class _BoardHandelerState extends State<BoardHandeler> {
                   folWorldNames.add(null);
                   folWorldIndex = folWorlds.length-1;
                 });
-                objecButtonsKey.currentState!.refresh();
+                objecButtonsKey.currentState?.refresh();
               },
               icon: Icon(Icons.add, size: 32*uiScale),
               style: ButtonStyle(

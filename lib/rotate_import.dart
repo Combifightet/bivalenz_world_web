@@ -1,12 +1,12 @@
-import 'dart:convert';
-
 import 'package:file_picker/file_picker.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'dart:convert';
 import 'dart:math';
 
-import 'package:bivalenz_world_web/theme.dart';
 import 'package:logic_expr_tree/logic_expr_tree.dart';
 
+import 'theme.dart';
 
 class RotateImport extends StatefulWidget {
 
@@ -63,11 +63,28 @@ class _RotateImportState extends State<RotateImport> {
               );
             }
             folWorlds.add(world);
-            folWorldNames.add(file.name.substring(0, file.name.length-4));
+            String? path;
+            if (!kIsWeb) {
+              path = file.path;
+              print('path_ "$path"');
+            }
+            folWorldNames.add(FileData(
+              name: file.name.substring(0, file.name.length-4),
+              path: path
+            ));
             folWorldIndex = folWorlds.length-1;
+            boardHandelerKey.currentState?.refresh();
           } else if (file.extension=='sen') {
             folSentences.add([]);
-            folSentenceNames.add(file.name.substring(0, file.name.length-4));
+            String? path;
+            if (!kIsWeb) {
+              path = file.path;
+              print('path_ "$path"');
+            }
+            folSentenceNames.add(FileData(
+              name: file.name.substring(0, file.name.length-4),
+              path: path
+            ));
             for (String sen in jsonData) {
               print('Sentence: \'$sen\'');
               folSentences.last.add(
@@ -79,6 +96,7 @@ class _RotateImportState extends State<RotateImport> {
             }
             folSentenceIndex = folSentences.length-1;
             folScentenceKey.currentState?.refresh();
+            sentenceHandelerKey.currentState?.refresh();
           }
         }
       }
