@@ -46,7 +46,7 @@ class _SentenceHandelerState extends State<SentenceHandeler> {
               if (folSentenceIndex!=i) {
                 setState(() {
                   folSentenceIndex = i;
-                  objecButtonsKey.currentState!.refresh();
+                  folScentenceKey.currentState!.refresh();
                 });
               }
             },
@@ -86,7 +86,7 @@ class _SentenceHandelerState extends State<SentenceHandeler> {
                       setState(() {
                         folSentenceIndex = max(0, i-1);
                       });
-                      objecButtonsKey.currentState!.refresh();
+                      folScentenceKey.currentState!.refresh();
                     },
                   );
                 }
@@ -123,7 +123,7 @@ class _SentenceHandelerState extends State<SentenceHandeler> {
                 setState(() {
                   folSentenceIndex = max(0, i-1);
                 });
-                objecButtonsKey.currentState!.refresh();
+                folScentenceKey.currentState!.refresh();
               },
             ),
           );
@@ -141,11 +141,14 @@ class _SentenceHandelerState extends State<SentenceHandeler> {
             child: IconButton(
               onPressed: () {
                 setState(() {
-                  folSentences.add([]);
+                  folSentences.add([SentenceTile(
+                    key: UniqueKey(),
+                    controller: TextEditingController(),
+                  )]);
                   folSentenceNames.add(null);
                   folSentenceIndex = folSentences.length-1;
                 });
-                objecButtonsKey.currentState!.refresh();
+                folScentenceKey.currentState!.refresh();
               },
               icon: Icon(Icons.add, size: 32*uiScale),
               style: ButtonStyle(
