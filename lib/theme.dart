@@ -95,6 +95,12 @@ ThemeData lightTheme = ThemeData(
       overlayColor: WidgetStatePropertyAll(cyanAccentColor.withAlpha(50)),
     )
   ),
+  iconButtonTheme: IconButtonThemeData(
+    style: ButtonStyle(
+      iconColor: WidgetStatePropertyAll(backgroundAccentColor),
+      overlayColor: WidgetStatePropertyAll(cyanAccentColor.withAlpha(50)),
+    )
+  ),
   textSelectionTheme: TextSelectionThemeData(
     cursorColor: cyanAccentColor,
     selectionColor: cyanAccentColor.withAlpha(100),
@@ -104,7 +110,9 @@ ThemeData lightTheme = ThemeData(
     bodyColor: backgroundAccentColor,
     displayColor: backgroundAccentColor,
   ),
-  dividerColor: foregroundAccentColor,
+  dividerTheme: DividerThemeData(
+    color: foregroundAccentColor
+  ),
   disabledColor: backgroundAccentColor,
   switchTheme: SwitchThemeData(
     thumbColor: WidgetStatePropertyAll(backgroundAccentColor),
@@ -119,6 +127,22 @@ ThemeData lightTheme = ThemeData(
   ),
   popupMenuTheme: PopupMenuThemeData(
     color: foregroundAccentColor
+  ),
+  menuTheme: MenuThemeData(
+    style: MenuStyle(
+      backgroundColor: WidgetStatePropertyAll(foregroundAccentColor),
+    )
+  ),
+  chipTheme: ChipThemeData(
+    backgroundColor: foregroundAccentColor,
+    selectedColor: cyanAccentColor,
+    deleteIconColor: backgroundAccentColor,
+    // padding: EdgeInsets.zero,
+    side: BorderSide.none
+  ),
+  inputDecorationTheme: InputDecorationTheme(
+    enabledBorder: OutlineInputBorder(borderSide: BorderSide(color: foregroundAccentColor)),
+    focusedBorder: OutlineInputBorder(borderSide: BorderSide(color: cyanAccentColor)),
   )
 );
 
@@ -142,6 +166,12 @@ ThemeData darkTheme = ThemeData(
           return foregroundAccentColor;
         }
       }),
+      iconColor: WidgetStatePropertyAll(foregroundAccentColor),
+      overlayColor: WidgetStatePropertyAll(cyanAccentColor.withAlpha(50)),
+    )
+  ),
+  iconButtonTheme: IconButtonThemeData(
+    style: ButtonStyle(
       iconColor: WidgetStatePropertyAll(foregroundAccentColor),
       overlayColor: WidgetStatePropertyAll(cyanAccentColor.withAlpha(50)),
     )

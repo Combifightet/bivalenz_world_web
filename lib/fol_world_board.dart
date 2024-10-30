@@ -58,7 +58,7 @@ class _FolWorldBoardState extends State<FolWorldBoard> {
 
   void _onTapDown(TapDownDetails details) {
     Offset newSelection = details.localPosition/canvasSize*(folWorldSize*1);
-    newSelection = Offset(newSelection.dx.floorToDouble(), newSelection.dy.floorToDouble());
+    newSelection = Offset(newSelection.dx.floorToDouble(), (folWorldSize-1)-newSelection.dy.floorToDouble());
     if (selectedTile==null || (newSelection.distanceSquared-selectedTile!.distanceSquared).abs()!=0) {
       selectedTile = newSelection;
     } else {
@@ -66,26 +66,29 @@ class _FolWorldBoardState extends State<FolWorldBoard> {
     }
     objecButtonsKey.currentState?.refresh();
     setState(() {});    // To force repaint
+    print('selectedTile: $selectedTile');
   }
 
   void _onPanStart(DragStartDetails details) {
     Offset newSelection = details.localPosition/canvasSize*(folWorldSize*1);
-    newSelection = Offset(newSelection.dx.floorToDouble(), newSelection.dy.floorToDouble());
+    newSelection = Offset(newSelection.dx.floorToDouble(), (folWorldSize-1)-newSelection.dy.floorToDouble());
     selectedTile = newSelection;
     
     cursorLocation = details.localPosition/canvasSize*(folWorldSize*1);
+    cursorLocation = Offset(cursorLocation!.dx, (folWorldSize)-cursorLocation!.dy);
     objecButtonsKey.currentState?.refresh();
     setState(() {});    // To force repaint
   }
 
   void _onPanUpdate(DragUpdateDetails details) {
     cursorLocation = details.localPosition/canvasSize*(folWorldSize*1);
+    cursorLocation = Offset(cursorLocation!.dx, (folWorldSize)-cursorLocation!.dy);
     setState(() {});    // To force repaint
   }
 
   void _onPanEnd(DragEndDetails details) {
     Offset newSelection = details.localPosition/canvasSize*(folWorldSize*1);
-    newSelection = Offset(newSelection.dx.floorToDouble(), newSelection.dy.floorToDouble());
+    newSelection = Offset(newSelection.dx.floorToDouble(), (folWorldSize-1)-newSelection.dy.floorToDouble());
     if (newSelection.dx.floor()<0||newSelection.dx.floor()>=folWorldSize || newSelection.dy.floor()<0||newSelection.dy.floor()>=folWorldSize) {
       folWorlds[folWorldIndex].clear(selectedTile!.dx.floor(), selectedTile!.dy.floor());
     }
@@ -117,7 +120,7 @@ class BoardPainter extends CustomPainter {
 
   Path drawPoly(int sides, Offset pos, ObjectSize size) {
     final double centerX = width*pos.dx + width/2;
-    final double centerY = width*pos.dy + width/2 + (sides==3?4:sides==5?2:0*uiScale*8/folWorldSize);
+    final double centerY = width*((folWorldSize-1)-pos.dy) + width/2 + (sides==3?4:sides==5?2:0*uiScale*8/folWorldSize);
     final double angle = (pi*2)/sides;
     final Path polygonPath = Path();
     final double radius = width/7 * (size.index+1);
@@ -170,11 +173,11 @@ class BoardPainter extends CustomPainter {
     }
     // highliht selected field if it exists
     if (selectedTile!=null &&
-        selectedTile!.dx>=0&&selectedTile!.dx<canvasSize &&
-        selectedTile!.dy>=0&&selectedTile!.dy<canvasSize) {
+        selectedTile!.dx>=0&&selectedTile!.dx<folWorldSize &&
+        selectedTile!.dy>=0&&selectedTile!.dy<folWorldSize) {
       canvas.drawRect(
       Rect.fromCircle(
-        center: Offset(width*selectedTile!.dx.floor()+width/2, width*selectedTile!.dy.floor()+width/2),
+        center: Offset(width*selectedTile!.dx.floor()+width/2, width*((folWorldSize-1)-selectedTile!.dy.floor())+width/2),
         radius: width/2,
       ),
       Paint()
@@ -220,7 +223,7 @@ class BoardPainter extends CustomPainter {
           canvas,
           Offset(
             width*objX + width*0.5 - textPainter.width*0.5,
-            width*objY + width*0.8
+            width*((folWorldSize-1)-objY) + width*0.8
           )
         );
     }
