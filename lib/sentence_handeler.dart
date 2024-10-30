@@ -1,6 +1,5 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
+import 'dart:math';
 
 import 'theme.dart';
 
@@ -55,10 +54,8 @@ class SentenceHandelerState extends State<SentenceHandeler> {
           );
           painter.layout();
           double textWidth = painter.size.width;
+          double chipWidth = (folSentenceIndex==i?34+30*uiScale:34)+textWidth;
           Widget chip = GestureDetector(
-            // splashColor: Colors.transparent,
-            // hoverColor: Colors.transparent,
-            // overlayColor: WidgetStatePropertyAll(Colors.transparent),
             onTap: () {
               if (folSentenceIndex!=i) {
                 setState(() {
@@ -72,7 +69,6 @@ class SentenceHandelerState extends State<SentenceHandeler> {
               alignment: Alignment.centerLeft,
               child: LayoutBuilder(
                 builder: (BuildContext context, BoxConstraints constraints) {
-                  double chipWidth = (folSentenceIndex==i?52:20)+textWidth;
                   double padding = max(0, constraints.maxWidth-chipWidth)/2;
                   return Chip(
                     color: folSentenceIndex!=i
@@ -101,10 +97,6 @@ class SentenceHandelerState extends State<SentenceHandeler> {
             ),
           );
           Widget expandedChip = GestureDetector(
-            // splashColor: Colors.transparent,
-            // hoverColor: Colors.transparent,
-            // overlayColor: WidgetStatePropertyAll(Colors.transparent),
-            // onTap: () {},
             onTertiaryTapUp: (_) => delete(i),
             child: Chip(
               color: WidgetStatePropertyAll(
@@ -135,7 +127,7 @@ class SentenceHandelerState extends State<SentenceHandeler> {
               },
             ),
           );
-          children.add(folSentenceIndex==i && constraints.maxWidth/folSentences.length<textWidth+52
+          children.add(folSentenceIndex==i && constraints.maxWidth/folSentences.length<chipWidth+20*uiScale
             ? expandedChip
             : Expanded(child: chip)
           );
@@ -145,14 +137,13 @@ class SentenceHandelerState extends State<SentenceHandeler> {
             aspectRatio: 1,
             child: IconButton(
               onPressed: () {
-                setState(() {
-                  folSentences.add([SentenceTile(
-                    key: UniqueKey(),
-                    controller: TextEditingController(),
-                  )]);
-                  folSentenceNames.add(null);
-                  folSentenceIndex = folSentences.length-1;
-                });
+                folSentences.add([SentenceTile(
+                  key: UniqueKey(),
+                  controller: TextEditingController(),
+                )]);
+                folSentenceNames.add(null);
+                folSentenceIndex = folSentences.length-1;
+                refresh();
                 folScentenceKey.currentState?.refresh();
               },
               icon: Icon(Icons.add, size: 32*uiScale),

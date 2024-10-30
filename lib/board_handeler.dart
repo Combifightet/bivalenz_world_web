@@ -56,10 +56,8 @@ class BoardHandelerState extends State<BoardHandeler> {
           );
           painter.layout();
           double textWidth = painter.size.width;
+          double chipWidth = (folWorldIndex==i?34+30*uiScale:34)+textWidth;
           Widget chip = GestureDetector(
-            // splashColor: Colors.transparent,
-            // hoverColor: Colors.transparent,
-            // overlayColor: WidgetStatePropertyAll(Colors.transparent),
             onTap: () {
               if (folWorldIndex!=i) {
                 setState(() {
@@ -73,7 +71,6 @@ class BoardHandelerState extends State<BoardHandeler> {
               alignment: Alignment.centerLeft,
               child: LayoutBuilder(
                 builder: (BuildContext context, BoxConstraints constraints) {
-                  double chipWidth = (folWorldIndex==i?52:20)+textWidth;
                   double padding = max(0, constraints.maxWidth-chipWidth)/2;
                   return Chip(
                     color: folWorldIndex!=i
@@ -102,10 +99,6 @@ class BoardHandelerState extends State<BoardHandeler> {
             ),
           );
           Widget expandedChip = GestureDetector(
-            // splashColor: Colors.transparent,
-            // hoverColor: Colors.transparent,
-            // overlayColor: WidgetStatePropertyAll(Colors.transparent),
-            // onTap: () {},
             onTertiaryTapUp: (_) => delete(i),
             child: Chip(
               color: WidgetStatePropertyAll(
@@ -136,7 +129,7 @@ class BoardHandelerState extends State<BoardHandeler> {
               },
             ),
           );
-          children.add(folWorldIndex==i && constraints.maxWidth/folWorlds.length<textWidth+52
+          children.add(folWorldIndex==i && constraints.maxWidth/folWorlds.length<chipWidth+20*uiScale
             ? expandedChip
             : Expanded(child: chip)
           );
@@ -146,11 +139,10 @@ class BoardHandelerState extends State<BoardHandeler> {
             aspectRatio: 1,
             child: IconButton(
               onPressed: () {
-                setState(() {
-                  folWorlds.add(FolWorld());
-                  folWorldNames.add(null);
-                  folWorldIndex = folWorlds.length-1;
-                });
+                folWorlds.add(FolWorld());
+                folWorldNames.add(null);
+                folWorldIndex = folWorlds.length-1;
+                refresh();
                 objecButtonsKey.currentState?.refresh();
               },
               icon: Icon(Icons.add, size: 32*uiScale),

@@ -164,20 +164,23 @@ ThemeData darkTheme = ThemeData(
     trackColor: WidgetStatePropertyAll(backgroundColor),
     trackOutlineColor: WidgetStatePropertyAll(backgroundAccentColor),
     trackOutlineWidth: WidgetStatePropertyAll(0),
+    
   ),
   listTileTheme: ListTileThemeData(
     iconColor: foregroundAccentColor,
     textColor: foregroundAccentColor,
     tileColor: backgroundAccentColor,
   ),
-  popupMenuTheme: PopupMenuThemeData(
-    color: backgroundAccentColor
+  menuTheme: MenuThemeData(
+    style: MenuStyle(
+      backgroundColor: WidgetStatePropertyAll(backgroundAccentColor),
+    )
   ),
   chipTheme: ChipThemeData(
     backgroundColor: backgroundAccentColor,
     selectedColor: cyanAccentColor,
     deleteIconColor: foregroundAccentColor,
-    padding: EdgeInsets.zero,
+    // padding: EdgeInsets.zero,
     side: BorderSide.none
   ),
   inputDecorationTheme: InputDecorationTheme(

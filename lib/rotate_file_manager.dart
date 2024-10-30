@@ -8,17 +8,17 @@ import 'package:logic_expr_tree/logic_expr_tree.dart';
 
 import 'theme.dart';
 
-class RotateImport extends StatefulWidget {
+class RotateFileManager extends StatefulWidget {
 
-  const RotateImport({
+  const RotateFileManager({
     super.key,
   });
 
   @override
-  State<RotateImport> createState() => _RotateImportState();
+  State<RotateFileManager> createState() => _RotateFileManagerState();
 }
 
-class _RotateImportState extends State<RotateImport> {
+class _RotateFileManagerState extends State<RotateFileManager> {
   double uiScale = 1;
 
   bool _isLoading = false;
@@ -128,53 +128,139 @@ class _RotateImportState extends State<RotateImport> {
                 aspectRatio: 1,
                 child: Padding(
                   padding: EdgeInsets.all(6*uiScale),
-                  child: ElevatedButton(
-                    onPressed: () {
-                      showMenu(
-                        context: context,
-                        position: RelativeRect.fromLTRB(constraints.maxWidth, 0, constraints.maxWidth+100*uiScale, 100*uiScale),
-                        items: [
-                          PopupMenuItem(
-                            child: ValueListenableBuilder(
-                              valueListenable: themeMode,
-                              builder: (BuildContext context, ThemeMode value, Widget? child) {
-                                return SwitchListTile(
-                                  value: value==ThemeMode.dark,
-                                  title: Text('dark mode'),
-                                  onChanged: null,
-                                );
-                              }
-                            ),
-                            onTap: () {
-                              setState(() {
-                                if (themeMode.value==ThemeMode.dark) {
-                                  themeMode.value = ThemeMode.light;
-                                } else {
-                                  themeMode.value = ThemeMode.dark;
-                                }
-                              });
-                            },
+                  child: MenuAnchor(
+                     builder: (context, controller, child) {
+                      return ElevatedButton(
+                        onPressed: () {
+                          if (controller.isOpen) {
+                            controller.close();
+                          } else {
+                            controller.open();
+                          }
+                        },
+                        style: ButtonStyle(
+                          padding: const WidgetStatePropertyAll(EdgeInsets.zero),
+                          shape: WidgetStateProperty.all<RoundedRectangleBorder>(
+                            RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(5*uiScale),
+                            )
                           ),
-                          PopupMenuItem(
-                            child: Text('Import files'),
-                            onTap: () {
-                              _importFile();
-                            },
-                          ),
-                        ]
+                        ),
+                        child: Icon(Icons.menu_outlined,
+                          size: 24*uiScale,
+                        )
+                        
+                        // onPressed: () {
+                        //   showMenu(
+                        //     context: context,
+                        //     position: RelativeRect.fromLTRB(constraints.maxWidth, 0, constraints.maxWidth+100*uiScale, 100*uiScale),
+                        //     items: [
+                        //       PopupMenuItem(
+                        //         child: ValueListenableBuilder(
+                        //           valueListenable: themeMode,
+                        //           builder: (BuildContext context, ThemeMode value, Widget? child) {
+                        //             return SwitchListTile(
+                        //               value: value==ThemeMode.dark,
+                        //               title: Text('dark mode'),
+                        //               onChanged: null,
+                        //             );
+                        //           }
+                        //         ),
+                        //         onTap: () {
+                        //           setState(() {
+                        //             if (themeMode.value==ThemeMode.dark) {
+                        //               themeMode.value = ThemeMode.light;
+                        //             } else {
+                        //               themeMode.value = ThemeMode.dark;
+                        //             }
+                        //           });
+                        //         },
+                        //       ),
+                        //       PopupMenuItem(
+                        //         child: Text('Import files'),
+                        //         onTap: () {
+                        //           _importFile();
+                        //         },
+                        //       ),
+                        //       PopupMenuItem(
+                        //         child: SubmenuButton(
+                        //           menuChildren: [
+                        //             MenuItemButton(
+                        //               onPressed: () {},
+                        //               child: Text('Save World'),
+                        //             ),
+                        //             MenuItemButton(
+                        //               onPressed: () {},
+                        //               child: Text('Save World As...'),
+                        //             ),
+                        //             MenuItemButton(
+                        //               onPressed: () {},
+                        //               child: Text('Save Sentences'),
+                        //             ),
+                        //             MenuItemButton(
+                        //               onPressed: () {},
+                        //               child: Text('Save Sentences As...'),
+                        //             ),
+                        //           ], 
+                        //           child: Text(kIsWeb?'Download':'Save')
+                        //         )
+                        //       )
+                        //     ]
+                        //   );
+                        // },
                       );
                     },
-                    style: ButtonStyle(
-                      padding: const WidgetStatePropertyAll(EdgeInsets.zero),
-                      shape: WidgetStateProperty.all<RoundedRectangleBorder>(
-                        RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(5*uiScale),
-                        )
+                    menuChildren: [
+                      MenuItemButton(
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text('Dark mode'),
+                            Padding(
+                              padding: EdgeInsets.only(left: 12*uiScale),
+                              child: Switch(
+                                value: themeMode.value==ThemeMode.dark,
+                                onChanged: null
+                              ),
+                            )
+                          ],
+                        ),
+                        onPressed: () {
+                          setState(() {
+                            if (themeMode.value==ThemeMode.dark) {
+                              themeMode.value = ThemeMode.light;
+                            } else {
+                              themeMode.value = ThemeMode.dark;
+                            }
+                          });
+                        },
                       ),
-                    ),
-                    child: Icon(Icons.menu_outlined,
-                      size: 24*uiScale,
-                    )
+                      MenuItemButton(
+                        child: Text('Import files'),
+                        onPressed: () => _importFile(),
+                      ),
+                      SubmenuButton(
+                        menuChildren: [
+                          MenuItemButton(
+                            onPressed: () {},
+                            child: Text('Save World'),
+                          ),
+                          MenuItemButton(
+                            onPressed: () {},
+                            child: Text('Save World As...'),
+                          ),
+                          MenuItemButton(
+                            onPressed: () {},
+                            child: Text('Save Sentences'),
+                          ),
+                          MenuItemButton(
+                            onPressed: () {},
+                            child: Text('Save Sentences As...'),
+                          ),
+                        ], 
+                        child: Text(kIsWeb?'Download':'Save')
+                      ),
+                    ],
                   ),
                 ),
               ),

@@ -9,7 +9,7 @@ import 'logic_sentences.dart';
 import 'fol_world_board.dart';
 import 'board_handeler.dart';
 import 'object_buttons.dart';
-import 'rotate_import.dart';
+import 'rotate_file_manager.dart';
 import 'theme.dart';
 
 class HomePage extends StatefulWidget {
@@ -46,7 +46,7 @@ class _HomePageState extends State<HomePage> {
                             child: AspectRatio(
                               aspectRatio:  1/3,
                               // child: Expanded(
-                                child: RotateImport(),
+                                child: RotateFileManager(),
                               // ),
                             ),
                           ),
