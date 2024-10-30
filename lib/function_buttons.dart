@@ -41,7 +41,6 @@ class _FunctionButtonsState extends State<FunctionButtons> {
                         baseOffset: offset,
                         extentOffset: offset
                       );
-                      // TODO: fix one frame long flicker ???
                       Future.microtask(() {
                         activeTextField!.requestFocus();
                         SchedulerBinding.instance.addPostFrameCallback((_) {
@@ -53,6 +52,7 @@ class _FunctionButtonsState extends State<FunctionButtons> {
                       });
                     }
                   });
+                  folScentenceKey.currentState!.refresh();
                 },
                 style: ButtonStyle(
                   padding: const WidgetStatePropertyAll(EdgeInsets.zero),

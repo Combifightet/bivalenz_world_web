@@ -202,6 +202,9 @@ class SentenceTile{
     this.result,
     required this.controller,
   });
+
+  @override
+  String toString() => '"${controller.text}"';
 }
 
 class FileData{

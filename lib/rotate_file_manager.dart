@@ -1,6 +1,9 @@
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+// this will only be used if <kIsWeb==true>
+// ignore: avoid_web_libraries_in_flutter
+import 'dart:html' as html;
 import 'dart:convert';
 import 'dart:math';
 
@@ -113,6 +116,16 @@ class _RotateFileManagerState extends State<RotateFileManager> {
     }
   }
 
+  void _download(String name, String data) {
+    assert(kIsWeb);
+    var blob = html.Blob([data], 'text/json', 'native');
+
+    // ignore: unused_local_variable
+    var anchorElement = html.AnchorElement(
+        href: html.Url.createObjectUrlFromBlob(blob).toString(),
+    )..setAttribute("download", name)..click();
+  }
+
   @override
   Widget build(BuildContext context) {
     return LayoutBuilder(
@@ -149,69 +162,19 @@ class _RotateFileManagerState extends State<RotateFileManager> {
                         child: Icon(Icons.menu_outlined,
                           size: 24*uiScale,
                         )
-                        
-                        // onPressed: () {
-                        //   showMenu(
-                        //     context: context,
-                        //     position: RelativeRect.fromLTRB(constraints.maxWidth, 0, constraints.maxWidth+100*uiScale, 100*uiScale),
-                        //     items: [
-                        //       PopupMenuItem(
-                        //         child: ValueListenableBuilder(
-                        //           valueListenable: themeMode,
-                        //           builder: (BuildContext context, ThemeMode value, Widget? child) {
-                        //             return SwitchListTile(
-                        //               value: value==ThemeMode.dark,
-                        //               title: Text('dark mode'),
-                        //               onChanged: null,
-                        //             );
-                        //           }
-                        //         ),
-                        //         onTap: () {
-                        //           setState(() {
-                        //             if (themeMode.value==ThemeMode.dark) {
-                        //               themeMode.value = ThemeMode.light;
-                        //             } else {
-                        //               themeMode.value = ThemeMode.dark;
-                        //             }
-                        //           });
-                        //         },
-                        //       ),
-                        //       PopupMenuItem(
-                        //         child: Text('Import files'),
-                        //         onTap: () {
-                        //           _importFile();
-                        //         },
-                        //       ),
-                        //       PopupMenuItem(
-                        //         child: SubmenuButton(
-                        //           menuChildren: [
-                        //             MenuItemButton(
-                        //               onPressed: () {},
-                        //               child: Text('Save World'),
-                        //             ),
-                        //             MenuItemButton(
-                        //               onPressed: () {},
-                        //               child: Text('Save World As...'),
-                        //             ),
-                        //             MenuItemButton(
-                        //               onPressed: () {},
-                        //               child: Text('Save Sentences'),
-                        //             ),
-                        //             MenuItemButton(
-                        //               onPressed: () {},
-                        //               child: Text('Save Sentences As...'),
-                        //             ),
-                        //           ], 
-                        //           child: Text(kIsWeb?'Download':'Save')
-                        //         )
-                        //       )
-                        //     ]
-                        //   );
-                        // },
                       );
                     },
                     menuChildren: [
                       MenuItemButton(
+                        onPressed: () {
+                          setState(() {
+                            if (themeMode.value==ThemeMode.dark) {
+                              themeMode.value = ThemeMode.light;
+                            } else {
+                              themeMode.value = ThemeMode.dark;
+                            }
+                          });
+                        },
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
@@ -225,40 +188,52 @@ class _RotateFileManagerState extends State<RotateFileManager> {
                             )
                           ],
                         ),
-                        onPressed: () {
-                          setState(() {
-                            if (themeMode.value==ThemeMode.dark) {
-                              themeMode.value = ThemeMode.light;
-                            } else {
-                              themeMode.value = ThemeMode.dark;
-                            }
-                          });
-                        },
                       ),
                       MenuItemButton(
-                        child: Text('Import files'),
                         onPressed: () => _importFile(),
+                        child: Text('Import files'),
                       ),
                       SubmenuButton(
-                        menuChildren: [
-                          MenuItemButton(
-                            onPressed: () {},
-                            child: Text('Save World'),
-                          ),
-                          MenuItemButton(
-                            onPressed: () {},
-                            child: Text('Save World As...'),
-                          ),
-                          MenuItemButton(
-                            onPressed: () {},
-                            child: Text('Save Sentences'),
-                          ),
-                          MenuItemButton(
-                            onPressed: () {},
-                            child: Text('Save Sentences As...'),
-                          ),
-                        ], 
+                        menuChildren: kIsWeb
+                          ? [
+                            MenuItemButton(
+                              onPressed: () => _download(
+                                folWorldNames[folWorldIndex]!=null?'${folWorldNames[folWorldIndex]!.name}.wld':'Unsaved World.wld',
+                                folWorlds[folWorldIndex].toString(),
+                              ),
+                              child: Text('Download World'),
+                            ),
+                            MenuItemButton(
+                              onPressed: () => _download(
+                                folSentenceNames[folSentenceIndex]!=null?'${folSentenceNames[folWorldIndex]!.name}.sen':'Untitled Sentences.sen',
+                                folSentences[folSentenceIndex].toString(),
+                              ),
+                              child: Text('Download Sentences'),
+                            ),
+                          ]
+                          : [
+                            MenuItemButton(
+                              onPressed: () => UnimplementedError(),  // TODO: implement these methods
+                              child: Text('Save World'),
+                            ),
+                            MenuItemButton(
+                              onPressed: () => UnimplementedError(),  // TODO: implement these methods
+                              child: Text('Save World As...'),
+                            ),
+                            MenuItemButton(
+                              onPressed: () => UnimplementedError(),  // TODO: implement these methods
+                              child: Text('Save Sentences'),
+                            ),
+                            MenuItemButton(
+                              onPressed: () => UnimplementedError(),  // TODO: implement these methods
+                              child: Text('Save Sentences As...'),
+                            ),
+                          ], 
                         child: Text(kIsWeb?'Download':'Save')
+                      ),
+                      MenuItemButton(
+                        onPressed: null,
+                        child: Text('PL1 Structure View'),
                       ),
                     ],
                   ),

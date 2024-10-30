@@ -48,7 +48,6 @@ class _OperatorButtonsState extends State<OperatorButtons> {
                         if (activeController!=null) {
                           int offset = min(activeController!.selection.baseOffset, activeController!.selection.extentOffset)+strings[i][j].length;
                           activeController!.text = activeController!.selection.textBefore(activeController!.text)+strings[i][j]+activeController!.selection.textAfter(activeController!.text);
-                          // TODO: fix one frame long flicker ???
                           Future.microtask(() {
                             activeTextField!.requestFocus();
                             SchedulerBinding.instance.addPostFrameCallback((_) {
@@ -60,6 +59,7 @@ class _OperatorButtonsState extends State<OperatorButtons> {
                           });
                         }
                       });
+                      folScentenceKey.currentState!.refresh();
                     },
                     style: ButtonStyle(
                       padding: const WidgetStatePropertyAll(EdgeInsets.zero),

@@ -40,24 +40,26 @@ class LogicSentencesState extends State<LogicSentences> {
                           child: ElevatedButton(
                               onPressed: () {
                                 for (int i=0; i<folSentences[folSentenceIndex].length; i++) {
-                                  ExpressionParser p = ExpressionParser();
-                                  ExpressionTree tree = p.parse(folSentences[folSentenceIndex][i].controller.text);
-                                  // ignore: prefer_typing_uninitialized_variables
-                                  var result;
-                                  try {
-                                    result = tree.getValue(folWorlds[folWorldIndex], {});
-                                  } catch (e) {
-                                    print('Expression parser encountered an error:\n$e');
-                                  }
-                                  setState(() {
-                                    if (result == true) {
-                                      folSentences[folSentenceIndex][i].result = true;
-                                    } else if (result == false) {
-                                      folSentences[folSentenceIndex][i].result = false;
-                                    } else {
-                                      folSentences[folSentenceIndex][i].result = null;
+                                  if (folSentences[folSentenceIndex][i].controller.text.replaceAll(' ', '').isNotEmpty) {
+                                    ExpressionParser p = ExpressionParser();
+                                    ExpressionTree tree = p.parse(folSentences[folSentenceIndex][i].controller.text);
+                                    // ignore: prefer_typing_uninitialized_variables
+                                    var result;
+                                    try {
+                                      result = tree.getValue(folWorlds[folWorldIndex], {});
+                                    } catch (e) {
+                                      print('Expression parser encountered an error:\n$e');
                                     }
-                                  });
+                                    setState(() {
+                                      if (result == true) {
+                                        folSentences[folSentenceIndex][i].result = true;
+                                      } else if (result == false) {
+                                        folSentences[folSentenceIndex][i].result = false;
+                                      } else {
+                                        folSentences[folSentenceIndex][i].result = null;
+                                      }
+                                    });
+                                  }
                                 }
                               },
                               style: ButtonStyle(
@@ -160,7 +162,7 @@ class LogicSentencesState extends State<LogicSentences> {
                           AspectRatio(
                             aspectRatio: 1,
                             child: ElevatedButton(
-                              onPressed: () {
+                              onPressed: folSentences[folSentenceIndex][index].controller.text.replaceAll(' ', '').isEmpty?null:() {
                                 ExpressionParser p = ExpressionParser();
                                 print('verbose: $kDebugMode');
                                 if (kDebugMode) {
@@ -219,6 +221,16 @@ class LogicSentencesState extends State<LogicSentences> {
                                   focusNode: focusNode,
                                   controller: folSentences[folSentenceIndex][index].controller,
                                   decoration: InputDecoration(
+                                    hintText: 'Enter text...',
+                                    hintStyle: TextStyle(
+                                      fontSize: 16*uiScale,
+                                      fontStyle: FontStyle.italic,
+                                      fontWeight: FontWeight.bold,
+                                      color: Color.alphaBlend(
+                                        Theme.of(context).elevatedButtonTheme.style!.overlayColor!.resolve({WidgetState.pressed})!,
+                                        Theme.of(context).elevatedButtonTheme.style!.backgroundColor!.resolve({WidgetState.pressed})!
+                                      ),
+                                    ),
                                     contentPadding: EdgeInsets.symmetric(horizontal: 12*uiScale, vertical: 4*uiScale),
                                     border: OutlineInputBorder(
                                       borderRadius: BorderRadius.circular(5*uiScale),
@@ -227,6 +239,7 @@ class LogicSentencesState extends State<LogicSentences> {
                                   style: TextStyle(
                                     fontSize: 16*uiScale,
                                   ),
+                                  onChanged: (_) => setState(() {}),
                                   onTap: () {
                                     activeController=folSentences[folSentenceIndex][index].controller;
                                     activeTextField =focusNode;
