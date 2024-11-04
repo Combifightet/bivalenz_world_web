@@ -225,11 +225,13 @@ ThemeData darkTheme = ThemeData(
 class SentenceTile{
   final Key key;
   bool? result;
+  String? lastError;
   final TextEditingController controller;
 
   SentenceTile({
     required this.key,
     this.result,
+    this.lastError,
     required this.controller,
   });
 

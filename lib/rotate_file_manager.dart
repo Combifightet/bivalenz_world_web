@@ -260,6 +260,7 @@ class _RotateFileManagerState extends State<RotateFileManager> {
                         if (folWorldSize%2==0) {
                           invertBoard = !invertBoard;
                         }
+                        folScentenceKey.currentState?.validateAll();
                       });
                     },
                     style: ButtonStyle(
@@ -298,6 +299,7 @@ class _RotateFileManagerState extends State<RotateFileManager> {
                         if (folWorldSize%2==0) {
                           invertBoard = !invertBoard;
                         }
+                        folScentenceKey.currentState?.validateAll();
                       });
                     },
                     style: ButtonStyle(

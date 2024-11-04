@@ -30,6 +30,7 @@ class BoardHandelerState extends State<BoardHandeler> {
       }
     });
     objecButtonsKey.currentState?.refresh();
+    folScentenceKey.currentState?.validateAll();
   }
 
   @override
@@ -63,6 +64,7 @@ class BoardHandelerState extends State<BoardHandeler> {
                 setState(() {
                   folWorldIndex = i;
                   objecButtonsKey.currentState?.refresh();
+                  folScentenceKey.currentState?.validateAll();
                 });
               }
             },
@@ -126,6 +128,7 @@ class BoardHandelerState extends State<BoardHandeler> {
                   folWorldIndex = max(0, i-1);
                 });
                 objecButtonsKey.currentState?.refresh();
+                folScentenceKey.currentState?.validateAll();
               },
             ),
           );
@@ -144,6 +147,7 @@ class BoardHandelerState extends State<BoardHandeler> {
                 folWorldIndex = folWorlds.length-1;
                 refresh();
                 objecButtonsKey.currentState?.refresh();
+                folScentenceKey.currentState?.validateAll();
               },
               icon: Icon(Icons.add, size: 32*uiScale),
               style: ButtonStyle(

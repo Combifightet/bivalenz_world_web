@@ -18,6 +18,44 @@ class LogicSentencesState extends State<LogicSentences> {
 
   void refresh() => setState(() {});
 
+  void validateAll()  {
+    for (int i=0; i<folSentences[folSentenceIndex].length; i++) {
+      validate(i);
+    }
+  }
+
+  void validate(int index, [bool verboose=false]) {
+    if (folSentences[folSentenceIndex][index].controller.text.replaceAll(' ', '').isNotEmpty) {
+      ExpressionParser p = ExpressionParser();
+      if (verboose) {
+        debugPrint('verbose: true');
+        p.setVerbose(true);
+      }
+      setState(() {
+        try {
+          folSentences[folSentenceIndex][index].result = null;
+          ExpressionTree tree = p.parse(folSentences[folSentenceIndex][index].controller.text);
+          folSentences[folSentenceIndex][index].result = tree.getValue(folWorlds[folWorldIndex], {});
+        } on UnsupportedError catch (e) {     // missing varible / constant definition
+          if (verboose) debugPrint('Expression parser encountered an error:  (UnsupportedError)\n  $e');
+          folSentences[folSentenceIndex][index].lastError = e.toString();
+        } on ArgumentError catch (e) {        // malformed expression
+          if (verboose) debugPrint('Expression parser encountered an error:  (ArgumentError)\n  $e');
+          folSentences[folSentenceIndex][index].lastError = e.toString();
+        } on TypeError catch (e) {            // equation does not evalueate to a boolean
+          if (verboose) debugPrint('Expression parser encountered an error:  (TypeError)\n  $e');
+          folSentences[folSentenceIndex][index].lastError = null;
+        } catch (e) {                         // unknown error encountered
+          if (verboose) debugPrint('Expression parser encountered an error:\n  $e');
+          folSentences[folSentenceIndex][index].lastError = null;
+        }
+      });
+    } else {
+      folSentences[folSentenceIndex][index].result = null;
+      folSentences[folSentenceIndex][index].lastError = null;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return LayoutBuilder(
@@ -36,46 +74,21 @@ class LogicSentencesState extends State<LogicSentences> {
                   children: [
                       AspectRatio(
                         aspectRatio: 1,
-                        // child: Expanded(
                           child: ElevatedButton(
-                              onPressed: () {
-                                for (int i=0; i<folSentences[folSentenceIndex].length; i++) {
-                                  if (folSentences[folSentenceIndex][i].controller.text.replaceAll(' ', '').isNotEmpty) {
-                                    ExpressionParser p = ExpressionParser();
-                                    ExpressionTree tree = p.parse(folSentences[folSentenceIndex][i].controller.text);
-                                    // ignore: prefer_typing_uninitialized_variables
-                                    var result;
-                                    try {
-                                      result = tree.getValue(folWorlds[folWorldIndex], {});
-                                    } catch (e) {
-                                      print('Expression parser encountered an error:\n$e');
-                                    }
-                                    setState(() {
-                                      if (result == true) {
-                                        folSentences[folSentenceIndex][i].result = true;
-                                      } else if (result == false) {
-                                        folSentences[folSentenceIndex][i].result = false;
-                                      } else {
-                                        folSentences[folSentenceIndex][i].result = null;
-                                      }
-                                    });
-                                  }
-                                }
-                              },
-                              style: ButtonStyle(
-                                padding: const WidgetStatePropertyAll(EdgeInsets.zero),
-                                shape: WidgetStateProperty.all<RoundedRectangleBorder>(
-                                  RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(5*uiScale),
-                                  )
-                                ),
+                            onPressed: () => validateAll(),
+                            style: ButtonStyle(
+                              padding: const WidgetStatePropertyAll(EdgeInsets.zero),
+                              shape: WidgetStateProperty.all<RoundedRectangleBorder>(
+                                RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(5*uiScale),
+                                )
                               ),
-                              child: Icon(
-                                Icons.check_rounded,
-                                size: 32*uiScale,
-                              )
                             ),
-                        // )
+                            child: Icon(
+                              Icons.check_rounded,
+                              size: 32*uiScale,
+                            )
+                          ),
                       ),
                     Expanded(
                       child: Padding(
@@ -162,30 +175,7 @@ class LogicSentencesState extends State<LogicSentences> {
                           AspectRatio(
                             aspectRatio: 1,
                             child: ElevatedButton(
-                              onPressed: folSentences[folSentenceIndex][index].controller.text.replaceAll(' ', '').isEmpty?null:() {
-                                ExpressionParser p = ExpressionParser();
-                                print('verbose: $kDebugMode');
-                                if (kDebugMode) {
-                                  p.setVerbose(true);
-                                }
-                                ExpressionTree tree = p.parse(folSentences[folSentenceIndex][index].controller.text);
-                                // ignore: prefer_typing_uninitialized_variables
-                                var result;
-                                try {
-                                  result = tree.getValue(folWorlds[folWorldIndex], {});
-                                } catch (e) {
-                                  print('Expression parser encountered an error:\n$e');
-                                }
-                                setState(() {
-                                  if (result == true) {
-                                    folSentences[folSentenceIndex][index].result = true;
-                                  } else if (result == false) {
-                                    folSentences[folSentenceIndex][index].result = false;
-                                  } else {
-                                    folSentences[folSentenceIndex][index].result = null;
-                                  }
-                                });
-                              },
+                              onPressed: folSentences[folSentenceIndex][index].controller.text.replaceAll(' ', '').isEmpty?null:()=>validate(index, kDebugMode),
                               style: ButtonStyle(
                                 padding: const WidgetStatePropertyAll(EdgeInsets.zero),
                                 shape: WidgetStateProperty.all<RoundedRectangleBorder>(
@@ -196,20 +186,27 @@ class LogicSentencesState extends State<LogicSentences> {
                               ),
                               child: folSentences[folSentenceIndex][index].controller.text.replaceAll(' ', '').isEmpty
                                 ? SizedBox()
-                                : Icon(
-                                  folSentences[folSentenceIndex][index].result==null
-                                    // TODO: add plus sign with error messages
-                                    // star only for not beeing able to parse formula
-                                    ? Icons.star
-                                    : folSentences[folSentenceIndex][index].result!
-                                      ? Icons.check_rounded
-                                      : Icons.close_rounded,
-                                  color: folSentences[folSentenceIndex][index].result==null
-                                    ? null
-                                    : folSentences[folSentenceIndex][index].result!
-                                      ? greenAccentColor
-                                      : redAccentColor,
-                                  size: 32*uiScale,
+                                : Tooltip(
+                                  waitDuration: Durations.extralong1,
+                                  // TODO: styling / scaling of tooltip
+                                  message: folSentences[folSentenceIndex][index].result==null
+                                      ? folSentences[folSentenceIndex][index].lastError ?? 'Failed to parse \'formulaBegin\''
+                                      : folSentences[folSentenceIndex][index].result.toString(),
+                                  child: Icon(
+                                    folSentences[folSentenceIndex][index].result==null
+                                      ? folSentences[folSentenceIndex][index].lastError==null
+                                        ? Icons.star
+                                        : Icons.priority_high
+                                      : folSentences[folSentenceIndex][index].result!
+                                        ? Icons.check_rounded
+                                        : Icons.close_rounded,
+                                    color: folSentences[folSentenceIndex][index].result==null
+                                      ? null
+                                      : folSentences[folSentenceIndex][index].result!
+                                        ? greenAccentColor
+                                        : redAccentColor,
+                                    size: 32*uiScale,
+                                  ),
                                 )
                             ),
                           ),
@@ -239,32 +236,21 @@ class LogicSentencesState extends State<LogicSentences> {
                                   style: TextStyle(
                                     fontSize: 16*uiScale,
                                   ),
-                                  onChanged: (_) => setState(() {}),
+                                  // onChanged: (_) => setState(() {}),
+                                  onChanged: (x) {
+                                    print('onChanged: ($x)');
+                                    setState(() {
+                                      validate(index);
+                                    });
+                                  },
                                   onTap: () {
                                     activeController=folSentences[folSentenceIndex][index].controller;
                                     activeTextField =focusNode;
                                   },
                                   onSubmitted: (value) {
-                                    print('submitted');
-                                    activeController=null;
-                                    activeTextField =null;
-                                    ExpressionParser p = ExpressionParser();
-                                    ExpressionTree tree = p.parse(value);
-                                    var result;
-                                    try {
-                                      result = tree.getValue(folWorlds[folWorldIndex], {});
-                                    } catch (e) {
-                                      print('Expression parser encountered an error:\n$e');
-                                    }
-                                    setState(() {
-                                      if (result == true) {
-                                        folSentences[folSentenceIndex][index].result = true;
-                                      } else if (result == false) {
-                                        folSentences[folSentenceIndex][index].result = false;
-                                      } else {
-                                        folSentences[folSentenceIndex][index].result = null;
-                                      }
-                                    });
+                                    activeController = null;
+                                    activeTextField  = null;
+                                    validate(index);
                                   },
                                 ),
                               )

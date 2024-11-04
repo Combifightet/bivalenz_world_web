@@ -52,7 +52,8 @@ class _FunctionButtonsState extends State<FunctionButtons> {
                       });
                     }
                   });
-                  folScentenceKey.currentState!.refresh();
+                  folScentenceKey.currentState?.validate(folSentences[folSentenceIndex].indexWhere((s) => s.controller==activeController));
+                  folScentenceKey.currentState?.refresh();
                 },
                 style: ButtonStyle(
                   padding: const WidgetStatePropertyAll(EdgeInsets.zero),

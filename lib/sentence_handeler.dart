@@ -28,6 +28,7 @@ class SentenceHandelerState extends State<SentenceHandeler> {
       }
     });
     folScentenceKey.currentState?.refresh();
+    folScentenceKey.currentState?.validateAll();
   }
 
   @override
@@ -61,6 +62,7 @@ class SentenceHandelerState extends State<SentenceHandeler> {
                 setState(() {
                   folSentenceIndex = i;
                   folScentenceKey.currentState?.refresh();
+                  folScentenceKey.currentState?.validateAll();
                 });
               }
             },
@@ -124,6 +126,7 @@ class SentenceHandelerState extends State<SentenceHandeler> {
                   folSentenceIndex = max(0, i-1);
                 });
                 folScentenceKey.currentState?.refresh();
+                folScentenceKey.currentState?.validateAll();
               },
             ),
           );
@@ -145,6 +148,7 @@ class SentenceHandelerState extends State<SentenceHandeler> {
                 folSentenceIndex = folSentences.length-1;
                 refresh();
                 folScentenceKey.currentState?.refresh();
+                folScentenceKey.currentState?.validateAll();
               },
               icon: Icon(Icons.add, size: 32*uiScale),
               style: ButtonStyle(

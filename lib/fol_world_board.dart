@@ -65,6 +65,7 @@ class _FolWorldBoardState extends State<FolWorldBoard> {
       selectedTile = null;
     }
     objecButtonsKey.currentState?.refresh();
+    folScentenceKey.currentState?.validateAll();
     setState(() {});    // To force repaint
     print('selectedTile: $selectedTile');
   }
@@ -97,6 +98,7 @@ class _FolWorldBoardState extends State<FolWorldBoard> {
     }
     cursorLocation = null;
     objecButtonsKey.currentState?.refresh();
+    folScentenceKey.currentState?.validateAll();
     setState(() {});
   }
 }

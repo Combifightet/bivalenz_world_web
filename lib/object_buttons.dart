@@ -39,6 +39,7 @@ class ObjectButtonsState extends State<ObjectButtons> {
         }
       }
     }
+    folScentenceKey.currentState?.validateAll();
     refresh();
   }
 
@@ -55,6 +56,7 @@ class ObjectButtonsState extends State<ObjectButtons> {
         folWorlds[folWorldIndex].createObj(selectedTile!.dx.round(), selectedTile!.dy.round(), type, ObjectSize.Medium);
       }
     }
+    folScentenceKey.currentState?.validateAll();
     refresh();
   }
 
@@ -65,6 +67,7 @@ class ObjectButtonsState extends State<ObjectButtons> {
         folWorlds[folWorldIndex].getWorld()[index].size=size;
       }
     }
+    folScentenceKey.currentState?.validateAll();
     refresh();
   }
 
