@@ -232,7 +232,13 @@ class _RotateFileManagerState extends State<RotateFileManager> {
                         child: Text(kIsWeb?'Download':'Save')
                       ),
                       MenuItemButton(
-                        onPressed: null,
+                        onPressed: () {
+                          List<String> sentences = [];
+                          for (SentenceTile sen in folSentences[folSentenceIndex]) {
+                            sentences.add(sen.controller.text);
+                          }
+                          debugPrint(folWorlds[folWorldIndex].toPL1(sentences));
+                        },
                         child: Text('PL1 Structure View'),
                       ),
                     ],
