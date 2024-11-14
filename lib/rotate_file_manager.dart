@@ -40,32 +40,8 @@ class _RotateFileManagerState extends State<RotateFileManager> {
       if (result!=null) {
         for (PlatformFile file in result.files) {
           print('reading in file \'${file.name}\'');
-          String jsonString = Utf8Decoder().convert(file.bytes!);
-          final dynamic jsonData = json.decode(jsonString);
           if (file.extension=='wld') {
-            FolWorld world = FolWorld();
-            for(dynamic wld in jsonData) {
-              List<String> consts = [];
-              for (String c in wld['Consts']) {
-                consts.add(c);
-              }
-              world.createObj(
-                wld['Tags'][0],
-                wld['Tags'][1],
-                wld['Predicates'][0]=='Tet'
-                  ? ObjectType.Tet
-                  : wld['Predicates'][0]=='Cube'
-                    ? ObjectType.Cube
-                    : ObjectType.Dodec,
-                wld['Predicates'][1]=='Small'
-                  ? ObjectSize.Small
-                  : wld['Predicates'][1]=='Medium'
-                    ? ObjectSize.Medium
-                    : ObjectSize.Large,
-                consts
-              );
-            }
-            folWorlds.add(world);
+            folWorlds.add(FileManager().parseWorld(file.bytes!));
             String? path;
             if (!kIsWeb) {
               path = file.path;
@@ -88,7 +64,7 @@ class _RotateFileManagerState extends State<RotateFileManager> {
               name: file.name.substring(0, file.name.length-4),
               path: path
             ));
-            for (String sen in jsonData) {
+            for (String sen in FileManager().parseSentence(file.bytes!)) {
               print('Sentence: \'$sen\'');
               folSentences.last.add(
                 SentenceTile(
