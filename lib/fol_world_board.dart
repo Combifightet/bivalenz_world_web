@@ -189,8 +189,8 @@ class BoardPainter extends CustomPainter {
     }
     // paint objects
     for (LogicObj obj in folWorlds[folWorldIndex].getWorld()) {
-      double objX = cursorLocation!=null&&selectedTile!=null&&((selectedTile!.distanceSquared-Offset(obj.getX()*1, obj.getY()*1).distanceSquared).abs()<0.001)?cursorLocation!.dx-.5:obj.getX()*1;
-      double objY = cursorLocation!=null&&selectedTile!=null&&((selectedTile!.distanceSquared-Offset(obj.getX()*1, obj.getY()*1).distanceSquared).abs()<0.001)?cursorLocation!.dy-.5:obj.getY()*1;
+      double objX = cursorLocation!=null&&selectedTile!=null&&(((selectedTile!.dx-obj.getX()*1).abs()+(selectedTile!.dy-obj.getY()*1).abs())<0.001)?cursorLocation!.dx-.5:obj.getX()*1;
+      double objY = cursorLocation!=null&&selectedTile!=null&&(((selectedTile!.dx-obj.getX()*1).abs()+(selectedTile!.dy-obj.getY()*1).abs())<0.001)?cursorLocation!.dy-.5:obj.getY()*1;
         canvas.drawPath(
           drawPoly(
             obj.type.sides(),

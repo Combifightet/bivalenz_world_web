@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 // this will only be used if <kIsWeb==true>
 // ignore: avoid_web_libraries_in_flutter
 import 'dart:html' as html;
-import 'dart:convert';
 import 'dart:math';
 
 import 'package:logic_expr_tree/logic_expr_tree.dart';

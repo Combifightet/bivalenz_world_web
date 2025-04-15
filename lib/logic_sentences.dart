@@ -163,6 +163,14 @@ class LogicSentencesState extends State<LogicSentences> {
                 itemBuilder: (BuildContext context, int index) {
                   FocusNode focusNode = FocusNode();
 
+                  focusNode.addListener(() {
+                    print('has focus: ${focusNode.hasFocus} ($index)');
+                    if (focusNode.hasFocus) {
+                      activeController = folSentences[folSentenceIndex][index].controller;
+                      activeTextField  = focusNode;
+                    }
+                  });
+
                   return SizedBox(
                     key: folSentences[folSentenceIndex][index].key,
                     height: 64*uiScale,
@@ -236,16 +244,11 @@ class LogicSentencesState extends State<LogicSentences> {
                                   style: TextStyle(
                                     fontSize: 16*uiScale,
                                   ),
-                                  // onChanged: (_) => setState(() {}),
                                   onChanged: (x) {
                                     print('onChanged: ($x)');
                                     setState(() {
                                       validate(index);
                                     });
-                                  },
-                                  onTap: () {
-                                    activeController=folSentences[folSentenceIndex][index].controller;
-                                    activeTextField =focusNode;
                                   },
                                   onSubmitted: (value) {
                                     activeController = null;
