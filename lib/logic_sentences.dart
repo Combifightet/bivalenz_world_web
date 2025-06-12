@@ -5,6 +5,8 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:logic_expr_tree/logic_expr_tree.dart';
 
+import 'replacers.dart';
+
 
 class LogicSentences extends StatefulWidget {
   const LogicSentences({super.key});
@@ -246,9 +248,31 @@ class LogicSentencesState extends State<LogicSentences> {
                                   ),
                                   onChanged: (x) {
                                     print('onChanged: ($x)');
-                                    setState(() {
-                                      validate(index);
-                                    });
+
+                                    // TODO: interprete short hands and convert to the correct expressions
+                                    // import replacers.dart and use replacers map to apply one after
+                                    // another until no more options remain
+
+                                    while (replacers.keys.any((pattern) => folSentences[folSentenceIndex][index].controller.text.contains(pattern))) {
+                                      print('some patterns faound');
+                                      for (String pattern in replacers.keys) {
+                                        print('  x.contains($pattern)');
+                                        if (folSentences[folSentenceIndex][index].controller.text.contains(pattern)) {
+                                          print('    is contained');
+                                          // TODO: fuck my life, cursor placement doesn't work like I want it to
+                                          folSentences[folSentenceIndex][index].controller.text = folSentences[folSentenceIndex][index].controller.text.replaceFirst(pattern, replacers[pattern]!);
+                                          if (folSentences[folSentenceIndex][index].controller.text.indexOf(pattern)<folSentences[folSentenceIndex][index].controller.selection.baseOffset) {
+                                            folSentences[folSentenceIndex][index].controller.selection = TextSelection(
+                                              baseOffset:   folSentences[folSentenceIndex][index].controller.selection.base.offset  -(pattern.length-replacers[pattern]!.length),
+                                              extentOffset: folSentences[folSentenceIndex][index].controller.selection.extent.offset-(pattern.length-replacers[pattern]!.length)
+                                            );
+                                          }
+
+                                        }
+                                      }
+                                    }
+
+                                    validate(index);
                                   },
                                   onSubmitted: (value) {
                                     activeController = null;
